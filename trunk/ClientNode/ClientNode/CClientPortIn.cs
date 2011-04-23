@@ -9,6 +9,12 @@ namespace ClientNode
 {
     class CClientPortIn : CClientPort
     {
+
+        public CClientPortIn(int i, Boolean p):       
+           base(i, p){}
+        
+
+
     }
 }
 

@@ -11,11 +11,16 @@ namespace ClientNode
 
         static void Main(string[] args)
         {
-            CPortManager cpm = new CPortManager();
 
-            cpm.readConfig();
-            cpm.showConfig();
 
+            //while (true)
+            //{
+            //    String input = Console.ReadLine();
+            //    if (input.StartsWith("stop"))
+            //    {
+            //        Console.WriteLine("zawiera " + input);
+            //    }
+            //}
             CConsole.Instance.consoleInit();
 
 
