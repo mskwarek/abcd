@@ -11,9 +11,19 @@ namespace NetworkNode
         private Boolean _busy;
 
         public CNetworkPortOut(int id, Boolean busy):base(id, busy)    
-        {}
+        {
+        }
 
-        public void send()
-        { }
+        private void setCurrentVPI_VCI(Data.CCharacteristicData data)
+        {
+
+        }
+
+        public void send( Data.CCharacteristicData data )
+        {
+            setCurrentVPI_VCI(data);
+
+            //send
+        }
     }
 }

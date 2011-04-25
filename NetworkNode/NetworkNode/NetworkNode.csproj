@@ -45,6 +45,10 @@
   <ItemGroup>
     <Compile Include="CAdministrationData.cs" />
     <Compile Include="CCharacteristicData.cs" />
+    <Compile Include="CClientPort.cs" />
+    <Compile Include="CClientPortIn.cs" />
+    <Compile Include="CClientPortOut.cs" />
+    <Compile Include="CCommutationTable.cs" />
     <Compile Include="CNetworkPort.cs" />
     <Compile Include="CNetworkPortIn.cs" />
     <Compile Include="CNetworkPortOut.cs" />
