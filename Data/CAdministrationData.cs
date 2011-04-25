@@ -12,11 +12,12 @@ namespace Data
 
     class CAdministrationData
     {
-        private static int VPI_UNI_MAX = 2;
-        private static int VPI_NNI_MAX = 2;
-        private static int VCI_MAX = 2;
+        private static int VPI_UNI_MAX = 255;
+        private static int VPI_NNI_MAX = 4095;
+        private static int VCI_MAX = 65535;
 
         private Contact contact;
+        private int GFC = 0;
         private int VPI;
         private int VCI;
         private PT payloadType;
@@ -38,6 +39,11 @@ namespace Data
         public void setContact(Contact contact)
         {
             this.contact = contact;
+        }
+
+        public void setGFC(int GFC)
+        {
+            this.GFC = GFC;
         }
 
         public void setVPI(int VPI)
@@ -115,7 +121,10 @@ namespace Data
             return payloadType;
         }
 
-
+        public int getGFC()
+        {
+            return GFC;
+        }
 
     }
 }
