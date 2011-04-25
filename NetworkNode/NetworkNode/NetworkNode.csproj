@@ -46,6 +46,8 @@
     <Compile Include="CAdministrationData.cs" />
     <Compile Include="CCharacteristicData.cs" />
     <Compile Include="CNetworkPort.cs" />
+    <Compile Include="CNetworkPortIn.cs" />
+    <Compile Include="CNetworkPortOut.cs" />
     <Compile Include="CUserData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
