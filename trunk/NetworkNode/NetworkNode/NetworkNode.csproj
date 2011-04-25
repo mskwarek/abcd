@@ -43,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CAdministrationData.cs" />
+    <Compile Include="CCharacteristicData.cs" />
     <Compile Include="CNetworkPort.cs" />
+    <Compile Include="CUserData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
