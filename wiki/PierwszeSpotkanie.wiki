@@ -5,6 +5,7 @@ Port sieciowy wyjściowy<br>
 1.	Nadaj<br>
 2.	Modyfikuj header -  nadaj VPI, VCI<br>
 3.	Odbierz z pola komutacyjnego<br>
+<br>
 Port sieciowy wejściowy<br>
 1.	Odbierz<br>
 2.	Wypluj na pole komutacyjne<br>
