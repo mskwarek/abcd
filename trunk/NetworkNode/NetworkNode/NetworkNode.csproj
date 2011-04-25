@@ -49,6 +49,7 @@
     <Compile Include="CClientPortIn.cs" />
     <Compile Include="CClientPortOut.cs" />
     <Compile Include="CCommutationTable.cs" />
+    <Compile Include="CManagementAgent.cs" />
     <Compile Include="CNetworkPort.cs" />
     <Compile Include="CNetworkPortIn.cs" />
     <Compile Include="CNetworkPortOut.cs" />

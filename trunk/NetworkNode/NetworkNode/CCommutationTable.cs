@@ -7,7 +7,7 @@ namespace NetworkNode
 {
     class CCommutationTable
     {
-        //<VPI, port_ID>
+        //<port_in, port_out>
         private Dictionary<int, int> commutationTable;
         //jak tu rozwiazac kwestie VPI/VCI?!?
 
@@ -21,6 +21,15 @@ namespace NetworkNode
             int iD = 0;
             //metoda zwracac ma docelowo ID portu na ktory ma wyjsc dana komorka ATM
             return iD;
+        }
+
+        public void showAll()
+        {
+            
+            foreach(int key in commutationTable.Keys)
+            {
+                Console.WriteLine("Port In :" + key + " Port Out :" + commutationTable.ElementAt(key));
+            }
         }
 
     }
