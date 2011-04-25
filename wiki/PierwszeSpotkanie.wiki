@@ -1,33 +1,33 @@
 #labels Phase-Design
 Węzeł
 
-Port sieciowy wyjściowy
-1.	Nadaj
-2.	Modyfikuj header -  nadaj VPI, VCI
-3.	Odbierz z pola komutacyjnego
-Port sieciowy wejściowy
-1.	Odbierz
-2.	Wypluj na pole komutacyjne
-
-Port kliencki wejściowy
-1.	Odbierz inf. Użytkową
-2.	Nadaj nagłówek
-3.	Wypluj na pole komutacyjne
-
-Port kliencki wyjściowy
-1.	Nadaj inf. Użytkową
-
-Pole
-1.	Kieruje z portu we -> wy
-2.	Czyta VPI, VCI
-3.	Decyduje w którym porcie wywoła „nadaj”
-
-Węzeł kliencki
-1.	Port kliencki
-2.	Konsola
-
-Węzeł sieciowy
-1.	Odbieranie info
-2.	Na podstawie nagłówka szukanie odpowiedniego portu wyjściowego
-3.	Określenie wyjściowego VPI, VCI
-4.	Nadawanie informacji charakterystycznej
+Port sieciowy wyjściowy<br>
+1.	Nadaj<br>
+2.	Modyfikuj header -  nadaj VPI, VCI<br>
+3.	Odbierz z pola komutacyjnego<br>
+Port sieciowy wejściowy<br>
+1.	Odbierz<br>
+2.	Wypluj na pole komutacyjne<br>
+<br>
+Port kliencki wejściowy<br>
+1.	Odbierz inf. użytkową<br>
+2.	Nadaj nagłówek<br>
+3.	Wypluj na pole komutacyjne<br>
+<br>
+Port kliencki wyjściowy<br>
+1.	Nadaj inf. Użytkową<br>
+<br>
+Pole<br>
+1.	Kieruje z portu we -> wy<br>
+2.	Czyta VPI, VCI<br>
+3.	Decyduje w którym porcie wywoła „nadaj”<br>
+<br>
+Węzeł kliencki<br>
+1.	Port kliencki<br>
+2.	Konsola<br>
+<br>
+Węzeł sieciowy<br>
+1.	Odbieranie info<br>
+2.	Na podstawie nagłówka szukanie odpowiedniego portu wyjściowego<br>
+3.	Określenie wyjściowego VPI, VCI<br>
+4.	Nadawanie informacji charakterystycznej<br>
