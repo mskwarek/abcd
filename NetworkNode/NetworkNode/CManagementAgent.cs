@@ -6,13 +6,14 @@ using System.Xml;
 
 namespace NetworkNode
 {
-    class CManagementAgent
+    static class CManagementAgent
     {
 
         private List<CNetworkPortIn> InputPortList = new List<CNetworkPortIn>();
         private List<CNetworkPortOut> OutputPortList = new List<CNetworkPortOut>();
         private int InputPortCount;
         private int OutputPortCount;
+        CCommutationTable switchingField = new CCommutationTable();
 
         private  CManagementAgent()
         {
@@ -22,15 +23,23 @@ namespace NetworkNode
             showPorts();
         }
 
-        public void addConnection() //metoda zestawiajaca polaczenia w polu komutacyjnym danego wezla
-        {}
+        public void addConnection(CNetworkPortIn portIn,CNetworkPortOut portOut) //metoda zestawiajaca polaczenia w polu komutacyjnym danego wezla
+        {
+            portIn.STATUS = true;
+            portOut.STATUS = true;
+            switchingField.addConnection(portIn.ID, portOut.ID);
+        }
 
-        public void removeConnection() //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
-        { }
+        public void removeConnection(CNetworkPortIn portIn, CNetworkPortOut portOut) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
+        {
+            portIn.STATUS = false;
+            portOut.STATUS = false;
+            switchingField.removeConnection(portIn.ID);
+        }
 
         public void showConnections() //metoda wyswietlajaca zestawione polaczenia
         {
-            CCommutationTable switchingField = new CCommutationTable();
+            
             switchingField.showAll();   
         }
 
