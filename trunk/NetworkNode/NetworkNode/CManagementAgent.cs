@@ -8,12 +8,11 @@ namespace NetworkNode
 {
     static class CManagementAgent
     {
-
         private List<CNetworkPortIn> InputPortList = new List<CNetworkPortIn>();
         private List<CNetworkPortOut> OutputPortList = new List<CNetworkPortOut>();
         private int InputPortCount;
         private int OutputPortCount;
-        CCommutationTable switchingField = new CCommutationTable();
+       //CCommutationTable switchingField = new CCommutationTable();
 
         private  CManagementAgent()
         {
@@ -27,20 +26,20 @@ namespace NetworkNode
         {
             portIn.STATUS = true;
             portOut.STATUS = true;
-            switchingField.addConnection(portIn, portOut);
+            CCommutationTable.Instance.addConnection(portIn, portOut);
         }
 
         public void removeConnection(CNetworkPortIn portIn, CNetworkPortOut portOut) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
         {
             portIn.STATUS = false;
             portOut.STATUS = false;
-            switchingField.removeConnection(portIn);
+            CCommutationTable.Instance.removeConnection(portIn);
         }
 
         public void showConnections() //metoda wyswietlajaca zestawione polaczenia
         {
             
-            switchingField.showAll();   
+            CCommutationTable.Instance.showAll();   
         }
 
         public void readConfig() {

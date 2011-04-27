@@ -5,10 +5,21 @@ using System.Text;
 
 namespace NetworkNode
 {
-    static class CCommutationTable
+    sealed class CCommutationTable
     {
         private Dictionary<CNetworkPortIn, CNetworkPortOut> commutationTable;
+        private static CCommutationTable instance = new CCommutationTable();
 
+        private CCommutationTable()
+        { }
+
+        public static CCommutationTable Instance
+        {
+            get
+            {
+                return Instance;
+            }
+        }
 
         public void setCommutationTable(Dictionary<CNetworkPortIn, CNetworkPortOut> commutationTable)
         {
