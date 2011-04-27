@@ -12,7 +12,7 @@ namespace NetworkNode
 
         public void receiveData(Data.CCharacteristicData data) //metoda odbierajace dane 
         {
-            CCommutationTable.passOnData(data, this);
+            CCommutationTable.Instance.passOnData(data, this);
         }
     
     } 
