@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Data
 {
-    class CCharacteristicData
+    public class CCharacteristicData
     {
         private CAdministrationData cAdministrationData;
         private CUserData cUserData;

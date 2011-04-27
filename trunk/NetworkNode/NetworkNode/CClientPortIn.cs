@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Data;
 
 // Klasa portu wyjściowego dziedzicząca po CClientPort
 
@@ -13,12 +14,12 @@ namespace ClientNode
         public CClientPortIn(int i, Boolean p):       
            base(i, p){}
 
-        private bool setHeader(Data.CUserData, int destination)
+        private bool setHeader(CUserData userData, int destination)
         {
             return true;
         }
 
-        public void prepareData(Data.CUserData userData, int destination)
+        public void prepareData(CUserData userData, int destination)
         {
             if(setHeader(userData, destination))
             {

@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Data
 {
-    enum Contact { UNI, NNI};
-    enum PT { _000_, _001_, _010_, _011_, _100_, _101_, _110_, _111_ };
-    enum CLP { _0_, _1_ };
+    public enum Contact { UNI, NNI};
+    public enum PT { _000_, _001_, _010_, _011_, _100_, _101_, _110_, _111_ };
+    public enum CLP { _0_, _1_ };
 
 
-    class CAdministrationData
+    public class CAdministrationData
     {
         private static int VPI_UNI_MAX = 255;
         private static int VPI_NNI_MAX = 4095;

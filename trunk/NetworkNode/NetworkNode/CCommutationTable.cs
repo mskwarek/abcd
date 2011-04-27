@@ -2,56 +2,58 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Data;
 
 namespace NetworkNode
 {
-    sealed class CCommutationTable
+   class CCommutationTable
     {
-        private Dictionary<CNetworkPortIn, CNetworkPortOut> commutationTable;
-        private static CCommutationTable instance = new CCommutationTable();
+        // IN/OUT
+        private Dictionary<PortInfo, PortInfo> commutationTable;
+        
 
-        private CCommutationTable()
-        { }
-
-        public static CCommutationTable Instance
+        public PortInfo getOutputPort(PortInfo portIn)
         {
-            get
+            PortInfo portOut;
+            if (commutationTable.ContainsKey(portIn))
             {
-                return Instance;
+                portOut = commutationTable[portIn];
             }
+            else
+            {
+                // Risky i nieladnie :P
+                portOut = null; 
+            }
+            
+            return portOut;
         }
-
-        public void setCommutationTable(Dictionary<CNetworkPortIn, CNetworkPortOut> commutationTable)
-        {
-            this.commutationTable = commutationTable;
-        }
-
-        public int getOutputPortId(int VPI, int VCI)
-        {
-            int iD = 0;
-            //metoda zwracac ma docelowo ID portu na ktory ma wyjsc dana komorka ATM
-            return iD;
-        }
-        public void addConnection(CNetworkPortIn portIn, CNetworkPortOut portOut)
+        
+        public void addEntry(PortInfo portIn, PortInfo portOut)
         {
             commutationTable.Add(portIn, portOut);
         }
-        public void removeConnection(CNetworkPortIn portIn)
+
+        public void removeConnection(PortInfo portIn)
         {
             commutationTable.Remove(portIn);
         }
 
-        public void passOnData(Data.CCharacteristicData data,CNetworkPortIn port )
-        {
-            commutationTable[port].send(data);
-        }
+        //public void passOnData(Data.CCharacteristicData data, PortInfo port )
+        //{
+        //    commutationTable[port].send(data);
+        //}
 
         public void showAll()
         {
-            
-            foreach(int key in commutationTable.Keys)
+
+            foreach (PortInfo key in commutationTable.Keys)
             {
-                Console.WriteLine("Port In :" + key + " Port Out :" + commutationTable.ElementAt(key));
+                PortInfo portOut;
+                if (commutationTable.ContainsKey(key))
+                {
+                    portOut = commutationTable[key];
+                }
+                Console.WriteLine("Port In :" + key.getPortID() + " Port Out :" + portOut.getPortID());
             }
         }
 

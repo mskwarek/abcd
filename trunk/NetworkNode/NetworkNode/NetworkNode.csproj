@@ -43,8 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CAdministrationData.cs" />
-    <Compile Include="CCharacteristicData.cs" />
     <Compile Include="CClientPort.cs" />
     <Compile Include="CClientPortIn.cs" />
     <Compile Include="CClientPortOut.cs" />
@@ -53,9 +51,15 @@
     <Compile Include="CNetworkPort.cs" />
     <Compile Include="CNetworkPortIn.cs" />
     <Compile Include="CNetworkPortOut.cs" />
-    <Compile Include="CUserData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Data.csproj">
+      <Project>{F9CF54D3-ED5F-4C87-8C0C-8067E306CC5E}</Project>
+      <Name>Data</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
