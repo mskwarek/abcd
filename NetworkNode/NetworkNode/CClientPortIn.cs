@@ -23,6 +23,7 @@ namespace ClientNode
             if(setHeader(userData, destination))
             {
                 //wrzuc na pole komutacyjne
+                
             }
 
         }

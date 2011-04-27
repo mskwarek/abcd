@@ -10,8 +10,10 @@ namespace NetworkNode
         public CNetworkPortIn(int id, Boolean status):base(id, status)
         {}
 
-        public void receiveData() //metoda odbierajace dane 
-        { }
+        public void receiveData(Data.CCharacteristicData data) //metoda odbierajace dane 
+        {
+            CCommutationTable.passOnData(data, this);
+        }
     
     } 
 }

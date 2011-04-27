@@ -27,14 +27,14 @@ namespace NetworkNode
         {
             portIn.STATUS = true;
             portOut.STATUS = true;
-            switchingField.addConnection(portIn.ID, portOut.ID);
+            switchingField.addConnection(portIn, portOut);
         }
 
         public void removeConnection(CNetworkPortIn portIn, CNetworkPortOut portOut) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
         {
             portIn.STATUS = false;
             portOut.STATUS = false;
-            switchingField.removeConnection(portIn.ID);
+            switchingField.removeConnection(portIn);
         }
 
         public void showConnections() //metoda wyswietlajaca zestawione polaczenia

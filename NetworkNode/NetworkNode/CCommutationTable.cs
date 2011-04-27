@@ -5,12 +5,12 @@ using System.Text;
 
 namespace NetworkNode
 {
-    class CCommutationTable
+    static class CCommutationTable
     {
-        private Dictionary<int, int> commutationTable;
+        private Dictionary<CNetworkPortIn, CNetworkPortOut> commutationTable;
 
 
-        public void setCommutationTable(Dictionary<int,int> commutationTable)
+        public void setCommutationTable(Dictionary<CNetworkPortIn, CNetworkPortOut> commutationTable)
         {
             this.commutationTable = commutationTable;
         }
@@ -21,13 +21,18 @@ namespace NetworkNode
             //metoda zwracac ma docelowo ID portu na ktory ma wyjsc dana komorka ATM
             return iD;
         }
-        public void addConnection(int portIn, int portOut)
+        public void addConnection(CNetworkPortIn portIn, CNetworkPortOut portOut)
         {
             commutationTable.Add(portIn, portOut);
         }
-        public void removeConnection(int portIn)
+        public void removeConnection(CNetworkPortIn portIn)
         {
             commutationTable.Remove(portIn);
+        }
+
+        public void passOnData(Data.CCharacteristicData data,CNetworkPortIn port )
+        {
+            commutationTable[port].send(data);
         }
 
         public void showAll()
