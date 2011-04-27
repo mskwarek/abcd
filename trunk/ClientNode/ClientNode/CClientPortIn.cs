@@ -19,12 +19,13 @@ namespace ClientNode
         private NetworkStream clientStream;
         private StreamWriter serwerStream;
         private static String helloMessage = "Welcome to port : " ;
-        
+        private int portNumber;
+   
         public CClientPortIn(int i, Boolean p):       
            base(i, p){}
 
 
-        public void init(int portNumber) //metoda uruchamiająca nasłuchiwanie na porcie. 
+        public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
         {
             status = true;
             portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
