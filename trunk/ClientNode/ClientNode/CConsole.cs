@@ -56,6 +56,7 @@ namespace ClientNode
                     catch (Exception e)
                     {
                         Console.WriteLine("argument nie jest liczbą");
+                        Console.WriteLine(e.StackTrace);
                     }
                         
                     

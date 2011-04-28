@@ -17,12 +17,12 @@ namespace ClientNode
         private TcpListener portListener;
         private TcpClient client;
         private NetworkStream clientStream;
-        private StreamWriter serwerStream;
-        private static String helloMessage = "Welcome to port : " ;
         private int portNumber;
-   
-        public CClientPortIn(int i, Boolean p):       
-           base(i, p){}
+    
+        public CClientPortIn(int id, Boolean busy, int systemPortNumber): base(id, busy){
+            this.portNumber = systemPortNumber;
+            Console.WriteLine("Port o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
+        }
 
 
         public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
@@ -30,7 +30,6 @@ namespace ClientNode
             status = true;
             portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
-
             client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
             clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
             Console.WriteLine("connection accepted ");
