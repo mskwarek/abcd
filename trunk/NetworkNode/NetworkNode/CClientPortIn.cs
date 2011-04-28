@@ -1,34 +1,59 @@
-﻿using System;
+﻿namespace NetworkNode
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Data;
+using System.Net;
+using System.Net.Sockets;
+using System.IO;
 
 // Klasa portu wyjściowego dziedzicząca po CClientPort
 
-namespace ClientNode
-{
     class CClientPortIn : CClientPort
     {
-
+        private bool status;
+        private IPAddress ip = IPAddress.Parse("127.0.0.1");     //adres serwera
+        private TcpListener portListener;
+        private TcpClient client;
+        private NetworkStream clientStream;
+        private StreamWriter serwerStream;
+        private static String helloMessage = "Welcome to port : " ;
+        private int portNumber;
+   
         public CClientPortIn(int i, Boolean p):       
            base(i, p){}
 
-        private bool setHeader(CUserData userData, int destination)
-        {
-            return true;
-        }
 
-        public void prepareData(CUserData userData, int destination)
+        public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
         {
-            if(setHeader(userData, destination))
+            status = true;
+            portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
+            portListener.Start();                      //uruchamiamy serwer
+
+            client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
+            clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
+            Console.WriteLine("connection accepted ");
+            while (status) //uruchamiamy nasłuchiwanie
             {
-                //wrzuc na pole komutacyjne
-                
+                StreamReader sr = new StreamReader(clientStream);
+                String dane = sr.ReadLine();
+                Console.WriteLine(dane);
             }
 
         }
 
+        public void shutdown()
+        {
+            status = false;
+            client.Close();
+            portListener.Stop();
+        }
+
+
+    
+        
+
+    
     }
 }
 

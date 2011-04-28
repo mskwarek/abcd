@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>42679148-7bca-493e-963f-6b9ba1ab4629</ProjectGuid>
+    <ProjectGuid>{D228B255-FE88-439F-9DD5-8EA7813C2075}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ManagementLayer</RootNamespace>

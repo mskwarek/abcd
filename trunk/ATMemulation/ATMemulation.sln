@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientNode", "..\ClientNode
 		{F9CF54D3-ED5F-4C87-8C0C-8067E306CC5E} = {F9CF54D3-ED5F-4C87-8C0C-8067E306CC5E}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagementLayer", "ManagementLayer\ManagementLayer.csproj", "{D228B255-FE88-439F-9DD5-8EA7813C2075}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -35,6 +37,10 @@ Global
 		{3D24BA8C-2B32-4694-9DEE-8C62B51E9B80}.Debug|x86.Build.0 = Debug|x86
 		{3D24BA8C-2B32-4694-9DEE-8C62B51E9B80}.Release|x86.ActiveCfg = Release|x86
 		{3D24BA8C-2B32-4694-9DEE-8C62B51E9B80}.Release|x86.Build.0 = Release|x86
+		{D228B255-FE88-439F-9DD5-8EA7813C2075}.Debug|x86.ActiveCfg = Debug|x86
+		{D228B255-FE88-439F-9DD5-8EA7813C2075}.Debug|x86.Build.0 = Debug|x86
+		{D228B255-FE88-439F-9DD5-8EA7813C2075}.Release|x86.ActiveCfg = Release|x86
+		{D228B255-FE88-439F-9DD5-8EA7813C2075}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
