@@ -9,6 +9,10 @@ namespace ManagementLayer
     {
         static void Main(string[] args)
         {
+            CNetworkConfiguration cnc = new CNetworkConfiguration();
+            cnc.readConfig();
+            cnc.showList();
+
         }
     }
 }

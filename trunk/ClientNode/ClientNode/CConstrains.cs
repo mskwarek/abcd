@@ -10,5 +10,6 @@ namespace ClientNode
         public static int inputPortNumber;
         public static int outputPortNumber;
         public static int nodeNumber;
+        public static const String nodeType = "ClientNode"; 
     }
 }
