@@ -26,14 +26,15 @@ namespace NetworkNode
         {
             portIn.STATUS = true;
             portOut.STATUS = true;
-            CCommutationTable.Instance.addConnection(portIn, portOut);
+            //Wydaje mi się, że to nie tak!
+                //CCommutationTable.Instance.addEntry(
         }
 
         public void removeConnection(CNetworkPortIn portIn, CNetworkPortOut portOut) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
         {
             portIn.STATUS = false;
             portOut.STATUS = false;
-            CCommutationTable.Instance.removeConnection(portIn);
+            //CCommutationTable.Instance.removeConnection(portIn);
         }
 
         public void showConnections() //metoda wyswietlajaca zestawione polaczenia

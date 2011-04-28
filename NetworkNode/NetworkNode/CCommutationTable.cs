@@ -6,8 +6,26 @@ using Data;
 
 namespace NetworkNode
 {
-   class CCommutationTable
+   public sealed class CCommutationTable
     {
+       static readonly CCommutationTable instance = new CCommutationTable();
+
+       static CCommutationTable()
+       {
+       }
+
+       CCommutationTable()
+       {
+       }
+
+       public static CCommutationTable Instance
+       {
+           get
+           {
+               return instance;
+           }
+       }
+
         // IN/OUT
         private Dictionary<PortInfo, PortInfo> commutationTable;
         
