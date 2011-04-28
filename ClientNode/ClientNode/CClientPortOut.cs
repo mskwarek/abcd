@@ -12,16 +12,13 @@ namespace ClientNode
 
     class CClientPortOut : CClientPort
     {
-
-        private int _id;
-        private bool _busy;
         private static TcpClient client;
         private static String ip = "127.0.0.1";
         private NetworkStream stream;
         private StreamWriter clientStream;
 
         //konstruktor
-        public CClientPortOut(int i, bool p): base(i,p){}
+        public CClientPortOut(int id, bool busy): base(id,busy){}
 
         public void init(int portNumber) // metoda łącząca socket z portNumber
         {

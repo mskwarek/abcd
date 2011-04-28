@@ -11,8 +11,6 @@ namespace ClientNode
     {
         private List<CClientPortIn> InputPortList = new List<CClientPortIn>();
         private List<CClientPortOut> OutputPortList = new List<CClientPortOut>();
-        private int InputPortCount;
-        private int OutputPortCount;
         private static  CPortManager instance = null;
 
         public static CPortManager Instance
@@ -44,10 +42,10 @@ namespace ClientNode
                         case XmlNodeType.Element:
                             switch (textReader.Name) {
                                 case "InputPort":
-                                    InputPortCount = Convert.ToInt16(textReader.ReadString());
+                                    CConstrains.inputPortNumber = Convert.ToInt16(textReader.ReadString());
                                     continue;
                                 case "OutputPort":
-                                    OutputPortCount = Convert.ToInt16(textReader.ReadString());
+                                    CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString());
                                     continue;
                             }
                             break;
@@ -60,15 +58,17 @@ namespace ClientNode
         }
 
         public void showConfig() {
-            Console.WriteLine("in : " + InputPortCount + " out : " + OutputPortCount); 
+            Console.WriteLine("in : " + CConstrains.inputPortNumber + " out : " + CConstrains.outputPortNumber); 
         }
 
+
         private void createPorts() {
-            for (int i = 0; i < InputPortCount; i++) {
-                InputPortList.Add(new CClientPortIn(i, false));
+            for (int i = 0; i < CConstrains.inputPortNumber; i++) {
+                int systemPortNumber = 50000 + (CConstrains.nodeNumber * 100) +i;
+                InputPortList.Add(new CClientPortIn(i, false, systemPortNumber));
             }
 
-            for (int x = 0; x < OutputPortCount; x++) {
+            for (int x = 0; x < CConstrains.outputPortNumber; x++) {
                 OutputPortList.Add(new CClientPortOut(x, false));
             }
          }
@@ -105,7 +105,7 @@ namespace ClientNode
             Console.WriteLine("Wstrzymywanie nadawnia na porcie : " + i);
             if (OutputPortList[i].STATUS == true)
             {
-                OutputPortList[i].stop();
+                //OutputPortList[i].stop();
                 OutputPortList[i].STATUS = false;
             }
             else { Console.WriteLine("błędny numer portu" ); }
