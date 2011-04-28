@@ -9,8 +9,8 @@ namespace ClientNode
     // ta klasa ma za zadanie odczytać z pliku konfiguracyjnego i utworzyc odpowiednią liczbę portów wyjściowych klienckich
     class CPortManager
     {
-        private List<CClientPortIn> InputPortList = new List<CClientPortIn>();
-        private List<CClientPortOut> OutputPortList = new List<CClientPortOut>();
+        private List<CClientPortIn> InputClientPortList = new List<CClientPortIn>();
+        private List<CClientPortOut> OutputClientPortList = new List<CClientPortOut>();
         private static  CPortManager instance = null;
 
         public static CPortManager Instance
@@ -35,16 +35,16 @@ namespace ClientNode
         }
 
         public void readConfig() {
-            XmlTextReader textReader = new XmlTextReader("../../config.xml");
+            XmlTextReader textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber +".xml");
             try {
                 while (textReader.Read()) {
                     switch (textReader.NodeType) {
                         case XmlNodeType.Element:
                             switch (textReader.Name) {
-                                case "InputPort":
+                                case "InputClientPort":
                                     CConstrains.inputPortNumber = Convert.ToInt16(textReader.ReadString());
                                     continue;
-                                case "OutputPort":
+                                case "OutputClientPort":
                                     CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString());
                                     continue;
                             }
@@ -65,25 +65,25 @@ namespace ClientNode
         private void createPorts() {
             for (int i = 0; i < CConstrains.inputPortNumber; i++) {
                 int systemPortNumber = 50000 + (CConstrains.nodeNumber * 100) +i;
-                InputPortList.Add(new CClientPortIn(i, false, systemPortNumber));
+                InputClientPortList.Add(new CClientPortIn(i, false, systemPortNumber));
             }
 
             for (int x = 0; x < CConstrains.outputPortNumber; x++) {
-                OutputPortList.Add(new CClientPortOut(x, false));
+                OutputClientPortList.Add(new CClientPortOut(x, false));
             }
          }
 
         public void showPorts() {
-            for (int i = 0; i < InputPortList.Count; i++) {
-                Console.WriteLine("in " + InputPortList[i].ID + "  " + InputPortList[i].STATUS);
+            for (int i = 0; i < InputClientPortList.Count; i++) {
+                Console.WriteLine("in " + InputClientPortList[i].ID + "  " + InputClientPortList[i].STATUS);
             }
-            for (int i = 0; i < OutputPortList.Count; i++) {
-                Console.WriteLine("out " + OutputPortList[i].ID + "  " + OutputPortList[i].STATUS);
+            for (int i = 0; i < OutputClientPortList.Count; i++) {
+                Console.WriteLine("out " + OutputClientPortList[i].ID + "  " + OutputClientPortList[i].STATUS);
             }
         }
 
         private CClientPortOut findFreePort() {   
-            CClientPortOut t = OutputPortList.Find(delegate(CClientPortOut p) {  return p.STATUS == false; });
+            CClientPortOut t = OutputClientPortList.Find(delegate(CClientPortOut p) {  return p.STATUS == false; });
             return t;
         }
         // metoda odpowiedzialna za nadawanie wiadomości
@@ -94,22 +94,30 @@ namespace ClientNode
             else
             {
                 Console.WriteLine("port o id= " + free.ID + " jest wolny");
-                int index = OutputPortList.IndexOf(free);
-                OutputPortList[index].send(str);
-                OutputPortList[index].STATUS = true;
+                int index = OutputClientPortList.IndexOf(free);
+                OutputClientPortList[index].send(str);
+                OutputClientPortList[index].STATUS = true;
             }
         }
 
         public void stopSending(int i)
         {
             Console.WriteLine("Wstrzymywanie nadawnia na porcie : " + i);
-            if (OutputPortList[i].STATUS == true)
+            if (OutputClientPortList[i].STATUS == true)
             {
-                //OutputPortList[i].stop();
-                OutputPortList[i].STATUS = false;
+                //OutputClientPortList[i].stop();
+                OutputClientPortList[i].STATUS = false;
             }
             else { Console.WriteLine("błędny numer portu" ); }
         }
-    
+
+        public void shutdownAllPorts()
+        {
+            foreach(CClientPortIn p in InputClientPortList) {
+                p.shutdown();
+            }
+
+        }
+
     }
 }
