@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Threading;
 
 // Klasa portu wyjściowego dziedzicząca po CClientPort
 
@@ -21,13 +22,18 @@ namespace ClientNode
     
         public CClientPortIn(int id, Boolean busy, int systemPortNumber): base(id, busy){
             this.portNumber = systemPortNumber;
+            
             Console.WriteLine("Port o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
+            Thread t1 = new Thread(new ThreadStart(init));
+            t1.Start();
+            
         }
 
 
         public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
         {
             status = true;
+            Console.WriteLine("włączyłem nasłuchiwanie na portcie " + portNumber);
             portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
             client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
@@ -35,6 +41,7 @@ namespace ClientNode
             Console.WriteLine("connection accepted ");
             while (status) //uruchamiamy nasłuchiwanie
             {
+              
                 StreamReader sr = new StreamReader(clientStream);
                 String dane = sr.ReadLine();
                 Console.WriteLine(dane);

@@ -8,6 +8,7 @@ namespace ManagementLayer
 {
     class CNetworkConfiguration
     {
+        Dictionary<int, String> nodesType = new Dictionary<int, string>();
         List<CLink> LinkList = new List<CLink>();
 
         public void readConfig()
@@ -48,6 +49,19 @@ namespace ManagementLayer
             foreach (CLink cl in LinkList)
                 Console.WriteLine("node " + cl.from.nodeNumber + " port " + cl.from.portNumber + " type  " + cl.from.portType + " --> node " + cl.to.nodeNumber + " port " + cl.to.portNumber + " type " + cl.to.portType + " ");
 
+        }
+
+        public void addNodeToDictionary(int i, String type)
+        {
+            try
+            {
+                nodesType.Add(i, type);
+                Console.WriteLine("dodałem " + i + " " + type);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("element o takim id juz isnieje");
+            }
         }
 
     }
