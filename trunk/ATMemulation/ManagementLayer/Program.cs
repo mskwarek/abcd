@@ -13,13 +13,6 @@ namespace ManagementLayer
             cnc.readConfig();
             cnc.showList();
 
-            cnc.addNodeToDictionary(1, "net");
-            cnc.addNodeToDictionary(2, "cli");
-            cnc.addNodeToDictionary(1, "cli");
-            cnc.addNodeToDictionary(3, "cli");
-
-
-
-        }
+         }
     }
 }
