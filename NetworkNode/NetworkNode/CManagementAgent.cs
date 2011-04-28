@@ -8,10 +8,7 @@ namespace NetworkNode
 {
     static class CManagementAgent
     {
-        private List<CNetworkPortIn> InputPortList = new List<CNetworkPortIn>();
-        private List<CNetworkPortOut> OutputPortList = new List<CNetworkPortOut>();
-        private int InputPortCount;
-        private int OutputPortCount;
+
        //CCommutationTable switchingField = new CCommutationTable();
 
         private  CManagementAgent()

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<network>
+  <link from="1;c;3" to="2;c;2"></link>
+  <link from="2;c;3" to="2;c;2"></link>
+  <link from="3;c;3" to="2;n;2"></link>
+</network>

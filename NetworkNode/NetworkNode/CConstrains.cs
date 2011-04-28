@@ -12,5 +12,6 @@ namespace NetworkNode
         public static int inputNetworkPortNumber;
         public static int outputNetworkPortNumber;
         public static int nodeNumber;
+        public static const String nodeType = "NetworkNode"; 
     }
 }
