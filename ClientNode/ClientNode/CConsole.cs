@@ -36,7 +36,8 @@ namespace ClientNode
                 ConsoleInput = Console.ReadLine();
                 if (ConsoleInput.Equals("q")) {
                     Console.WriteLine(exitMessage);
-                    Environment.Exit(0);
+                    //cpm.shutdownAllPorts();
+                    Environment.Exit(1);
                 }
                 else if(ConsoleInput.StartsWith("start")) {
                     // wywołanie metod związanych z nadawaniem 
@@ -58,34 +59,9 @@ namespace ClientNode
                         Console.WriteLine("argument nie jest liczbą");
                         Console.WriteLine(e.StackTrace);
                     }
-                        
-                    
-                    
-                    
-
                 }
                 else Console.WriteLine(ConsoleInput);
                 
-                //switch (ConsoleInput)
-                //{
-                //    case "q": 
-                //        Console.WriteLine(exitMessage);
-                //        Environment.Exit(0);
-                //        break;
-                //    case "start":
-                //        Console.WriteLine("wywołanie start");
-                //        // wywołanie metod związanych z nadawaniem 
-                //        cpm.sendMsg("dupa");
-                //        cpm.showPorts();
-                //        continue;
-                //    case "stop":
-                //        Console.WriteLine("wywołanie stop");
-                //        // wywoałenie metod związanych z wstrzymaniem nadawania
-                //        continue;
-                //    default:
-                //        Console.WriteLine(ConsoleInput);
-                //        break;
-                //}
             }
         }
 

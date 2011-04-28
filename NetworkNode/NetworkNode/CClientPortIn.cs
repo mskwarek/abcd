@@ -20,9 +20,14 @@ namespace NetworkNode
         private StreamWriter serwerStream;
         private static String helloMessage = "Welcome to port : " ;
         private int portNumber;
-   
-        public CClientPortIn(int i, Boolean p):       
-           base(i, p){}
+
+        public CClientPortIn(int id, Boolean busy, int systemPortNumber)
+            : base(id, busy)
+        {
+            this.portNumber = systemPortNumber;
+            Console.WriteLine("Port kliencki o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
+        }
+
 
 
         public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
