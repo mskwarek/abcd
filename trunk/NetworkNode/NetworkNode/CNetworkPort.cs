@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Data;
 namespace NetworkNode
 {
     class CNetworkPort : CPort
     {
-        
+        private Queue<CCharacteristicData> queue = new Queue<CCharacteristicData>();
 
         public CNetworkPort(int id, bool busy) :base(id,busy) {}
 
