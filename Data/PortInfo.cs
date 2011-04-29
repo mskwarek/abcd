@@ -11,7 +11,7 @@ namespace Data
         private int VPI;
         private int VCI;
 
-        PortInfo(int portID, int VPI, int VCI)
+        public PortInfo(int portID, int VPI, int VCI)
         {
             this.portID = portID;
             this.VPI = VPI;
