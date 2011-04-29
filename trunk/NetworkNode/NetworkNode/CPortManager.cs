@@ -101,10 +101,36 @@ namespace NetworkNode
         }
 
 
+        public CPort getOutputPort(bool clientPort, int ID)
+        {
+
+            if (clientPort)
+            {
+                CClientPortOut port = OutputClientPortList.ElementAt(ID);
+                return port;
+            }
+            else
+            {
+                CNetworkPortOut port = OutputNetworkPortList.ElementAt(ID);
+                return port;
+            }
+        }
+
+        public CPort getInputPort(bool clientPort, int ID)
+        {
+            if (clientPort)
+            {
+                CClientPortIn port = InputClientPortList.ElementAt(ID);
+                return port;
+            }
+            else
+            {
+                CNetworkPortIn port = InputNetworkPortList.ElementAt(ID);
+                return port;
+            }
+        }
 
     }
-        //Dodatkowo musi zapewniać odwoływanie do portów po ich ID 
-        //(Agent zarządzania wypełniając tablicę podaje ID, VPI, VCI, Pole komutacyjne odczytuje z tablicy komutacji ID portu na podstawie VPI, VCI
-        // i pobiera odpowiedni port na podstawie jego ID odwołując się do CPortManager)
+    
     
 }

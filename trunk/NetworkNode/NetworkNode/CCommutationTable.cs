@@ -30,7 +30,7 @@ namespace NetworkNode
         private Dictionary<PortInfo, PortInfo> commutationTable;
         
 
-        public PortInfo getOutputPort(PortInfo portIn)
+        public PortInfo getOutputPortInfo(PortInfo portIn)
         {
             PortInfo portOut;
             if (commutationTable.ContainsKey(portIn))
@@ -56,10 +56,7 @@ namespace NetworkNode
             commutationTable.Remove(portIn);
         }
 
-        //public void passOnData(Data.CCharacteristicData data, PortInfo port )
-        //{
-        //    commutationTable[port].send(data);
-        //}
+
 
         public void showAll()
         {
@@ -70,8 +67,9 @@ namespace NetworkNode
                 if (commutationTable.ContainsKey(key))
                 {
                     portOut = commutationTable[key];
+                    Console.WriteLine("Port In :" + key.getPortID() + " Port Out :" + portOut.getPortID());
                 }
-                Console.WriteLine("Port In :" + key.getPortID() + " Port Out :" + portOut.getPortID());
+                
             }
         }
 

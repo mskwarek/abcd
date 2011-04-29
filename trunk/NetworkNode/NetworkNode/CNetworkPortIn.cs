@@ -55,11 +55,9 @@ namespace NetworkNode
             portListener.Stop();
         }
 
-
-
         public void receiveData(Data.CCharacteristicData data) //metoda odbierajace dane 
         {
-            CCommutationTable.Instance.passOnData(data, this);
+         //   CCommutationTable.Instance.passOnData(data, this);
         }
     
     } 
