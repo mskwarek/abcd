@@ -12,6 +12,13 @@ namespace NetworkNode
         public static int inputNetworkPortNumber;
         public static int outputNetworkPortNumber;
         public static int nodeNumber;
-        public static const String nodeType = "NetworkNode"; 
+        public const String nodeType = "NetworkNode";
+        public static string ipAddress = "127.0.0.1";
+
+
+        public static int inputPortNumber { get { return inputClientPortNumber + inputNetworkPortNumber; } }
+        public static int outputPortNumber { get { return outputClientPortNumber + outputNetworkPortNumber; } }
+
+
     }
 }

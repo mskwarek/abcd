@@ -9,20 +9,16 @@ namespace NetworkNode
     // ta klasa ma za zadanie odczytać z pliku konfiguracyjnego i utworzyc odpowiednią liczbę portów wyjściowych klienckich
     public sealed class CPortManager
     {
-        private List<CClientPortIn> InputClientPortList = new List<CClientPortIn>();
-        private List<CClientPortOut> OutputClientPortList = new List<CClientPortOut>();
-        private List<CNetworkPortIn> InputNetworkPortList = new List<CNetworkPortIn>();
-        private List<CNetworkPortOut> OutputNetworkPortList = new List<CNetworkPortOut>();
+
+        private List<CPort> InputPortList = new List<CPort>();
+        private List<CPort> OutputPortList = new List<CPort>();
         
+        private static readonly CPortManager instance = new CPortManager();
 
-        static readonly CPortManager instance = new CPortManager();
-
-        static CPortManager()
+        private CPortManager()
         {
-        }
-
-        CPortManager()
-        {
+            readConfig();
+            createPorts();
         }
 
         public static CPortManager Instance
@@ -33,7 +29,8 @@ namespace NetworkNode
             }
         }
 
-        public void readConfig()
+
+        private void readConfig()
         {
             XmlTextReader textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
             try
@@ -46,7 +43,7 @@ namespace NetworkNode
                             switch (textReader.Name)
                             {
                                 case "InputClientPort":
-                                    CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString());
+                                    CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString());                              
                                     continue;
                                 case "OutputClientPort":
                                     CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString());
@@ -70,34 +67,43 @@ namespace NetworkNode
 
 
         /* Mechanizm tworzenia portów:
-         * porty klienckie mają numer od 50 x qq gdzie xx - numer węzła od 1 a qq to nr systemowego portu od 01 do 99
-         * porty sieciowe mają numer od 55 x qq gdzie xx - numer węzła od 1 a qq to nr systemowego portu od 01 do 99
+         * numer port systemowy na którym będzie nasłuchiwał port sieciowy albo kliencki jest tworzony w następujący sposób:
+         * wolne porty systemowe mają numery od 50 000 więc numer portu jest to kombinacja numeru węzła i id portu 
+         * 50 x qq gdzie xx - numer węzła od 1 a qq to nr portu od 01 do 99
          */
 
 
         private void createPorts()
         {
-            for (int i = 0; i < CConstrains.inputClientPortNumber; i++)
-            {
-                int systemPortNumber = 50000 + (CConstrains.nodeNumber * 100) + i;
-                InputClientPortList.Add(new CClientPortIn(i, false, systemPortNumber));
-            }
+                int z = 0;
+                //tworzenie portów wejściowych
+                for (int i = 0; i < CConstrains.inputClientPortNumber; i++)
+                {
+                    int systemPortNumber = 50000 + (CConstrains.nodeNumber * 100) + z;
+                    InputPortList.Add(new CClientPortIn(z, false, systemPortNumber));
+                    z++;
+                }
+                for (int x = 0; x < CConstrains.inputNetworkPortNumber; x++)
+                {
+                    int systemPortNumber = 50000 + (CConstrains.nodeNumber * 100) + z;
+                    InputPortList.Add(new CNetworkPortIn(z, false, systemPortNumber));
+                    z++;
+                }
 
-            for (int x = 0; x < CConstrains.outputClientPortNumber; x++)
-            {
-                OutputClientPortList.Add(new CClientPortOut(x, false));
-            } 
+
+                int j = 0;
+            //tworzenie portów wyjsciowych
+                for (int y = 0; y < CConstrains.outputClientPortNumber; y++)
+                {
+                    OutputPortList.Add(new CClientPortOut(j, false));
+                    j++;
+                }
+                for (int k = 0; k < CConstrains.outputNetworkPortNumber; k++)
+                {
+                    OutputPortList.Add(new CNetworkPortOut(j, false));
+                    j++;
+                } 
             
-            for (int y = 0; y < CConstrains.inputNetworkPortNumber; y++)
-            {
-                int systemPortNumber = 55000 + (CConstrains.nodeNumber * 100) + y;
-                InputNetworkPortList.Add(new CNetworkPortIn(y, false, systemPortNumber));
-            }
-
-            for (int z = 0; z < CConstrains.outputNetworkPortNumber; z++)
-            {
-                OutputNetworkPortList.Add(new CNetworkPortOut(z, false));
-            }
         }
 
 
@@ -106,12 +112,12 @@ namespace NetworkNode
 
             if (clientPort)
             {
-                CClientPortOut port = OutputClientPortList.ElementAt(ID);
+                CClientPortOut port = (CClientPortOut)OutputPortList.ElementAt(ID);
                 return port;
             }
             else
             {
-                CNetworkPortOut port = OutputNetworkPortList.ElementAt(ID);
+                CNetworkPortOut port = (CNetworkPortOut)OutputPortList.ElementAt(ID);
                 return port;
             }
         }
@@ -120,13 +126,28 @@ namespace NetworkNode
         {
             if (clientPort)
             {
-                CClientPortIn port = InputClientPortList.ElementAt(ID);
+                CClientPortIn port = (CClientPortIn)InputPortList.ElementAt(ID);
                 return port;
             }
             else
             {
-                CNetworkPortIn port = InputNetworkPortList.ElementAt(ID);
+                CNetworkPortIn port = (CNetworkPortIn)InputPortList.ElementAt(ID);
                 return port;
+            }
+        }
+
+
+
+        public void getNodePortConfiguration()
+        {
+            Console.WriteLine("\n\nNode ID = " + CConstrains.nodeNumber + " PORT CONFIGURATION\n\n");
+            foreach (CPort p in InputPortList)
+            {
+                Console.WriteLine("ID = " + p.ID + " CLASS = " + p.PORTCLASS + " TYPE = " + p.PORTTYPE + " LISTENING ON PORT = " + p.PORTNUMBER);
+            }
+            foreach (CPort p in OutputPortList)
+            {
+                Console.WriteLine("ID = " + p.ID + " CLASS = " + p.PORTCLASS + " TYPE = " + p.PORTTYPE + " SENDING TO PORT = " + p.PORTNUMBER);
             }
         }
 

@@ -10,19 +10,24 @@ namespace NetworkNode
     class CNetworkPortOut:CNetworkPort
     {
         private static TcpClient client;
-        private static String ip = "127.0.0.1";
         private NetworkStream stream;
         private StreamWriter clientStream;
 
-        //konstruktor
-        public CNetworkPortOut(int id, bool busy) : base(id, busy) { }
 
-        public void init(int portNumber) // metoda łącząca socket z portNumber
+
+        //konstruktor
+        public CNetworkPortOut(int id, bool busy) : base(id, busy) {
+            base.PORTTYPE = "OUT";
+            base.PORTCLASS = "NetworkPort";
+        }
+
+        public void init(int systemPortNumber) // metoda łącząca socket z portNumber
         {
+            base.PORTNUMBER = systemPortNumber;
             try
             {
                 client = new TcpClient();
-                client.Connect(ip, portNumber);
+                client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
                 stream = client.GetStream();
             }
             catch (Exception e)

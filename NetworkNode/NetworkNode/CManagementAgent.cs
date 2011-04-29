@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace NetworkNode
 {
-    static class CManagementAgent
+     class CManagementAgent
     {
 
        //CCommutationTable switchingField = new CCommutationTable();

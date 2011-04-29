@@ -13,19 +13,20 @@ namespace NetworkNode
     class CClientPortIn : CClientPort
     {
         private bool status;
-        private IPAddress ip = IPAddress.Parse("127.0.0.1");     //adres serwera
+        private IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
         private TcpListener portListener;
         private TcpClient client;
         private NetworkStream clientStream;
         private StreamWriter serwerStream;
         private static String helloMessage = "Welcome to port : " ;
-        private int portNumber;
 
         public CClientPortIn(int id, Boolean busy, int systemPortNumber)
             : base(id, busy)
         {
-            this.portNumber = systemPortNumber;
-            Console.WriteLine("Port kliencki o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
+            base.PORTNUMBER = systemPortNumber;
+            base.PORTTYPE = "IN";
+            base.PORTCLASS = "ClientPort";
+            Console.WriteLine("Port kliencki o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
         }
 
 
@@ -33,7 +34,7 @@ namespace NetworkNode
         public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
         {
             status = true;
-            portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
+            portListener = new TcpListener(ip, base.PORTNUMBER);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
 
             client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
