@@ -14,12 +14,12 @@ namespace Data
          * Setters
          ******/
 
-        void setCAdministrationData(CAdministrationData cAdministrationData)
+        public void setCAdministrationData(CAdministrationData cAdministrationData)
         {
             this.cAdministrationData = cAdministrationData;
         }
 
-        void setCUserData(CUserData cUserData)
+        public void setCUserData(CUserData cUserData)
         {
             this.cUserData = cUserData;
         }
@@ -28,12 +28,12 @@ namespace Data
          * Getters
          ******/
 
-        CAdministrationData getCAdministrationData()
+        public CAdministrationData getCAdministrationData()
         {
             return cAdministrationData;
         }
 
-        CUserData getCUserData()
+        public CUserData getCUserData()
         {
             return cUserData;
         }
