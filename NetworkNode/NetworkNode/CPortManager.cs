@@ -25,6 +25,7 @@ namespace NetworkNode
         {
             get
             {
+               
                 return instance;
             }
         }
@@ -32,6 +33,7 @@ namespace NetworkNode
 
         private void readConfig()
         {
+
             XmlTextReader textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
             try
             {
