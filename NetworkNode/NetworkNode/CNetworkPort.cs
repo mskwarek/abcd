@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkNode
 {
-    class CNetworkPort
+    class CNetworkPort : CPort
     {
         private int _id;
         private Boolean _busy;

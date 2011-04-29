@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkNode
 { // klasa po której będą dziedziczyć porty wej i wyj
-    class CClientPort 
+    class CClientPort : CPort
     {
         private int _id;
         private Boolean _busy;

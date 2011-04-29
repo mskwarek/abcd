@@ -24,5 +24,13 @@ namespace NetworkNode
                 return instance;
             }
         }
+
+        public void passOnData(Data.CCharacteristicData data, CPort inputPort)
+        {
+            int VCI = data.getCAdministrationData().getVCI();
+            int VPI = data.getCAdministrationData().getVPI();
+
+            CCommutationTable.Instance.getOutputPortInfo(new Data.PortInfo(inputPort.ID, VPI, VCI));
+        }
     }
 }
