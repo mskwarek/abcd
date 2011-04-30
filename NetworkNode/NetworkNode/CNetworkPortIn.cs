@@ -8,7 +8,7 @@ using System.IO;
 
 namespace NetworkNode
 {
-    class CNetworkPortIn : CNetworkPort
+    public class CNetworkPortIn : CNetworkPort
     {
 
         private bool status;

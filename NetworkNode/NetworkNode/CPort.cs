@@ -7,11 +7,16 @@ namespace NetworkNode
 {
     public class CPort
     {
-        private int _id;
-        private Boolean _busy;
-        private int portNumber;
-        private String portClass;
-        private String portType;
+        protected int _id;
+        protected Boolean _busy;
+        protected int portNumber;
+        protected String portClass;
+        protected String portType;
+
+        public CPort()
+        {
+
+        }
 
         public CPort(int id, Boolean x)
         {

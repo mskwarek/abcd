@@ -24,8 +24,7 @@ namespace NetworkNode
         public static CPortManager Instance
         {
             get
-            {
-               
+            {       
                 return instance;
             }
         }
@@ -109,10 +108,10 @@ namespace NetworkNode
         }
 
 
-        public CPort getOutputPort(bool clientPort, int ID)
+        public CPort getOutputPort(int ID)
         {
 
-            if (clientPort)
+            if( OutputPortList.ElementAt(ID).GetType() == typeof(CClientPortOut) )
             {
                 CClientPortOut port = (CClientPortOut)OutputPortList.ElementAt(ID);
                 return port;
@@ -124,16 +123,16 @@ namespace NetworkNode
             }
         }
 
-        public CPort getInputPort(bool clientPort, int ID)
+        public CPort getInputPort(int ID)
         {
-            if (clientPort)
+            if (OutputPortList.ElementAt(ID).GetType() == typeof(CClientPortOut))
             {
-                CClientPortIn port = (CClientPortIn)InputPortList.ElementAt(ID);
+                CClientPortOut port = (CClientPortOut)InputPortList.ElementAt(ID);
                 return port;
             }
             else
             {
-                CNetworkPortIn port = (CNetworkPortIn)InputPortList.ElementAt(ID);
+                CNetworkPortOut port = (CNetworkPortOut)InputPortList.ElementAt(ID);
                 return port;
             }
         }

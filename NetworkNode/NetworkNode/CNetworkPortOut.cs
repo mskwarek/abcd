@@ -7,7 +7,7 @@ using System.IO;
 
 namespace NetworkNode
 {
-    class CNetworkPortOut:CNetworkPort
+    public class CNetworkPortOut:CNetworkPort
     {
         private static TcpClient client;
         private NetworkStream stream;
@@ -49,15 +49,21 @@ namespace NetworkNode
             clientStream.WriteLine(str);
             clientStream.Flush();
         }
-        private void setCurrentVPI_VCI(Data.CCharacteristicData data)
+        private Data.CCharacteristicData prepareNewAdministrationData(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
         {
-
+            //pobieram dawne dane administracyjne
+            Data.CAdministrationData oldCAdministrationData = data.getCAdministrationData();
+            Data.CAdministrationData newCAdministrationData = oldCAdministrationData;
+            //zmieniam adresy VPI/VCI
+            newCAdministrationData.setVCI(outputPortInfo.getVCI());
+            newCAdministrationData.setVPI(outputPortInfo.getVPI());
+            data.setCAdministrationData(newCAdministrationData);
+            return data;
         }
 
-        public void send( Data.CCharacteristicData data )
+        public void send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
         {
-            setCurrentVPI_VCI(data);
-
+            data = prepareNewAdministrationData(data, outputPortInfo);
             //send
         }
     }
