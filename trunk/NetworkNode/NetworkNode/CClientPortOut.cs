@@ -54,5 +54,11 @@ namespace  NetworkNode
             clientStream.WriteLine(str);
             clientStream.Flush();
         }
+
+        public void send(Data.CCharacteristicData data)
+        {
+            Data.CUserData cUserData = data.getCUserData();
+            //send
+        }
     }
 }

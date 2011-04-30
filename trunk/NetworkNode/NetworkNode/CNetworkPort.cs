@@ -5,7 +5,7 @@ using System.Text;
 using Data;
 namespace NetworkNode
 {
-    class CNetworkPort : CPort
+    public class CNetworkPort : CPort
     {
         private Queue<CCharacteristicData> queue = new Queue<CCharacteristicData>();
 

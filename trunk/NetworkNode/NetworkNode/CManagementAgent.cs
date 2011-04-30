@@ -6,22 +6,32 @@ using System.Xml;
 
 namespace NetworkNode
 {
-     class CManagementAgent
+    public sealed class CManagementAgent
     {
 
-       //CCommutationTable switchingField = new CCommutationTable();
+       static readonly CManagementAgent instance = new CManagementAgent();
 
-        private  CManagementAgent()
+
+       private CManagementAgent()
+       {
+       }
+
+       public static CManagementAgent Instance
+       {
+           get
+           {
+               return instance;
+           }
+       }      
+
+        public void setCommutationTable(Dictionary<Data.PortInfo, Data.PortInfo> commutationTable)
         {
-
+            CCommutationTable.Instance.setCommutationTable(commutationTable);
         }
 
-        public void addConnection(CNetworkPortIn portIn,CNetworkPortOut portOut) //metoda zestawiajaca polaczenia w polu komutacyjnym danego wezla
+        public void resetCommutationTable()
         {
-            portIn.STATUS = true;
-            portOut.STATUS = true;
-            //Wydaje mi się, że to nie tak!
-                //CCommutationTable.Instance.addEntry(
+            CCommutationTable.Instance.resetCommutationTable();
         }
 
         public void removeConnection(CNetworkPortIn portIn, CNetworkPortOut portOut) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla

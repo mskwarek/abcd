@@ -20,8 +20,7 @@ namespace NetworkNode
         private StreamWriter serwerStream;
         private static String helloMessage = "Welcome to port : " ;
 
-        public CClientPortIn(int id, Boolean busy, int systemPortNumber)
-            : base(id, busy)
+        public CClientPortIn(int id, Boolean busy, int systemPortNumber) : base(id, busy)
         {
             base.PORTNUMBER = systemPortNumber;
             base.PORTTYPE = "IN";
