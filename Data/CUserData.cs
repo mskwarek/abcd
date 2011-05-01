@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Data
-{
+{   [Serializable]
     public class CUserData
     {
         private static int MAX_CAPACITY = 48;

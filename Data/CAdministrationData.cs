@@ -9,7 +9,7 @@ namespace Data
     public enum PT { _000_, _001_, _010_, _011_, _100_, _101_, _110_, _111_ };
     public enum CLP { _0_, _1_ };
 
-
+    [Serializable]
     public class CAdministrationData
     {
         private static int VPI_UNI_MAX = 255;
