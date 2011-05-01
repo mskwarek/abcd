@@ -7,7 +7,7 @@ namespace NetworkNode
 {
     public class CNetworkPort : CPort
     {
-        private Queue<CCharacteristicData> queue = new Queue<CCharacteristicData>();
+        public Queue<CCharacteristicData> queue = new Queue<CCharacteristicData>();
 
         public CNetworkPort(int id, bool busy) :base(id,busy) {}
 

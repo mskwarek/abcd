@@ -5,7 +5,8 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
-
+using Data;
+using System.Runtime.Serialization.Formatters.Binary;
 namespace NetworkNode
 {
     public class CNetworkPortIn : CNetworkPort
@@ -41,11 +42,14 @@ namespace NetworkNode
 
             client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
             clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
-            Console.WriteLine("connection accepted ");
+            Console.WriteLine("connection accepted");
             while (status) //uruchamiamy nasłuchiwanie
             {
-                StreamReader sr = new StreamReader(clientStream);
-                String dane = sr.ReadLine();
+                //StreamReader sr = new StreamReader(clientStream);
+                //Stream stream = new Stream(clientStream.); 
+                BinaryFormatter binaryFormater =new BinaryFormatter();
+                CCharacteristicData dane = (CCharacteristicData) binaryFormater.Deserialize(clientStream);
+                queue.Enqueue(dane);
                 Console.WriteLine(dane);
             }
 

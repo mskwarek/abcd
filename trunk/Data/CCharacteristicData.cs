@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Data
-{
+{   [Serializable]
     public class CCharacteristicData
     {
         private CAdministrationData cAdministrationData;
