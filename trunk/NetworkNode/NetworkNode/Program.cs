@@ -14,7 +14,7 @@ namespace NetworkNode
            
             CPortManager.Instance.getNodePortConfiguration();
            
-            //CManagementAgent.Instance.resetCommutationTable();
+            CManagementAgent.Instance.resetCommutationTable();
             
             System.Console.ReadKey();
             return 0;
