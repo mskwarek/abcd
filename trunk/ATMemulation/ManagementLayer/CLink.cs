@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ManagementLayer
 {
-    class CLink : IEquatable<CLinkInfo>
+    class CLink : IEquatable<CLink>
     {
         public CLinkInfo from;
         public CLinkInfo to;
@@ -19,7 +19,7 @@ namespace ManagementLayer
 
         public bool Equals(CLink other)
         {
-            if (this.from.nodeNumber == other.from.nodeNumber && this.from.portNumber == other.from.portNumber && this.to.portNumber == other.to.portNumber && this.to.nodeNumber == this.to.nodeNumber)
+            if (this.from.nodeNumber == other.from.nodeNumber && this.from.portNumber == other.from.portNumber && this.to.portNumber == other.to.portNumber && this.to.nodeNumber == other.to.nodeNumber)
             {
                 return true;
             }
