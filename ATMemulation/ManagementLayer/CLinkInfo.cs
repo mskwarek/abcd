@@ -18,6 +18,8 @@ namespace ManagementLayer
             portNumber = pn;
             portType = pt;
         }
+
+           
     }
 
 }

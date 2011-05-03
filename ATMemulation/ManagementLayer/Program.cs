@@ -9,9 +9,18 @@ namespace ManagementLayer
     {
         static void Main(string[] args)
         {
-            CNetworkConfiguration cnc = new CNetworkConfiguration();
-            cnc.readConfig();
-            cnc.showList();
+            
+            //while (true)
+            //{
+            //    String input = Console.ReadLine();
+            //    if (input.StartsWith("stop"))
+            //    {
+            //        Console.WriteLine("zawiera " + input);
+            //    }
+            //}
+            CMLConsole.Instance.consoleInit();
+
+
 
          }
     }
