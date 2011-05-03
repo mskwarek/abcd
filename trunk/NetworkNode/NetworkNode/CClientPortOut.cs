@@ -41,7 +41,8 @@ namespace  NetworkNode
             }
         }
 
-        private Data.CCharacteristicData prepareAdministrationData(Data.CUserData userData, Data.PortInfo outputPortInfo)
+        // NIEPOTRZEBNE
+   /*     private Data.CCharacteristicData prepareAdministrationData(Data.CUserData userData, Data.PortInfo outputPortInfo)
         {
             
             Data.CAdministrationData newCAdministrationData = new Data.CAdministrationData(Data.Contact.UNI, Data.PT._000_, Data.CLP._0_);
@@ -51,7 +52,7 @@ namespace  NetworkNode
             Data.CCharacteristicData cCharacteristicData = new Data.CCharacteristicData(newCAdministrationData, userData);
             
             return cCharacteristicData;
-        }
+        }*/ 
 
         public void shutdown()
         {
