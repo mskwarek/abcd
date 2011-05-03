@@ -5,6 +5,9 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using Data;
+using System.Threading;
 
 namespace NetworkNode
 {
@@ -25,6 +28,11 @@ namespace NetworkNode
             base.PORTTYPE = CConstrains.PortType["PortTypeIN"];
             base.PORTCLASS = CConstrains.PortType["ClientPortClass"];
             Console.WriteLine("Port kliencki o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
+            Thread t1 = new Thread(new ThreadStart(init));
+            t1.Start();
+            Thread t2 = new Thread(new ThreadStart(receiveData));
+            t2.Start();
+            
         }
 
 
@@ -40,10 +48,14 @@ namespace NetworkNode
             Console.WriteLine("connection accepted ");
             while (status) //uruchamiamy nasłuchiwanie
             {
-                StreamReader sr = new StreamReader(clientStream);
-                String dane = sr.ReadLine();
+                //StreamReader sr = new StreamReader(clientStream);
+                //Stream stream = new Stream(clientStream.); 
+                BinaryFormatter binaryFormater = new BinaryFormatter();
+                CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);
+                queue.Enqueue(dane);
                 Console.WriteLine(dane);
             }
+
 
         }
 
@@ -72,7 +84,7 @@ namespace NetworkNode
         {
             while (status)
             {
-               // if (queue.Count != 0)
+                if (queue.Count != 0)
                 {
                     //CCommutationField.Instance.passOnData(queue.Dequeue(), this);
                 }

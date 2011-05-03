@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.IO;
 using Data;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 
 namespace NetworkNode
 {
@@ -28,8 +29,11 @@ namespace NetworkNode
             base.PORTCLASS = CConstrains.PortType["NetworkPortClass"];
             base.PORTNUMBER = systemPortNumber;
             Console.WriteLine("Port sieciowy o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
-            init();
-            receiveData();
+            Thread t1 = new Thread(new ThreadStart(init));
+            t1.Start();
+            Thread t2 = new Thread(new ThreadStart(receiveData));
+            t2.Start();
+            
         }
 
 

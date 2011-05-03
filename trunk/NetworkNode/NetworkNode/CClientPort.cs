@@ -8,7 +8,7 @@ namespace NetworkNode
     public class CClientPort : CPort
     {
 
-        private Queue<Data.CUserData> queue = new Queue<Data.CUserData>();
+        public Queue<Data.CUserData> queue = new Queue<Data.CUserData>();
 
         public CClientPort(int id, bool busy) :base(id,busy) {}
 
