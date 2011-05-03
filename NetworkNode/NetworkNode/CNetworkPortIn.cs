@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.IO;
 using Data;
 using System.Runtime.Serialization.Formatters.Binary;
+
 namespace NetworkNode
 {
     public class CNetworkPortIn : CNetworkPort
@@ -21,8 +22,6 @@ namespace NetworkNode
         private static String helloMessage = "Welcome to port : " ;
 
 
-        
-
         public CNetworkPortIn(int id, Boolean busy, int systemPortNumber)
             : base(id, busy)
         {
@@ -30,6 +29,8 @@ namespace NetworkNode
             base.PORTCLASS = "NetworkPort";
             base.PORTNUMBER = systemPortNumber;
             Console.WriteLine("Port sieciowy o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
+            init();
+            receiveData();
         }
 
 
@@ -62,9 +63,15 @@ namespace NetworkNode
             portListener.Stop();
         }
 
-        public void receiveData(Data.CCharacteristicData data) //metoda odbierajace dane 
+        private void receiveData() //metoda odbierajace dane 
         {
-         //   CCommutationTable.Instance.passOnData(data, this);
+            while (status)
+            {
+                if (queue.Count != 0)
+                {
+                    CCommutationField.Instance.passOnData(queue.Dequeue(), this);
+                }
+            }
         }
 
 
