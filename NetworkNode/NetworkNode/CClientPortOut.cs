@@ -40,14 +40,19 @@ namespace  NetworkNode
                 Console.WriteLine("Error.... " + e.StackTrace);
             }
         }
-        private Data.CCharacteristicData prepareAdministrationData(Data.PortInfo outputPortInfo)
+
+        private Data.CCharacteristicData prepareAdministrationData(Data.CUserData userData, Data.PortInfo outputPortInfo)
         {
             
+            Data.CAdministrationData newCAdministrationData = new Data.CAdministrationData(Data.Contact.UNI, Data.PT._000_, Data.CLP._0_);
             newCAdministrationData.setVCI(outputPortInfo.getVCI());
             newCAdministrationData.setVPI(outputPortInfo.getVPI());
-            data.setCAdministrationData(newCAdministrationData);
-            return data;
+
+            Data.CCharacteristicData cCharacteristicData = new Data.CCharacteristicData(newCAdministrationData, userData);
+            
+            return cCharacteristicData;
         }
+
         public void shutdown()
         {
             client.Close();
