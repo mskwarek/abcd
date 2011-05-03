@@ -42,19 +42,7 @@ namespace ClientNode
             }
         }
 
-        private Data.CCharacteristicData prepareCharacteristicData(Data.CUserData data )
-        {
-            Data.CAdministrationData adData = new Data.CAdministrationData(Data.Contact.UNI);
-            adData.setCLP(Data.CLP._1_);  //standardowy priorytet, moze w konsoli mozna podnosic priorytet wtedy byloby 0?
-            adData.setHEC(calcHec());
-            adData.setPayloadType(Data.PT._000_); // komorki uzytkownika zawsze maja 0 na poczatku, komorki zarzadzania ! maja 1 na poczatku- to raczej wazne
-            adData.setVCI(this.VCI); //czy moze tez za pomoca PortInfo?
-            adData.setVCI(this.VPI);
-            Data.CCharacteristicData charData = new Data.CCharacteristicData();
-            charData.setCAdministrationData(adData);
-            charData.setCUserData(data);
-            return charData;
-        }
+        
 
         public void shutdown()
         {
@@ -62,11 +50,11 @@ namespace ClientNode
         }
 
         // metoda nawiązująca połączenie z węzłem sieciowym i nadająca do niego TO DO
-        public void send(String str)
+        public void send(Data.CUserData data)
         {
-            Console.WriteLine("nadaje " + str);
+            Console.WriteLine("nadaje " + data);
             clientStream = new StreamWriter(stream);
-            clientStream.WriteLine(str);
+            clientStream.WriteLine(data);
             clientStream.Flush();
         }
     }
