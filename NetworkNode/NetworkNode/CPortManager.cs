@@ -76,7 +76,7 @@ namespace NetworkNode
 
         private void createPorts()
         {
-                int z = 0;
+                int z = 1;
                 //tworzenie portów wejściowych
                 for (int i = 0; i < CConstrains.inputClientPortNumber; i++)
                 {

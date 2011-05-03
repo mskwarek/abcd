@@ -16,6 +16,8 @@ namespace ManagementLayer
         
         {"show netCfg", "Wyświetla konfigurację połaczeń w sieci"},
         {"show nodes","Wyświetla węzły wraz z ich rolą w sieci"},
+        {"getConnections [args]","Pobiera informacje o połączeniach w danych węźle "},
+        {"addConnections [args]","Dodaje połączenie w tablicy komutacji"},
         {"?","Wyswietla listę poleceń dostępnych w konsoli"}
         
         };
@@ -85,7 +87,7 @@ namespace ManagementLayer
                     }                  
 
                 }
-                else if (ConsoleInput.Equals("addconnection")) 
+                else if (ConsoleInput.StartsWith("addconnection")) 
                 {
                     String[] alt = ConsoleInput.Split(new char[] { ' ' });
                     List<int> args = new List<int>();
@@ -106,16 +108,51 @@ namespace ManagementLayer
                             }
 
                             // sprawdza poprawność argumentów
-                            if(cnc.checkFormula(args))
-                            {
-                                // zestaw połączenie.
-                            }
+                            //if(cnc.checkFormula(args))
+                            //{
+                            //    // zestaw połączenie.
+                            //}
 
                         }
                         else { Console.WriteLine("Błęda liczba argumentów"); }
                     }
 
                 }
+                else if (ConsoleInput.StartsWith("getConnections"))
+                {
+                    String[] alt = ConsoleInput.Split(new char[] { ' ' });
+                    List<int> args = new List<int>();
+                    if (alt.Count() > 1)
+                    {
+                        try
+                            {
+                                for (int i = 1; i < alt.Count(); i++)
+                                {
+                                    args.Add(Convert.ToInt16(alt[i]));
+                                }
+                            }
+                        catch (Exception e) {
+                             Console.WriteLine("Błędny argument");
+                            }
+                        // usuwam powtarzające sie argumenty
+                        int[] var = args.Distinct().ToArray();
+
+                        // dla każdego argumentu sprawdza warunek i wysyła request do noda
+                        foreach (int a in var)
+                        {
+                            if (cnc.checkFormula(a))
+                            {
+                                Console.WriteLine("Pobierasz dane z noda: " + args[0]);
+                                // pobierz dane z noda
+                            }
+                        }
+                                
+                    }
+                    else { Console.WriteLine("Nie podałeś numeru węzła"); continue; }
+                }
+
+ 
+                
                 else Console.WriteLine(ConsoleInput);
 
             }

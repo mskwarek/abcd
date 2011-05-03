@@ -8,7 +8,7 @@ namespace ManagementLayer
 {
     class CNetworkConfiguration
     {
-        Dictionary<int, String> nodesType = new Dictionary<int, string>();
+        Dictionary<int, String> nodesType = new Dictionary<int, string>() { {1,"client"}};
         List<CLink> LinkList = new List<CLink>();
 
         public void readConfig()
@@ -75,25 +75,26 @@ namespace ManagementLayer
             }
         }
 
-        public bool checkFormula(List<int> args)
+        public bool checkFormula(int args)
         {
             // sprawdzanie czy takie połączenie już istnieje oraz czy istnieją nody
             bool warunek1 = false;
-            bool warunek2 = false;
+            //bool warunek2 = false;
 
-            if (nodesType.ContainsKey(args[0]) && nodesType.ContainsKey(args[2])) 
+
+            if (nodesType.ContainsKey(args)) 
             {
                 warunek1 = true;
             }
 
-            CLink cl = new CLink(new CLinkInfo(args[0], null, args[1]), new CLinkInfo(args[2], null, args[3]));
+            //CLink cl = new CLink(new CLinkInfo(args[0], null, args[1]), new CLinkInfo(args[2], null, args[3]));
 
-            if (!LinkList.Contains(cl)) 
-            {
-                warunek2 = true;
-            }
+            //if (!LinkList.Contains(cl)) 
+            //{
+            //    warunek2 = true;
+            //}
 
-            if(warunek1 && warunek2)
+            if(warunek1)
             { return true; }
 
             return false;
