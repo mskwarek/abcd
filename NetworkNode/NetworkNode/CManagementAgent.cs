@@ -45,11 +45,14 @@ namespace NetworkNode
             CCommutationTable.Instance.resetCommutationTable();
         }
 
-        public void removeConnection(CNetworkPortIn portIn, CNetworkPortOut portOut) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
+        public void addConnection(Data.PortInfo portIn, Data.PortInfo portOut)
         {
-            portIn.STATUS = false;
-            portOut.STATUS = false;
-            //CCommutationTable.Instance.removeConnection(portIn);
+            CCommutationTable.Instance.addEntry(portIn, portOut);
+        }
+
+        public void removeConnection(Data.PortInfo portIn) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
+        {
+            CCommutationTable.Instance.removeConnection(portIn);
         }
 
         public void showConnections() //metoda wyswietlajaca zestawione polaczenia
