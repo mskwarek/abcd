@@ -70,7 +70,16 @@ namespace NetworkNode
             portListener.Stop();
         }
 
-
+        private void receiveData() //metoda odbierajace dane 
+        {
+            while (status)
+            {
+               // if (queue.Count != 0)
+                {
+                    //CCommutationField.Instance.passOnData(queue.Dequeue(), this);
+                }
+            }
+        }
     
         
 
