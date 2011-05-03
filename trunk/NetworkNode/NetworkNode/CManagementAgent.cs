@@ -14,8 +14,7 @@ namespace NetworkNode
 
        static readonly CManagementAgent instance = new CManagementAgent();
 
-       static int nodeNum = 0;
-
+       
        private bool status;
        private IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
        private int portNum;
@@ -25,16 +24,7 @@ namespace NetworkNode
 
        private CManagementAgent()
        {
-           if (nodeNum == 0)
-           {
-               nodeNum = 1; //pierwszy utworzony węzeł
-           }
-           else
-           {
-               nodeNum++;   //kolejne węzły
-           }
-
-           portNum = 50000 + nodeNum * 100;
+           portNum = 50000 + CConstrains.nodeNumber * 100;
        }
 
        public static CManagementAgent Instance

@@ -70,7 +70,10 @@ namespace  NetworkNode
         public void send(Data.CCharacteristicData data)
         {
             Data.CUserData cUserData = data.getCUserData();
-            //send
+            Console.WriteLine("nadaje " + cUserData);
+            clientStream = new StreamWriter(stream);
+            clientStream.WriteLine(cUserData);
+            clientStream.Flush();
         }
     }
 }
