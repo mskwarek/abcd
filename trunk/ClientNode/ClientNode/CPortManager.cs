@@ -87,7 +87,7 @@ namespace ClientNode
             return t;
         }
         // metoda odpowiedzialna za nadawanie wiadomości
-        public void sendMsg(String str) {
+        public void sendMsg(Data.CUserData data) {
             Console.WriteLine("wyszukuje port...");
             CClientPortOut free = findFreePort();
             if (free == null) { Console.WriteLine("Wszystkie porty zajete"); }
@@ -95,7 +95,7 @@ namespace ClientNode
             {
                 Console.WriteLine("port o id= " + free.ID + " jest wolny");
                 int index = OutputClientPortList.IndexOf(free);
-                OutputClientPortList[index].send(str);
+                OutputClientPortList[index].send(data);
                 OutputClientPortList[index].STATUS = true;
             }
         }

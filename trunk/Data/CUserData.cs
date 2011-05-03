@@ -10,7 +10,7 @@ namespace Data
         private static int MAX_CAPACITY = 48;
         private List<byte> data;
 
-        CUserData()
+        public CUserData()
         {
             data = new List<byte>();
         }
