@@ -25,8 +25,8 @@ namespace NetworkNode
         public CNetworkPortIn(int id, Boolean busy, int systemPortNumber)
             : base(id, busy)
         {
-            base.PORTTYPE = "IN";
-            base.PORTCLASS = "NetworkPort";
+            base.PORTTYPE = CConstrains.PortType.PortTypeIN.ToString();
+            base.PORTCLASS = CConstrains.PortType.NetworkPortClass.ToString();
             base.PORTNUMBER = systemPortNumber;
             Console.WriteLine("Port sieciowy o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
             init();
