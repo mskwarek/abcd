@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Data
 {
-    public enum Contact { UNI, NNI};
+    public enum Contact { UNI, NNI };
     public enum PT { _000_, _001_, _010_, _011_, _100_, _101_, _110_, _111_ };
     public enum CLP { _0_, _1_ };
 
@@ -26,9 +26,11 @@ namespace Data
 
 
         //Constructor with contact type
-        public CAdministrationData(Contact contact)
+        public CAdministrationData(Contact contact, PT payloadType, CLP clp )
         {
             this.contact = contact;
+            this.payloadType = payloadType;
+            this.clp = clp;
         }
 
 

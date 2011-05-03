@@ -9,7 +9,13 @@ namespace Data
     {
         private CAdministrationData cAdministrationData;
         private CUserData cUserData;
-        
+
+        public CCharacteristicData(CAdministrationData cAdministrationData, CUserData cUserData)
+        {
+            this.cAdministrationData = cAdministrationData;
+            this.cUserData = cUserData;
+        }
+
         /******
          * Setters
          ******/
