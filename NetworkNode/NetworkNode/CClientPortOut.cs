@@ -21,8 +21,8 @@ namespace  NetworkNode
         public CClientPortOut(int i, bool p)
             : base(i, p)
         {
-            base.PORTTYPE = "OUT";
-            base.PORTCLASS = "ClientPort";
+            base.PORTTYPE = CConstrains.PortType["PortTypeOUT"];
+            base.PORTCLASS = CConstrains.PortType["ClientPortClass"];
         }
 
         public void init(int systemPortNumber) // metoda łącząca socket z portNumber

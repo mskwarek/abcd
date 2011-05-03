@@ -17,14 +17,13 @@ namespace NetworkNode
         private TcpListener portListener;
         private TcpClient client;
         private NetworkStream clientStream;
-        private StreamWriter serwerStream;
-        private static String helloMessage = "Welcome to port : " ;
+       
 
         public CClientPortIn(int id, Boolean busy, int systemPortNumber) : base(id, busy)
         {
             base.PORTNUMBER = systemPortNumber;
-            base.PORTTYPE = "IN";
-            base.PORTCLASS = "ClientPort";
+            base.PORTTYPE = CConstrains.PortType["PortTypeIN"];
+            base.PORTCLASS = CConstrains.PortType["ClientPortClass"];
             Console.WriteLine("Port kliencki o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
         }
 

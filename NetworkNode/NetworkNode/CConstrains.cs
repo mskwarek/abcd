@@ -15,14 +15,15 @@ namespace NetworkNode
         public const String nodeType = "NetworkNode";
         public static string ipAddress = "127.0.0.1";
 
-        public enum PortType
+        public static Dictionary<string, string> PortType = new Dictionary<string, string>()
         {
-            PortTypeIN = "IN",
-            PortTypeOUT = "OUT",
-            ClientPortClass = "CLIENTPORT",
-            NetworkPortClass = "NETWORKPORT"
-            
-        }
+                {"PortTypeIN" , "IN" },
+                {"PortTypeOUT" ,"OUT"},
+                {"ClientPortClass", "CLIENTPORT"},
+                {"NetworkPortClass" , "NETWORKPORT"}
+        };        
+        
+        
 
 
         public static int inputPortNumber { get { return inputClientPortNumber + inputNetworkPortNumber; } }

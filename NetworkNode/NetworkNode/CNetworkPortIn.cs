@@ -18,15 +18,14 @@ namespace NetworkNode
         private TcpListener portListener;
         private TcpClient client;
         private NetworkStream clientStream;
-        private StreamWriter serwerStream;
-        private static String helloMessage = "Welcome to port : " ;
+    
 
 
         public CNetworkPortIn(int id, Boolean busy, int systemPortNumber)
             : base(id, busy)
         {
-            base.PORTTYPE = CConstrains.PortType.PortTypeIN.ToString();
-            base.PORTCLASS = CConstrains.PortType.NetworkPortClass.ToString();
+            base.PORTTYPE = CConstrains.PortType["PortTypeIN"];
+            base.PORTCLASS = CConstrains.PortType["NetworkPortClass"];
             base.PORTNUMBER = systemPortNumber;
             Console.WriteLine("Port sieciowy o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
             init();
