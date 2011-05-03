@@ -40,7 +40,14 @@ namespace  NetworkNode
                 Console.WriteLine("Error.... " + e.StackTrace);
             }
         }
-
+        private Data.CCharacteristicData prepareAdministrationData(Data.PortInfo outputPortInfo)
+        {
+            
+            newCAdministrationData.setVCI(outputPortInfo.getVCI());
+            newCAdministrationData.setVPI(outputPortInfo.getVPI());
+            data.setCAdministrationData(newCAdministrationData);
+            return data;
+        }
         public void shutdown()
         {
             client.Close();

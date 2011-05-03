@@ -26,7 +26,7 @@ namespace Data
 
 
         //Constructor with contact type
-        CAdministrationData(Contact contact)
+        public CAdministrationData(Contact contact)
         {
             this.contact = contact;
         }

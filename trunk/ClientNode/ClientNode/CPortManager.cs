@@ -51,6 +51,7 @@ namespace ClientNode
                             break;
                     }
                 }
+                textReader.Close();
             }
             catch(System.Exception e) {
                 Console.WriteLine(e.StackTrace);
