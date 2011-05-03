@@ -43,7 +43,7 @@ namespace ManagementLayer
             }
         }
 
-        public void showList()
+        public void showNetworkConfiguration()
         {
             Console.WriteLine("Konfiguracja sieci : ");
             foreach (CLink cl in LinkList)
@@ -60,9 +60,45 @@ namespace ManagementLayer
             }
             catch (Exception e)
             {
-                Console.WriteLine("element o takim id juz isnieje");
+                Console.WriteLine("Błąd przy dodawaniu węzła do słownika, węzeł o id = " + i + " juz isnieje");
             }
         }
+
+        public void showNodes()
+        {
+            foreach(KeyValuePair<int, String> pair in nodesType)
+            {
+                Console.WriteLine("\t Wezly w sieci");
+                Console.WriteLine("{0}, {1}",
+                pair.Key,
+                pair.Value);
+            }
+        }
+
+        public bool checkFormula(List<int> args)
+        {
+            // sprawdzanie czy takie połączenie już istnieje oraz czy istnieją nody
+            bool warunek1 = false;
+            bool warunek2 = false;
+
+            if (nodesType.ContainsKey(args[0]) && nodesType.ContainsKey(args[2])) 
+            {
+                warunek1 = true;
+            }
+
+            CLink cl = new CLink(new CLinkInfo(args[0], null, args[1]), new CLinkInfo(args[2], null, args[3]));
+
+            if (!LinkList.Contains(cl)) 
+            {
+                warunek2 = true;
+            }
+
+            if(warunek1 && warunek2)
+            { return true; }
+
+            return false;
+        }
+
 
     }
 }

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CMLConsole.cs" />
     <Compile Include="CLinkInfo.cs" />
     <Compile Include="CLink.cs" />
     <Compile Include="CNetworkConfiguration.cs" />
