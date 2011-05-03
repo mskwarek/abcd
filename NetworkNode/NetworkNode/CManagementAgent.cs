@@ -77,5 +77,17 @@ namespace NetworkNode
                 //obsługa tego co przyśle ML
             }
         }
+
+        public void sendToML()      //wysyłanie do ML - co konkretnie to zaraz..
+        {
+            TcpClient agentClient = new TcpClient();
+            agentClient.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
+            NetworkStream upStream = agentClient.GetStream();
+            StreamWriter upStreamWriter = new StreamWriter(upStream);
+
+            //wysyłanie:
+            upStreamWriter.WriteLine();
+            upStreamWriter.Flush();
+        }
    }
 }
