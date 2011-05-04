@@ -86,9 +86,17 @@ namespace Data
 
         public void setHEC()
         {
+            System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+            String GFCbinary = Convert.ToString(GFC, 2).PadLeft(4,'0');
+            String VPIbinary = Convert.ToString(VPI, 2).PadLeft(8, '0');
+            String VCIbinary = Convert.ToString(VCI, 2).PadLeft(16, '0');
+            //jak przekonwertowac PT i CLP do postaci binarnej?
+            //String PTbinary =  
+            String sHeader = GFCbinary + VPIbinary + VCIbinary;
+            
+            byte[] header=new byte[4];
+            header = encoding.GetBytes(sHeader);
 
-           // String GFCbinary = Convert.ToString(GFC, 2);
-            byte[] header=new byte[5];
             CRC8 crc = new CRC8(CRC8_POLY.CRC8_CCITT);
             byte checksum = crc.Checksum(header);
 
