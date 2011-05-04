@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="CAdministrationData.cs" />
     <Compile Include="CCharacteristicData.cs" />
+    <Compile Include="CSNMPmessage.cs" />
     <Compile Include="CUserData.cs" />
     <Compile Include="PortInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
