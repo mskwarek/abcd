@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Data
 {
-    public class PortInfo : IEquatable<PortInfo>
+    public class PortInfo
     {
         private int portID;
         private int VPI;
@@ -33,22 +33,19 @@ namespace Data
             return VPI;
         }
         // zmiana testowa do poprawienia
-        public bool Equals( PortInfo other)
+        public class EqualityComparer : IEqualityComparer<PortInfo>
         {
-            if (this.getPortID() == other.getPortID() && this.getVPI() == other.getVPI() && this.getVCI() == other.getVCI())
+
+            public bool Equals(PortInfo x, PortInfo y)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                return x.getPortID() == y.getPortID() && x.getVPI() == y.getVPI() && x.getVCI() == y.getVCI();
             }
 
-        }
+            public int GetHashCode(PortInfo x)
+            {
+                return x.getPortID() ^ x.getVCI();
+            }
 
-        public int GetHashCode(Data.PortInfo portInfo)
-        {
-            return 1;
         }
     }
 }

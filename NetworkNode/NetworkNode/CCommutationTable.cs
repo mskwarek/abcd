@@ -16,7 +16,7 @@ namespace NetworkNode
 
        private CCommutationTable()
        {
-           commutationTable = new Dictionary<PortInfo, PortInfo>();
+           commutationTable = new Dictionary<PortInfo, PortInfo>(new PortInfo.EqualityComparer());
        }
 
        public static CCommutationTable Instance
@@ -80,7 +80,7 @@ namespace NetworkNode
                 if (commutationTable.ContainsKey(key))
                 {
                     portOut = commutationTable[key];
-                    Console.WriteLine("Port In :" + key.getPortID() + " VPI :" + key.getVPI() + " VCI :" + key.getVCI() + " || Port Out :" + portOut.getPortID() + " VPI :" + key.getVPI() + " VCI :" + key.getVCI());
+                    Console.WriteLine("Port In :" + key.getPortID() + " VPI :" + key.getVPI() + " VCI :" + key.getVCI() + " || Port Out :" + portOut.getPortID() + " VPI :" + portOut.getVPI() + " VCI :" + portOut.getVCI());
                 }
                 
             }
