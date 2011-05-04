@@ -33,7 +33,28 @@ namespace Data
             return VPI;
         }
         // zmiana testowa do poprawienia
-        public class EqualityComparer : IEqualityComparer<PortInfo>
+// rozwiązanie maka
+        public bool Equals(PortInfo other) {
+
+            if (this.getPortID() == other.getPortID() && this.getVPI() == other.getVPI() && this.getVCI() == other.getVCI())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        
+        }
+
+        
+        public override int GetHashCode()
+        {
+            return this.getVCI().GetHashCode() + this.getVPI().GetHashCode() + this.getPortID().GetHashCode();
+        }
+            
+// rozwiązanie festera            
+       public class EqualityComparer : IEqualityComparer<PortInfo>
         {
 
             public bool Equals(PortInfo x, PortInfo y)
