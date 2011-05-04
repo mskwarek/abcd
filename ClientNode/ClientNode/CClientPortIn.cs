@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Threading;
+using Data;
+using System.Runtime.Serialization.Formatters.Binary;
 
 // Klasa portu wyjściowego dziedzicząca po CClientPort
 
@@ -41,9 +43,9 @@ namespace ClientNode
             Console.WriteLine("connection accepted ");
             while (status) //uruchamiamy nasłuchiwanie
             {
-              
-                StreamReader sr = new StreamReader(clientStream);
-                String dane = sr.ReadLine();
+
+                BinaryFormatter binaryFormater = new BinaryFormatter();
+                CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);
                 Console.WriteLine(dane);
             }
 

@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Threading;
+using Data;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ClientNode
 {
@@ -50,9 +52,11 @@ namespace ClientNode
         }
 
         // metoda nawiązująca połączenie z węzłem sieciowym i nadająca do niego TO DO
-        public void send(Data.CUserData data)
+        public void send(CUserData data)
         {
             Console.WriteLine("nadaje " + data);
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, data);
             clientStream = new StreamWriter(stream);
             clientStream.WriteLine(data);
             clientStream.Flush();
