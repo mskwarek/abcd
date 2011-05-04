@@ -35,6 +35,9 @@ namespace NetworkNode
             if (commutationTable.ContainsKey(portIn))
             {
                 portOut = commutationTable[portIn];
+                // testowe
+                Console.WriteLine("tutaj");
+                //
             }
             else
             {
