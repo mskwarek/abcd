@@ -30,7 +30,7 @@ namespace ClientNode
             t.Start();
         }
         
-        public void init() // metoda łącząca socket z portNumber
+        private void init() // metoda łącząca socket z portNumber
         {
             try
             {

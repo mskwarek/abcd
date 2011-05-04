@@ -96,6 +96,7 @@ namespace ClientNode
             {
                 Console.WriteLine("port o id= " + free.ID + " jest wolny");
                 int index = OutputClientPortList.IndexOf(free);
+                OutputClientPortList[index].startPort(50201);
                 OutputClientPortList[index].send(data);
                 OutputClientPortList[index].STATUS = true;
             }
