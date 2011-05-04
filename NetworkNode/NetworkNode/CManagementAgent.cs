@@ -24,7 +24,8 @@ namespace NetworkNode
 
        private CManagementAgent()
        {
-           portNum = 50000 + CConstrains.nodeNumber * 100;
+           //portNum = 50000 + CConstrains.nodeNumber * 100;
+           portNum = 161;
        }
 
        public static CManagementAgent Instance
