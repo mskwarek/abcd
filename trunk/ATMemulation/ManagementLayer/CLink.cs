@@ -9,25 +9,39 @@ namespace ManagementLayer
     {
         public CLinkInfo from;
         public CLinkInfo to;
+        int _weight;
+        private bool _state;
 
 
-        public CLink(CLinkInfo f, CLinkInfo t)
+        public CLink(CLinkInfo f, CLinkInfo t, int weight)
         {
             from = f;
             to = t;
+            _weight = weight;
+        }
+        
+        private bool state
+        {
+            get { return _state; }
+            set { _state = value; }
         }
 
-        public bool Equals(CLink other)
+        public CLinkInfo B
         {
-            if (this.from.nodeNumber == other.from.nodeNumber && this.from.portNumber == other.from.portNumber && this.to.portNumber == other.to.portNumber && this.to.nodeNumber == other.to.nodeNumber)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            get { return to; }
+            set { to = value; }
+        }
 
+        public CLinkInfo A
+        {
+            get { return from; }
+            set { from = value; }
+        }       
+
+        public int Weight
+        {
+            get { return _weight; }
+            set { _weight = value; }
         }
     }
 }

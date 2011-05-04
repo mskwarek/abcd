@@ -33,7 +33,7 @@ namespace ManagementLayer
                         CLinkInfo from = new CLinkInfo(Convert.ToInt32(fromArray[0]), fromArray[1], Convert.ToInt32(fromArray[2]));
                         CLinkInfo to = new CLinkInfo(Convert.ToInt32(toArray[0]), toArray[1], Convert.ToInt32(toArray[2]));
                         //add
-                        LinkList.Add(new CLink(from, to));
+                        LinkList.Add(new CLink(from, to, 1));
                     }
                 }
             }
