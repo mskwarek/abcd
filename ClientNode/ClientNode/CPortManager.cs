@@ -64,12 +64,12 @@ namespace ClientNode
 
 
         private void createPorts() {
-            for (int i = 0; i < CConstrains.inputPortNumber; i++) {
+            for (int i = 1; i <= CConstrains.inputPortNumber; i++) {
                 int systemPortNumber = 50000 + (CConstrains.nodeNumber * 100) +i;
                 InputClientPortList.Add(new CClientPortIn(i, false, systemPortNumber));
             }
 
-            for (int x = 0; x < CConstrains.outputPortNumber; x++) {
+            for (int x = 1; x <= CConstrains.outputPortNumber; x++) {
                 OutputClientPortList.Add(new CClientPortOut(x, false));
             }
          }
@@ -96,7 +96,9 @@ namespace ClientNode
             {
                 Console.WriteLine("port o id= " + free.ID + " jest wolny");
                 int index = OutputClientPortList.IndexOf(free);
+                //testowa zmiana------------
                 OutputClientPortList[index].startPort(50201);
+                //------------------
                 OutputClientPortList[index].send(data);
                 OutputClientPortList[index].STATUS = true;
             }

@@ -13,7 +13,7 @@ namespace ClientNode
         {
             try
             {
-                CConstrains.nodeNumber = Convert.ToInt32("1");
+                CConstrains.nodeNumber = Convert.ToInt32(args[0]);
             }
             catch (Exception e)
             {

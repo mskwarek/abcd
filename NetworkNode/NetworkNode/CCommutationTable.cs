@@ -80,7 +80,7 @@ namespace NetworkNode
                 if (commutationTable.ContainsKey(key))
                 {
                     portOut = commutationTable[key];
-                    Console.WriteLine("Port In :" + key.getPortID() + " Port Out :" + portOut.getPortID());
+                    Console.WriteLine("Port In :" + key.getPortID() + " VPI :" + key.getVPI() + " VCI :" + key.getVCI() + " || Port Out :" + portOut.getPortID() + " VPI :" + key.getVPI() + " VCI :" + key.getVCI());
                 }
                 
             }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Data
 {
-    public class PortInfo
+    public class PortInfo : IEquatable<PortInfo>
     {
         private int portID;
         private int VPI;
@@ -32,7 +32,23 @@ namespace Data
         {
             return VPI;
         }
+        // zmiana testowa do poprawienia
+        public bool Equals( PortInfo other)
+        {
+            if (this.getPortID() == other.getPortID() && this.getVPI() == other.getVPI() && this.getVCI() == other.getVCI())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
+        }
 
+        public int GetHashCode(Data.PortInfo portInfo)
+        {
+            return 1;
+        }
     }
 }

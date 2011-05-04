@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ManagementLayer
 {
-    class CLinkInfo
+    public class CLinkInfo
     {
         public  int nodeNumber;
         public  int portNumber;
