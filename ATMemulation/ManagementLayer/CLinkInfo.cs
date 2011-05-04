@@ -17,9 +17,10 @@ namespace ManagementLayer
             nodeNumber = nn;
             portNumber = pn;
             portType = pt;
-        }
 
-           
+        }
+   
+        
     }
 
 }
