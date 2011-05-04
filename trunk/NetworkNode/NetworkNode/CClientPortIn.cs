@@ -12,6 +12,9 @@ using System.Threading;
 namespace NetworkNode
 {
 // Klasa portu wyjściowego dziedzicząca po CClientPort
+    /// <summary>
+    /// w ramach testów dodane zostały sleep
+    /// </summary>
 
     class CClientPortIn : CClientPort
     {
@@ -54,6 +57,7 @@ namespace NetworkNode
                 CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
                 Console.WriteLine(dane);
+                Thread.Sleep(1000);
             }
 
 
@@ -86,8 +90,11 @@ namespace NetworkNode
             {
                 if (queue.Count != 0)
                 {
-                    //CCommutationField.Instance.passOnData(queue.Dequeue(), this);
+                    CCharacteristicData cCharacteristicData = prepareCharacteristicData(queue.Dequeue());
+                    CCommutationField.Instance.passOnData(cCharacteristicData, this);
+                    Thread.Sleep(1000);
                 }
+                Thread.Sleep(1000);
             }
         }
     

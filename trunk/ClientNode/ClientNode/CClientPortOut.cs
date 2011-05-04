@@ -26,8 +26,9 @@ namespace ClientNode
         public void startPort(int portNumber)
         {
             this.portNumber = portNumber;
-            Thread t = new Thread(new ThreadStart(init));
-            t.Start();
+            init();
+            //Thread t = new Thread(new ThreadStart(init));
+            //t.Start();
         }
         
         private void init() // metoda łącząca socket z portNumber

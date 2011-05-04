@@ -55,6 +55,7 @@ namespace NetworkNode
                 CCharacteristicData dane = (CCharacteristicData) binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
                 Console.WriteLine(dane);
+                Thread.Sleep(1000);
             }
 
         }
@@ -73,7 +74,9 @@ namespace NetworkNode
                 if (queue.Count != 0)
                 {
                     CCommutationField.Instance.passOnData(queue.Dequeue(), this);
+                    Thread.Sleep(1000);
                 }
+                Thread.Sleep(1000);
             }
         }
 
