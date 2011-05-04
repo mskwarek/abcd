@@ -6,8 +6,8 @@ using System.Text;
 namespace Data
 {
     public enum Contact { UNI, NNI };
-    public enum PT { _000_, _001_, _010_, _011_, _100_, _101_, _110_, _111_ };
-    public enum CLP { _0_, _1_ };
+    public enum PT { _000_=0, _001_=1, _010_=2, _011_=3, _100=4, _101_=5, _110_=6, _111_=7 };
+    public enum CLP { _0_=0, _1_=1 };
 
     [Serializable]
     public class CAdministrationData
@@ -87,12 +87,21 @@ namespace Data
         public void setHEC()
         {
             System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-            String GFCbinary = Convert.ToString(GFC, 2).PadLeft(4,'0');
-            String VPIbinary = Convert.ToString(VPI, 2).PadLeft(8, '0');
+            String GFCbinary = "";
+            String VPIbinary = "";
+            if (contact == Contact.UNI)
+            {
+                GFCbinary = Convert.ToString(GFC, 2).PadLeft(4, '0');
+                VPIbinary = Convert.ToString(VPI, 2).PadLeft(8, '0');
+            }
+            else if(contact== Contact.NNI)
+                VPIbinary = Convert.ToString(VPI, 2).PadLeft(12, '0');
+           
             String VCIbinary = Convert.ToString(VCI, 2).PadLeft(16, '0');
-            //jak przekonwertowac PT i CLP do postaci binarnej?
-            //String PTbinary =  
-            String sHeader = GFCbinary + VPIbinary + VCIbinary;
+            String payloadbinary = Convert.ToString((int)payloadType, 2).PadLeft(3,'0');
+            String CLPbinary = Convert.ToString((int)clp, 2);
+            
+            String sHeader = GFCbinary + VPIbinary + VCIbinary+payloadbinary+CLPbinary;
             
             byte[] header=new byte[4];
             header = encoding.GetBytes(sHeader);
