@@ -28,7 +28,6 @@ namespace NetworkNode
             base.PORTTYPE = CConstrains.PortType["PortTypeIN"];
             base.PORTCLASS = CConstrains.PortType["NetworkPortClass"];
             base.PORTNUMBER = systemPortNumber;
-            Console.WriteLine("Port sieciowy o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
             Thread t1 = new Thread(new ThreadStart(init));
             t1.Start();
             Thread t2 = new Thread(new ThreadStart(receiveData));
@@ -43,7 +42,7 @@ namespace NetworkNode
             status = true;
             portListener = new TcpListener(ip, base.PORTNUMBER);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
-
+            Console.WriteLine(base.PORTCLASS + " o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
             client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
             clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
             Console.WriteLine("connection accepted");
