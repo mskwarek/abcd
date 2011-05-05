@@ -17,6 +17,13 @@ namespace Data
             this.VPI = VPI;
             this.VCI = VCI;
         }
+        public PortInfo(string portInfoStr)
+        {
+            //portInfoStr == "portID;VCI;VPI"
+            this.portID = Convert.ToInt32(portInfoStr.Split(';')[0]);
+            this.VCI = Convert.ToInt32(portInfoStr.Split(';')[1]);
+            this.VPI = Convert.ToInt32(portInfoStr.Split(';')[2]);
+        }
 
         public int getPortID()
         {
@@ -32,6 +39,12 @@ namespace Data
         {
             return VPI;
         }
+
+        public override string ToString()
+        {
+            // "portID;VCI;VPI"
+            return Convert.ToString(this.portID) + ";" + Convert.ToString(this.VCI) + ";" + Convert.ToString(this.VPI);
+        } 
         // zmiana testowa do poprawienia
 // rozwiązanie maka
         public bool Equals(PortInfo other) {

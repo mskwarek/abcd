@@ -78,9 +78,23 @@ namespace NetworkNode
                 StreamReader sr = new StreamReader(clientStream);
                 String message = sr.ReadLine();
 
-                if (message.Equals(""))
+                if (message.StartsWith("SNMP GET"))
                 {
-                    //obsługa
+                    //SNMP GET var_name
+                    String var_name = message.Split(' ')[2];
+                }
+                else if (message.StartsWith("SNMP SET"))
+                {
+                    //obsługa SET var_name var_value
+                    String var_name = message.Split(' ')[2];
+                    String var_value = message.Split(' ')[3];
+
+                    if (var_name.Equals("add_entry"))
+                    {
+                        CCommutationTable.Instance.addEntry(
+                            new Data.PortInfo(var_value.Split('.')[0]), 
+                            new Data.PortInfo(var_value.Split('.')[1]));
+                    }
                 }
             }
         }
@@ -98,3 +112,10 @@ namespace NetworkNode
         }
    }
 }
+
+/*
+ * Wiadomości SNMP jako string:
+ * 
+ *  Dodanie wpisu w tablicy komutacji:
+ *  SNMP SET add_entry portIn.portOut
+*/
