@@ -6,6 +6,8 @@ using System.Xml;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 
 namespace NetworkNode
 {
@@ -14,6 +16,7 @@ namespace NetworkNode
 
        static readonly CManagementAgent instance = new CManagementAgent();
 
+       public Queue<Data.CSNMPmessage> queue = new Queue<Data.CSNMPmessage>();
        
        private bool status;
        private IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
@@ -75,27 +78,11 @@ namespace NetworkNode
 
             while (status) //uruchamiamy nasłuchiwanie
             {
-                StreamReader sr = new StreamReader(clientStream);
-                String message = sr.ReadLine();
-
-                if (message.StartsWith("SNMP GET"))
-                {
-                    //SNMP GET var_name
-                    String var_name = message.Split(' ')[2];
-                }
-                else if (message.StartsWith("SNMP SET"))
-                {
-                    //obsługa SET var_name var_value
-                    String var_name = message.Split(' ')[2];
-                    String var_value = message.Split(' ')[3];
-
-                    if (var_name.Equals("add_entry"))
-                    {
-                        CCommutationTable.Instance.addEntry(
-                            new Data.PortInfo(var_value.Split('.')[0]), 
-                            new Data.PortInfo(var_value.Split('.')[1]));
-                    }
-                }
+                BinaryFormatter binaryFormater = new BinaryFormatter();
+                Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
+                queue.Enqueue(dane);
+                
+                Thread.Sleep(1000);
             }
         }
 
@@ -112,10 +99,3 @@ namespace NetworkNode
         }
    }
 }
-
-/*
- * Wiadomości SNMP jako string:
- * 
- *  Dodanie wpisu w tablicy komutacji:
- *  SNMP SET add_entry portIn.portOut
-*/
