@@ -93,7 +93,7 @@ namespace ManagementLayer
                     List<int> args = new List<int>();
                     if (alt.Count() > 1)
                     {
-                        if (alt.Count() != 5)
+                        if (alt.Count() != 3)
                         {
                             try
                             {
@@ -106,17 +106,11 @@ namespace ManagementLayer
                             {
                                 Console.WriteLine("Błędny argument");
                             }
-
-                            // sprawdza poprawność argumentów
-                            //if(cnc.checkFormula(args))
-                            //{
-                            //    // zestaw połączenie.
-                            //}
-
                         }
                         else { Console.WriteLine("Błęda liczba argumentów"); }
                     }
-
+                    else { Console.WriteLine("Błęda liczba argumentów"); }
+                    
                 }
                 else if (ConsoleInput.StartsWith("getConnections"))
                 {
