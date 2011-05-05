@@ -62,7 +62,7 @@ namespace NetworkNode
             CCommutationTable.Instance.showAll();   
         }
 
-        public void mlConnectionListener()
+        public void SNMPMessagesListener()
         {
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
             portListener.Start();
@@ -76,9 +76,12 @@ namespace NetworkNode
             while (status) //uruchamiamy nasłuchiwanie
             {
                 StreamReader sr = new StreamReader(clientStream);
-                String dane = sr.ReadLine();
-                
-                //obsługa tego co przyśle ML
+                String message = sr.ReadLine();
+
+                if (message.Equals(""))
+                {
+                    //obsługa
+                }
             }
         }
 
