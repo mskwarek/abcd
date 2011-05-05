@@ -52,7 +52,7 @@ namespace Data
     class SNMPpdu
     {
         private string type;
-        private List<Dictionary<String, String>> variablebinding; //lista zawierajaca jedna lub wiecej par nazwa obiektu - wartosci, dalsze tlumaczenie tego w ksiazce jest dla mnie lekko niezrozumiale o tej porze...
+        private List<Dictionary<Object, Object>> variablebinding; //lista zawierajaca jedna lub wiecej par nazwa obiektu - wartosci, dalsze tlumaczenie tego w ksiazce jest dla mnie lekko niezrozumiale o tej porze...
         private string requestIdentifier;
 
         string Type
