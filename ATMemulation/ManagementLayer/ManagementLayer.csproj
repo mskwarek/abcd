@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CConstrains.cs" />
-    <Compile Include="CHandleAgentConnection.cs" />
     <Compile Include="CMLConsole.cs" />
     <Compile Include="CLinkInfo.cs" />
     <Compile Include="CLink.cs" />
