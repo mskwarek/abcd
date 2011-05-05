@@ -65,9 +65,10 @@ namespace NetworkNode
         public void send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
         {
             data = prepareNewAdministrationData(data, outputPortInfo);
-            Console.WriteLine("nadaje " + data);
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, data);
+            stream.Flush();
+            Console.WriteLine("nadaje " + data);
         }
 
     }
