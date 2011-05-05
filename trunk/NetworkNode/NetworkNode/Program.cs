@@ -19,7 +19,7 @@ namespace NetworkNode
                 Console.WriteLine(e.StackTrace);
             }
             System.Console.WriteLine("Network Node!");
-           
+            Console.Title = "NetworkNode ID = " + CConstrains.nodeNumber;
             CPortManager.Instance.getNodePortConfiguration();
            
             CManagementAgent.Instance.resetCommutationTable();
