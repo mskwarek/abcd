@@ -17,13 +17,7 @@ namespace Data
             this.VPI = VPI;
             this.VCI = VCI;
         }
-        public PortInfo(string portInfoStr)
-        {
-            //portInfoStr == "portID;VCI;VPI"
-            this.portID = Convert.ToInt32(portInfoStr.Split(';')[0]);
-            this.VCI = Convert.ToInt32(portInfoStr.Split(';')[1]);
-            this.VPI = Convert.ToInt32(portInfoStr.Split(';')[2]);
-        }
+        
 
         public int getPortID()
         {
