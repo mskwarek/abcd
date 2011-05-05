@@ -44,7 +44,8 @@ namespace Data
         {
             // "portID;VCI;VPI"
             return Convert.ToString(this.portID) + ";" + Convert.ToString(this.VCI) + ";" + Convert.ToString(this.VPI);
-        } 
+        } 
+
         // zmiana testowa do poprawienia
 // rozwiązanie maka
         public bool Equals(PortInfo other) {

@@ -5,12 +5,13 @@ using System.Text;
 
 namespace ManagementLayer
 {
-    class CLink : IEquatable<CLink>
+    public class CLink : IEquatable<CLink>
     {
         public CLinkInfo from;
         public CLinkInfo to;
         int _weight;
-        private bool _state;
+        // do wytyczania ścieżek
+        private bool _isBusy;
 
 
         public CLink(CLinkInfo f, CLinkInfo t, int weight)
@@ -19,11 +20,11 @@ namespace ManagementLayer
             to = t;
             _weight = weight;
         }
-        
-        private bool state
+
+        public bool isBusy
         {
-            get { return _state; }
-            set { _state = value; }
+            get { return _isBusy; }
+            set { _isBusy = value; }
         }
 
         public CLinkInfo B
@@ -42,6 +43,18 @@ namespace ManagementLayer
         {
             get { return _weight; }
             set { _weight = value; }
+        }
+
+        public bool Equals(CLink other)
+        {
+            if (this.from.nodeNumber == other.from.nodeNumber && this.from.portNumber == other.from.portNumber && this.to.portNumber == other.to.portNumber && this.to.nodeNumber == other.to.nodeNumber)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

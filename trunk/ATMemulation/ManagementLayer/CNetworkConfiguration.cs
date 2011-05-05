@@ -6,10 +6,30 @@ using System.Xml;
 
 namespace ManagementLayer
 {
-    class CNetworkConfiguration
+    public sealed class CNetworkConfiguration
     {
+        static readonly CNetworkConfiguration instance = new CNetworkConfiguration();
+
+        CNetworkConfiguration()
+        {
+        }
+
+        public static CNetworkConfiguration Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         Dictionary<int, String> nodesType = new Dictionary<int, string>() { {1,"client"}};
-        List<CLink> LinkList = new List<CLink>();
+        private List<CLink> LinkList = new List<CLink>();
+
+        public List<CLink> linkList
+        {
+            get { return LinkList; }
+            set { LinkList = value; }
+        }
 
         public void readConfig()
         {
