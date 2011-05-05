@@ -29,9 +29,7 @@ namespace ClientNode
         private  CPortManager()
         {
             readConfig();
-            showConfig();
             createPorts();
-            showPorts();
         }
 
         public void readConfig() {
@@ -52,21 +50,24 @@ namespace ClientNode
                     }
                 }
                 textReader.Close();
+                Console.WriteLine("Config loaded. " + showConfig());
             }
             catch(System.Exception e) {
                 Console.WriteLine(e.StackTrace);
             }
         }
 
-        public void showConfig() {
-            Console.WriteLine("in : " + CConstrains.inputPortNumber + " out : " + CConstrains.outputPortNumber); 
+        public String showConfig() {
+            return "in : " + CConstrains.inputPortNumber.ToString() + " out : " + CConstrains.outputPortNumber.ToString(); 
         }
 
 
         private void createPorts() {
+            
             for (int i = 1; i <= CConstrains.inputPortNumber; i++) {
                 int systemPortNumber = 50000 + (CConstrains.nodeNumber * 100) +i;
                 InputClientPortList.Add(new CClientPortIn(i, false, systemPortNumber));
+                
             }
 
             for (int x = 1; x <= CConstrains.outputPortNumber; x++) {
@@ -122,6 +123,7 @@ namespace ClientNode
             }
 
         }
+
 
     }
 }
