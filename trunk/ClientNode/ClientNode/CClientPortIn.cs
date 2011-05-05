@@ -21,23 +21,23 @@ namespace ClientNode
         private TcpClient client;
         private NetworkStream clientStream;
         private int portNumber;
-    
+        
         public CClientPortIn(int id, Boolean busy, int systemPortNumber): base(id, busy){
             this.portNumber = systemPortNumber;
-            
-            Console.WriteLine("Port o id = " + id + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
-            Thread t1 = new Thread(new ThreadStart(init));
-            t1.Start();
+        
+            Thread portListen = new Thread(init);
+            CConstrains.threadList.Add(portListen);
             
         }
 
 
         public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
         {
+            Console.WriteLine("Port o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
             status = true;
-            Console.WriteLine("włączyłem nasłuchiwanie na portcie " + portNumber);
             portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
+            Thread.Sleep(10000);
             client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
             clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
             Console.WriteLine("connection accepted ");
