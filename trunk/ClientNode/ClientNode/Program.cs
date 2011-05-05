@@ -28,9 +28,10 @@ namespace ClientNode
             //        Console.WriteLine("zawiera " + input);
             //    }
             //}
-            CConsole.Instance.consoleInit();
 
-
+         
+                 CConsole.Instance.consoleInit();
+         
         }
     }
 }
