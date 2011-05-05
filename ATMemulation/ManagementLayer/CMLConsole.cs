@@ -38,7 +38,7 @@ namespace ManagementLayer
         {
             //CPortManager cpm = CPortManager.Instance;
             Console.WriteLine(helloMessage);
-            CNetworkConfiguration cnc = new CNetworkConfiguration();
+            CNetworkConfiguration cnc = CNetworkConfiguration.Instance;
             cnc.readConfig();
             while (true)
             {
@@ -93,7 +93,7 @@ namespace ManagementLayer
                     List<int> args = new List<int>();
                     if (alt.Count() > 1)
                     {
-                        if (alt.Count() != 3)
+                        if (alt.Count() == 3)
                         {
                             try
                             {
@@ -101,7 +101,10 @@ namespace ManagementLayer
                                 {
                                     args.Add(Convert.ToInt16(alt[i]));
                                 }
-                            }
+
+                                CShortestPathCalculatorWrapper.Instance.getShortestPath(args[0], args[1]);
+
+                                }
                             catch (Exception e)
                             {
                                 Console.WriteLine("Błędny argument");

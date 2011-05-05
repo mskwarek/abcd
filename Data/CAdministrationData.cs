@@ -12,9 +12,9 @@ namespace Data
     [Serializable]
     public class CAdministrationData
     {
-        private static int VPI_UNI_MAX = 255;
-        private static int VPI_NNI_MAX = 4095;
-        private static int VCI_MAX = 65535;
+        public static const int VPI_UNI_MAX = 255;
+        public static const int VPI_NNI_MAX = 4095;
+        public static const int VCI_MAX = 65535;
 
         private Contact contact;
         private int GFC = 0;
