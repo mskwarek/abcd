@@ -10,7 +10,7 @@ namespace Data
     {
         private string version;
         private string community;
-        private SNMPpdu pdu;
+        public SNMPpdu pdu;
 
         string Version
         {
@@ -49,10 +49,10 @@ namespace Data
         }
     }
 
-    class SNMPpdu
+    public class SNMPpdu
     {
         private string type;
-        private List<Dictionary<Object, Object>> variablebinding; //lista zawierajaca jedna lub wiecej par nazwa obiektu - wartosci, dalsze tlumaczenie tego w ksiazce jest dla mnie lekko niezrozumiale o tej porze...
+        public List<Dictionary<Object, Object>> variablebinding; //lista zawierajaca jedna lub wiecej par nazwa obiektu - wartosci, dalsze tlumaczenie tego w ksiazce jest dla mnie lekko niezrozumiale o tej porze...
         private string requestIdentifier;
 
         string Type
