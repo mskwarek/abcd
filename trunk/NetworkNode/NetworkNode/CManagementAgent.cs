@@ -29,6 +29,11 @@ namespace NetworkNode
        {
            //portNum = 50000 + CConstrains.nodeNumber * 100;
            portNum = 161;
+
+           Thread recieve = new Thread(new ThreadStart(SNMPMessagesListener));
+           recieve.Start();
+           Thread processMessage = new Thread(new ThreadStart(processReceivedData));
+           processMessage.Start();
        }
 
        public static CManagementAgent Instance
@@ -81,21 +86,50 @@ namespace NetworkNode
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
-                
+
                 Thread.Sleep(1000);
             }
         }
 
-        public void sendToML()      //wysyłanie do ML - co konkretnie to zaraz..
+        public void processReceivedData()
         {
-            TcpClient agentClient = new TcpClient();
-            agentClient.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
-            NetworkStream upStream = agentClient.GetStream();
-            StreamWriter upStreamWriter = new StreamWriter(upStream);
+            while (status)
+            {
+                if (queue.Count != 0)
+                {
+                    //obiekty w słowniku: [from = CPortInfo1][to = CPortInfo2][add = null]
 
-            //wysyłanie:
-            upStreamWriter.WriteLine();
-            upStreamWriter.Flush();
+                    foreach (Dictionary<Object, Object> d in queue.Dequeue().pdu.variablebinding)
+                    {
+                        if (d.ContainsKey("add"))
+                        {
+                            //obsługa dodania połaczenia w polu kom.
+                            addConnection(
+                                (Data.PortInfo)d["from"],
+                                (Data.PortInfo)d["to"]);
+                        }
+                        else if (d.ContainsKey("delete"))
+                        {
+                            //obsługa usuniecia połaczenia w polu kom.
+                            removeConnection((Data.PortInfo)d["from"]);
+                        }
+                    }
+                   Thread.Sleep(1000);
+                }
+                Thread.Sleep(1000);
+            }
         }
+
+        //public void sendToML()      //wysyłanie do ML - co konkretnie to zaraz..
+        //{
+        //    TcpClient agentClient = new TcpClient();
+        //    agentClient.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
+        //    NetworkStream upStream = agentClient.GetStream();
+        //    StreamWriter upStreamWriter = new StreamWriter(upStream);
+
+        //    //wysyłanie:
+        //    upStreamWriter.WriteLine();
+        //    upStreamWriter.Flush();
+        //}
    }
 }
