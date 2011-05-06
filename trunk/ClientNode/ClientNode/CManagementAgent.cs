@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using Data;
 
 namespace ClientNode
 {
@@ -16,7 +17,7 @@ namespace ClientNode
 
        static readonly CManagementAgent instance = new CManagementAgent();
 
-       public Queue<Data.CSNMPmessage> queue = new Queue<Data.CSNMPmessage>();
+       public Queue<CSNMPmessage> queue = new Queue<CSNMPmessage>();
        
        private bool status;
        private IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
@@ -53,7 +54,7 @@ namespace ClientNode
             while (status) //uruchamiamy nasłuchiwanie
             {
                 BinaryFormatter binaryFormater = new BinaryFormatter();
-                Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
+                CSNMPmessage dane = (CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
                 Thread.Sleep(1000);
             }
@@ -66,7 +67,7 @@ namespace ClientNode
             NetworkStream upStream = agentClient.GetStream();
             StreamWriter upStreamWriter = new StreamWriter(upStream);
 
-            // TO DO
+            // T
             upStreamWriter.WriteLine();
             upStreamWriter.Flush();
         }
@@ -75,7 +76,7 @@ namespace ClientNode
         // metoda która uruchamia port wyjściowy na podstawie informacji z ML
         public void startPort(CLinkInfo from, CLinkInfo to)
         {
-            CClientPortOut outPort = CPortManager.Instance.getOutputPort(from.PortNumber);
+            CClientPortOut outPort = CPortManager.Instance.getOutputPort(from.portNumber);
             outPort.startPort(50000 + to.nodeNumber * 100 + to.portNumber);
         }
    }
