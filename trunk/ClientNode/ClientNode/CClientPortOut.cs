@@ -16,7 +16,6 @@ namespace ClientNode
     class CClientPortOut : CClientPort
     {
         private static TcpClient client;
-        private static String ip = "127.0.0.1";
         private NetworkStream stream;
         private StreamWriter clientStream;
         private int portNumber;
@@ -36,7 +35,7 @@ namespace ClientNode
             try
             {
                 client = new TcpClient();
-                client.Connect(ip, portNumber);
+                client.Connect(CConstrains.ipAddress, portNumber);
                 stream = client.GetStream();
             }
             catch (Exception e)

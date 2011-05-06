@@ -61,6 +61,14 @@ namespace ClientNode
             return "in : " + CConstrains.inputPortNumber.ToString() + " out : " + CConstrains.outputPortNumber.ToString(); 
         }
 
+        public CClientPort getOutputPort(int ID)
+        {
+
+                CClientPortOut port = (CClientPortOut)OutputClientPortList.ElementAt(ID);
+                return port;
+            
+        }
+
 
         private void createPorts() {
             
