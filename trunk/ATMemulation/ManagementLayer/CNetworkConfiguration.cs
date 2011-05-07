@@ -23,9 +23,9 @@ namespace ManagementLayer
         }
 
         Dictionary<int, String> nodesType = new Dictionary<int, string>() { {1,"client"}};
-        private List<CLink> LinkList = new List<CLink>();
+        private List<Data.CLink> LinkList = new List<Data.CLink>();
 
-        public List<CLink> linkList
+        public List<Data.CLink> linkList
         {
             get { return LinkList; }
             set { LinkList = value; }
@@ -50,10 +50,10 @@ namespace ManagementLayer
                             break;
                         }
 
-                        CLinkInfo from = new CLinkInfo(Convert.ToInt32(fromArray[0]), fromArray[1], Convert.ToInt32(fromArray[2]));
-                        CLinkInfo to = new CLinkInfo(Convert.ToInt32(toArray[0]), toArray[1], Convert.ToInt32(toArray[2]));
+                        Data.CLinkInfo from = new Data.CLinkInfo(Convert.ToInt32(fromArray[0]), fromArray[1], Convert.ToInt32(fromArray[2]));
+                        Data.CLinkInfo to = new Data.CLinkInfo(Convert.ToInt32(toArray[0]), toArray[1], Convert.ToInt32(toArray[2]));
                         //add
-                        LinkList.Add(new CLink(from, to, 1));
+                        LinkList.Add(new Data.CLink(from, to, 1));
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace ManagementLayer
         public void showNetworkConfiguration()
         {
             Console.WriteLine("Konfiguracja sieci : ");
-            foreach (CLink cl in LinkList)
+            foreach (Data.CLink cl in LinkList)
                 Console.WriteLine("node " + cl.from.nodeNumber + " port " + cl.from.portNumber + " type  " + cl.from.portType + " --> node " + cl.to.nodeNumber + " port " + cl.to.portNumber + " type " + cl.to.portType + " ");
 
         }
@@ -107,7 +107,7 @@ namespace ManagementLayer
                 warunek1 = true;
             }
 
-            //CLink cl = new CLink(new CLinkInfo(args[0], null, args[1]), new CLinkInfo(args[2], null, args[3]));
+            //Data.CLink cl = new Data.CLink(new Data.CLinkInfo(args[0], null, args[1]), new Data.CLinkInfo(args[2], null, args[3]));
 
             //if (!LinkList.Contains(cl)) 
             //{
