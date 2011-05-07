@@ -70,6 +70,12 @@ namespace NetworkNode
             CCommutationTable.Instance.showAll();   
         }
 
+        public Data.CCommutationTable getCommutationTable()
+        {
+            return CCommutationTable.Instance.getCommutationTable();
+        }
+
+
         public void SNMPMessagesListener()
         {
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
@@ -89,6 +95,40 @@ namespace NetworkNode
                 Thread.Sleep(1000);
             }
         }
+        // metoda wysyłająca response do ML
+        private void sendResponse(String responseId, Data.CCommutationTable table) 
+        {
+            Data.CSNMPmessage msg;
+            int portNumber = CConstrains.managementLayerPort;
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress,portNumber);
+            NetworkStream stream = client.GetStream();
+
+            // przypadek wysyłania tablicy komutacji do ML
+            if (table != null)
+            {
+                Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+                {"CommutationTable", table}
+                };
+                List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+                pduList.Add(pduDict);
+                msg = new Data.CSNMPmessage(pduList, null, null);
+            }
+            else
+            {
+                msg = new Data.CSNMPmessage(null, null, null);
+            }
+
+            msg.pdu.RequestIdentifier = responseId;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("sending respnse " + msg + " to ML");
+            client.Close();
+        
+        }
+
 
         public void processReceivedData()
         {
@@ -106,17 +146,29 @@ namespace NetworkNode
                             addConnection(
                                 (Data.PortInfo)d["from"],
                                 (Data.PortInfo)d["to"]);
+                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, null);
+        
                         }
                         else if (d.ContainsKey("remove"))
                         {
                             //obsługa usuniecia połaczenia w polu kom.
                             removeConnection((Data.PortInfo)d["from"], (Data.PortInfo)d["to"]);
+                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, null);
+        
                         }
                         else if (d.ContainsKey("setTopologyConnection"))
                         {
                             //obsługa ustawienia portów wyjściowych.
                             startPort((Data.CLinkInfo)d["from"], (Data.CLinkInfo)d["to"]);
+                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, null);
+        
                         }
+                        else if (d.ContainsKey("getTable"))
+                        {
+                            //pobranie i wysłanie tablicy komutacji dla wybranego noda.
+                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, getCommutationTable());
+                        }
+
                     }
                    Thread.Sleep(1000);
                 }

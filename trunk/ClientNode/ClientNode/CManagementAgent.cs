@@ -28,8 +28,8 @@ namespace ClientNode
 
        private CManagementAgent()
        {
-           //portNum = 50000 + CConstrains.nodeNumber * 100;
-           portNum = 161;
+           portNum = 50000 + CConstrains.nodeNumber * 100;
+           //portNum = 161;
        }
 
        public static CManagementAgent Instance
@@ -75,6 +75,7 @@ namespace ClientNode
                         {
                             //obsługa ustawienia portów wyjściowych.
                             startPort((Data.CLinkInfo)d["from"], (Data.CLinkInfo)d["to"]);
+                            sendResponse(queue.Dequeue().pdu.RequestIdentifier);
                         }
                     }
                     Thread.Sleep(1000);
@@ -82,9 +83,25 @@ namespace ClientNode
                 Thread.Sleep(1000);
             }
         }
+
+       
+        private void sendResponse(String responseId) 
+        { 
+            int portNumber = CConstrains.managementLayerPort;
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress,portNumber);
+            NetworkStream stream = client.GetStream();
+
+            CSNMPmessage msg = new CSNMPmessage(null, null, null);
+            msg.pdu.RequestIdentifier = responseId;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("sending respnse " + msg + " to ML");
+            client.Close();
         
-        
-        
+        }
         
         
         public void sendToML()      //wysyłanie do ML - co konkretnie to zaraz..
