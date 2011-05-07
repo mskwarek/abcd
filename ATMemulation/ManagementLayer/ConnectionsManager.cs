@@ -37,7 +37,7 @@ namespace ManagementLayer
             Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
         }
 
-        public void setNetworkConnections(int nodeNumber, CLink link)
+        public void setNetworkConnections(int nodeNumber, Data.CLink link)
         {
             //TODO send to node nodeNumber to establish connection with another node
 
