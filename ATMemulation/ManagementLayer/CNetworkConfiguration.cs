@@ -54,6 +54,9 @@ namespace ManagementLayer
                         Data.CLinkInfo to = new Data.CLinkInfo(Convert.ToInt32(toArray[0]), toArray[1], Convert.ToInt32(toArray[2]));
                         //add
                         LinkList.Add(new Data.CLink(from, to, 1));
+
+
+                        //TODO wysyłanie do Nodów info o połączeniach
                     }
                 }
             }

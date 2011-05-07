@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace ManagementLayer
 {
     public sealed class ConnectionsManager
     {
         static readonly ConnectionsManager instance = new ConnectionsManager();
+
+        private NetworkStream stream;
+        private StreamWriter clientStream;
 
         public static ConnectionsManager Instance
         {
@@ -22,7 +29,20 @@ namespace ManagementLayer
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
 
-            //TODO send to node nodeNumber as add request
+            Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+            {"from", portIn},
+            {"to", portOut},
+            {"add", null}
+            };
+            List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, dataToSend);
+            clientStream = new StreamWriter(stream);
+            clientStream.WriteLine(dataToSend);
+            clientStream.Flush();
 
             Console.WriteLine("node : " + nodeNumber + "from : " + portNumber_A + " to : " + portNumber_B);
         }
@@ -32,7 +52,20 @@ namespace ManagementLayer
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
 
-            //TODO send to node nodeNumber as remove request
+            Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+            {"from", portIn},
+            {"to", portOut},
+            {"remove", null}
+            };
+            List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, dataToSend);
+            clientStream = new StreamWriter(stream);
+            clientStream.WriteLine(dataToSend);
+            clientStream.Flush();
 
             Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
         }
