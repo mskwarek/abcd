@@ -53,6 +53,8 @@
     <Compile Include="CAdministrationData.cs" />
     <Compile Include="CCharacteristicData.cs" />
     <Compile Include="CCommutationTable.cs" />
+    <Compile Include="CLink.cs" />
+    <Compile Include="CLinkInfo.cs" />
     <Compile Include="CSNMPmessage.cs" />
     <Compile Include="CUserData.cs" />
     <Compile Include="PortInfo.cs" />
