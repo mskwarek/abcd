@@ -78,7 +78,6 @@ namespace NetworkNode
             client = portListener.AcceptTcpClient(); 
             clientStream = client.GetStream();  
             Console.WriteLine("connection with ML ");
-
             status = true;
 
             while (status) //uruchamiamy nasłuchiwanie
@@ -108,7 +107,7 @@ namespace NetworkNode
                                 (Data.PortInfo)d["from"],
                                 (Data.PortInfo)d["to"]);
                         }
-                        else if (d.ContainsKey("delete"))
+                        else if (d.ContainsKey("remove"))
                         {
                             //obsługa usuniecia połaczenia w polu kom.
                             removeConnection((Data.PortInfo)d["from"], (Data.PortInfo)d["to"]);

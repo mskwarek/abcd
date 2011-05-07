@@ -12,6 +12,13 @@ namespace Data
         private string community;
         public SNMPpdu pdu;
 
+        public CSNMPmessage(List<Dictionary<Object, Object>> list, string ver, string com)
+        {
+            this.version = ver;
+            this.community = com;
+            this.pdu.variablebinding = list;
+        }
+
         string Version
         {
             get
