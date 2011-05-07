@@ -113,11 +113,22 @@ namespace NetworkNode
                             //obsługa usuniecia połaczenia w polu kom.
                             removeConnection((Data.PortInfo)d["from"], (Data.PortInfo)d["to"]);
                         }
+                        else if (d.ContainsKey("setTopologyConnection"))
+                        {
+                            //obsługa ustawienia portów wyjściowych.
+                            startPort((Data.CLinkInfo)d["from"], (Data.CLinkInfo)d["to"]);
+                        }
                     }
                    Thread.Sleep(1000);
                 }
                 Thread.Sleep(1000);
             }
+        }
+
+        public void startPort(Data.CLinkInfo from, Data.CLinkInfo to)
+        {
+            CPort outPort = (CPort)CPortManager.Instance.getOutputPort(from.portNumber);
+            outPort.startPort(50000 + to.nodeNumber * 100 + to.portNumber);
         }
 
         //public void sendToML()      //wysyłanie do ML - co konkretnie to zaraz..

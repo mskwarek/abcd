@@ -24,8 +24,8 @@ namespace  NetworkNode
             base.PORTTYPE = CConstrains.PortType["PortTypeOUT"];
             base.PORTCLASS = CConstrains.PortType["ClientPortClass"];
         }
-
-        public void init(int systemPortNumber) // metoda łącząca socket z portNumber
+        // metoda używana przy portach wyjściowych. Po otrzymaniu topologi sieci port dostaje informacje na jaki port systemowy ma nadawać.
+        public override void startPort(int systemPortNumber) 
         {
 
             base.PORTNUMBER = systemPortNumber;

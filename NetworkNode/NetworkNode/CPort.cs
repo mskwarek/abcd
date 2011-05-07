@@ -23,7 +23,8 @@ namespace NetworkNode
             this._id = id;
             this._busy = x;
         }
-
+        // metoda używana przy portach wyjściowych. Po otrzymaniu topologi sieci port dostaje informacje na jaki port systemowy ma nadawać. 
+        public virtual void startPort(int systemPortNumber) { }
 
         public int ID { get { return _id; } }
         public int PORTNUMBER { get { return portNumber; } set { portNumber = value; } }

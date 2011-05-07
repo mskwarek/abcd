@@ -36,7 +36,7 @@ namespace NetworkNode
                 CNetworkPortOut outputPort;
                 outputPort = (CNetworkPortOut)CPortManager.Instance.getOutputPort(outputPortInfo.getPortID());
                 //testowe
-                outputPort.init(50101);
+                outputPort.startPort(50101);
                 //---------------
                 outputPort.send(data, outputPortInfo);
             }
