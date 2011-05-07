@@ -44,7 +44,7 @@ namespace NetworkNode
            }
        }      
 
-        public void setCommutationTable(Dictionary<Data.PortInfo, Data.PortInfo> commutationTable)
+        public void setCommutationTable(Data.CCommutationTable commutationTable)
         {
             CCommutationTable.Instance.setCommutationTable(commutationTable);
         }
@@ -59,9 +59,9 @@ namespace NetworkNode
             CCommutationTable.Instance.addEntry(portIn, portOut);
         }
 
-        public void removeConnection(Data.PortInfo portIn) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
+        public void removeConnection(Data.PortInfo portIn, Data.PortInfo portOut) //metoda rozlaczajaca polaczenie w polu komutacyjnym danego wezla
         {
-            CCommutationTable.Instance.removeConnection(portIn);
+            CCommutationTable.Instance.removeConnection(portIn, portOut);
         }
 
         public void showConnections() //metoda wyswietlajaca zestawione polaczenia
@@ -111,7 +111,7 @@ namespace NetworkNode
                         else if (d.ContainsKey("delete"))
                         {
                             //obsługa usuniecia połaczenia w polu kom.
-                            removeConnection((Data.PortInfo)d["from"]);
+                            removeConnection((Data.PortInfo)d["from"], (Data.PortInfo)d["to"]);
                         }
                     }
                    Thread.Sleep(1000);

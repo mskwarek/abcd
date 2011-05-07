@@ -11,12 +11,12 @@ namespace NetworkNode
        static readonly CCommutationTable instance = new CCommutationTable();
 
        // IN/OUT
-       private Dictionary<PortInfo, PortInfo> commutationTable;
+       private Data.CCommutationTable commutationTable;
 
 
        private CCommutationTable()
        {
-           commutationTable = new Dictionary<PortInfo, PortInfo>(new PortInfo.EqualityComparer());
+           commutationTable = new Data.CCommutationTable(new PortInfo.EqualityComparer());
        }
 
        public static CCommutationTable Instance
@@ -46,7 +46,7 @@ namespace NetworkNode
             return portOut;
         }
 
-        public void setCommutationTable(Dictionary<PortInfo, PortInfo> commutationTable)
+        public void setCommutationTable(Data.CCommutationTable commutationTable)
         {
             Console.WriteLine("Setting connection");
             this.commutationTable = commutationTable;
@@ -64,13 +64,19 @@ namespace NetworkNode
             commutationTable.Add(portIn, portOut);
         }
 
-        public void removeConnection(PortInfo portIn)
+        public void removeConnection(PortInfo portIn, PortInfo portOut)
         {
             Console.WriteLine("Removing connection");
-            commutationTable.Remove(portIn);
+            if (commutationTable[portIn].Equals(portOut))
+            {
+                commutationTable.Remove(portIn);
+            }
         }
 
-
+        public Data.CCommutationTable getCommutationTable()
+        {
+            return commutationTable;
+        }
 
         public void showAll()
         {
