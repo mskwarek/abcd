@@ -63,6 +63,7 @@
     <Compile Include="CConsole.cs" />
     <Compile Include="CClientPort.cs" />
     <Compile Include="CConstrains.cs" />
+    <Compile Include="CManagementAgent.cs" />
     <Compile Include="CPortManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
