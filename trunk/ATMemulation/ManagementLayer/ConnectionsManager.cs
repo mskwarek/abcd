@@ -34,7 +34,14 @@ namespace ManagementLayer
 
             //TODO send to node nodeNumber as remove request
 
-            Console.WriteLine("node : " + nodeNumber + "from : " + portNumber_A + " to : " + portNumber_B);
+            Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
+        }
+
+        public void setNetworkConnections(int nodeNumber, CLink link)
+        {
+            //TODO send to node nodeNumber to establish connection with another node
+
+            Console.WriteLine("node : " + nodeNumber + " Setting link on port : " + link.from.portNumber + " to port : " + link.to.portNumber + " on node : " + link.to.nodeNumber);
         }
     }
 }
