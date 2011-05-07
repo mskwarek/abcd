@@ -60,6 +60,33 @@ namespace ClientNode
             }
         }
 
+        public void processReceivedData()
+        {
+            while (status)
+            {
+                if (queue.Count != 0)
+                {
+                    //obiekty w słowniku: [from = CPortInfo1][to = CPortInfo2][add = null]
+
+                    foreach (Dictionary<Object, Object> d in queue.Dequeue().pdu.variablebinding)
+                    {
+                        
+                        if (d.ContainsKey("setTopologyConnection"))
+                        {
+                            //obsługa ustawienia portów wyjściowych.
+                            startPort((Data.CLinkInfo)d["from"], (Data.CLinkInfo)d["to"]);
+                        }
+                    }
+                    Thread.Sleep(1000);
+                }
+                Thread.Sleep(1000);
+            }
+        }
+        
+        
+        
+        
+        
         public void sendToML()      //wysyłanie do ML - co konkretnie to zaraz..
         {
             TcpClient agentClient = new TcpClient();
@@ -76,7 +103,7 @@ namespace ClientNode
         // metoda która uruchamia port wyjściowy na podstawie informacji z ML
         public void startPort(CLinkInfo from, CLinkInfo to)
         {
-            CClientPortOut outPort = CPortManager.Instance.getOutputPort(from.portNumber);
+            CClientPortOut outPort = (CClientPortOut)CPortManager.Instance.getOutputPort(from.portNumber);
             outPort.startPort(50000 + to.nodeNumber * 100 + to.portNumber);
         }
    }
