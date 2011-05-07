@@ -74,7 +74,7 @@ namespace Data
             }
         }
 
-        string RequestIdentifier
+        public string RequestIdentifier
         {
             get
             {

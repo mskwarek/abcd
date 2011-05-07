@@ -16,7 +16,7 @@ namespace ManagementLayer
         
         {"show netCfg", "Wyświetla konfigurację połaczeń w sieci"},
         {"show nodes","Wyświetla węzły wraz z ich rolą w sieci"},
-        {"getConnections [args]","Pobiera informacje o połączeniach w danych węźle "},
+        {"getConnections [args]","Pobiera tablicę komutacji z węzła i ja wyświetla"},
         {"addConnections [args]","Dodaje połączenie w tablicy komutacji"},
         {"?","Wyswietla listę poleceń dostępnych w konsoli"}
         
@@ -174,7 +174,7 @@ namespace ManagementLayer
                             if (cnc.checkFormula(a))
                             {
                                 Console.WriteLine("Pobierasz dane z noda: " + args[0]);
-                                //TODO pobierz dane z noda
+                                ConnectionsManager.Instance.getNodeCommutationTable(args[1]);
                             }
                         }
                                 
@@ -182,14 +182,12 @@ namespace ManagementLayer
                     else { Console.WriteLine("Nie podałeś numeru węzła"); continue; }
                 }
 
- 
-                
-                else Console.WriteLine(ConsoleInput);
+             else Console.WriteLine(ConsoleInput);
 
             }
         }
 
-
+        
 
     }
 }
