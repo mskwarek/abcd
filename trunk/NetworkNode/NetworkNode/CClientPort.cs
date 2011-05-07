@@ -12,7 +12,5 @@ namespace NetworkNode
 
         public CClientPort(int id, bool busy) :base(id,busy) {}
 
- 
-
     }
 }
