@@ -79,12 +79,17 @@ namespace ManagementLayer
                             //pokazuje listę nodów które zgłosiły sie do ML
                             cnc.showNodes();
                         }
-                        else 
+                        else
                         {
-                            Console.WriteLine("Brak podanego argumentu...");
-                            continue; 
+                            Console.WriteLine("Błędny argument");
+                            continue;
                         }
-                    }                  
+                    }
+                    else
+                    {
+                        Console.WriteLine("Brak podanego argumentu...");
+                        continue;
+                    }
 
                 }
                 else if (ConsoleInput.StartsWith("addconnection")) 
@@ -93,27 +98,56 @@ namespace ManagementLayer
                     List<int> args = new List<int>();
                     if (alt.Count() > 1)
                     {
-                        if (alt.Count() == 3)
+                        if (alt.Count() == 8)
                         {
                             try
                             {
                                 for (int i = 1; i < alt.Count(); i++)
                                 {
-                                    args.Add(Convert.ToInt16(alt[i]));
+                                    args.Add(Convert.ToInt32(alt[i]));
                                 }
-
-                                CShortestPathCalculatorWrapper.Instance.getShortestPath(args[0], args[1]);
+                                // node number, port in port out
+                                ConnectionsManager.Instance.addConnection(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                                //CShortestPathCalculatorWrapper.Instance.getShortestPath(args[0], args[1]);
 
                                 }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Błędny argument");
+                                Console.WriteLine("Błędny argument " + e.Message);
                             }
                         }
                         else { Console.WriteLine("Błęda liczba argumentów"); }
                     }
                     else { Console.WriteLine("Błęda liczba argumentów"); }
                     
+                }
+
+                else if (ConsoleInput.StartsWith("removeconnection"))
+                {
+                    String[] alt = ConsoleInput.Split(new char[] { ' ' });
+                    List<int> args = new List<int>();
+                    if (alt.Count() > 1)
+                    {
+                        if (alt.Count() == 8)
+                        {
+                            try
+                            {
+                                for (int i = 1; i < alt.Count(); i++)
+                                {
+                                    args.Add(Convert.ToInt32(alt[i]));
+                                }
+                                // node number, port in port out
+                                ConnectionsManager.Instance.removeConnection(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Błędny argument " + e.Message);
+                            }
+                        }
+                        else { Console.WriteLine("Błęda liczba argumentów"); }
+                    }
+                    else { Console.WriteLine("Błęda liczba argumentów"); }
+
                 }
                 else if (ConsoleInput.StartsWith("getConnections"))
                 {
@@ -129,7 +163,7 @@ namespace ManagementLayer
                                 }
                             }
                         catch (Exception e) {
-                             Console.WriteLine("Błędny argument");
+                            Console.WriteLine("Błędny argument " + e.Message);
                             }
                         // usuwam powtarzające sie argumenty
                         int[] var = args.Distinct().ToArray();
@@ -140,7 +174,7 @@ namespace ManagementLayer
                             if (cnc.checkFormula(a))
                             {
                                 Console.WriteLine("Pobierasz dane z noda: " + args[0]);
-                                // pobierz dane z noda
+                                //TODO pobierz dane z noda
                             }
                         }
                                 

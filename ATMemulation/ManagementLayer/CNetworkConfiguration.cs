@@ -80,7 +80,7 @@ namespace ManagementLayer
             }
             catch (Exception e)
             {
-                Console.WriteLine("Błąd przy dodawaniu węzła do słownika, węzeł o id = " + i + " juz isnieje");
+                Console.WriteLine("Błąd przy dodawaniu węzła do słownika, węzeł o id = " + i + " juz isnieje " + e.Message);
             }
         }
 

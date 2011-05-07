@@ -48,13 +48,10 @@
     <Compile Include="CLinkInfo.cs" />
     <Compile Include="CLink.cs" />
     <Compile Include="CNetworkConfiguration.cs" />
-    <Compile Include="CShortestPathCalculatorWrapper.cs" />
-    <Compile Include="Location.cs" />
+    <Compile Include="ConnectionsManager.cs" />
+    <Compile Include="IdentifiersManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Route.cs" />
-    <Compile Include="RouteEngine.cs" />
-    <Compile Include="RouteHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="networkConfig.xml" />

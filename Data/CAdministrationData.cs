@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Data
 {
+
     public enum Contact { UNI, NNI };
     public enum PT { _000_=0, _001_=1, _010_=2, _011_=3, _100=4, _101_=5, _110_=6, _111_=7 };
     public enum CLP { _0_=0, _1_=1 };
@@ -22,7 +23,7 @@ namespace Data
         private int VCI;
         private PT payloadType;
         private CLP clp;
-        private byte HEC;
+        private byte HEC = new Byte();
 
 
         //Constructor with contact type

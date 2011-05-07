@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Data
 {
+    [Serializable]
     public class PortInfo
     {
         private int portID;
