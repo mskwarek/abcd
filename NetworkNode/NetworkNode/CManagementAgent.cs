@@ -27,8 +27,8 @@ namespace NetworkNode
 
        private CManagementAgent()
        {
-           //portNum = 50000 + CConstrains.nodeNumber * 100;
-           portNum = 161;
+           portNum = 50000 + CConstrains.nodeNumber * 100;
+           //portNum = 161;
 
            Thread recieve = new Thread(new ThreadStart(SNMPMessagesListener));
            recieve.Start();
