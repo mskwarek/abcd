@@ -13,6 +13,7 @@ namespace Data
     [Serializable]
     public class CAdministrationData
     {
+
         public const int VPI_UNI_MAX = 255;
         public const int VPI_NNI_MAX = 4095;
         public const int VCI_MAX = 65535;
