@@ -62,13 +62,15 @@ namespace NetworkNode
             return data;
         }
 
-        public void send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
+        public int send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
         {
             data = prepareNewAdministrationData(data, outputPortInfo);
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, data);
             stream.Flush();
             Console.WriteLine("nadaje " + data);
+
+            return PORTNUMBER;
         }
 
     }

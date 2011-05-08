@@ -68,13 +68,15 @@ namespace  NetworkNode
             clientStream.Flush();
         }
 
-        public void send(Data.CCharacteristicData data)
+        public int send(Data.CCharacteristicData data)
         {
             Data.CUserData cUserData = data.getCUserData();
             Console.WriteLine("nadaje " + cUserData);
             clientStream = new StreamWriter(stream);
             clientStream.WriteLine(cUserData);
             clientStream.Flush();
+
+            return PORTNUMBER;
         }
     }
 }

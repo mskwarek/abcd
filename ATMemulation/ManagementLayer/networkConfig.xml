@@ -3,7 +3,7 @@
 <network>
   <link from="1;c;1" to="2;n;1"></link>
   <link from="1;c;2" to="3;n;1"></link>
-  <link from="2;n;1" to="4;c;1"></link>
+  <link from="2;n;2" to="3;n;5"></link>
   <link from="3;n;1" to="4;c;2"></link>
  
 </network>
