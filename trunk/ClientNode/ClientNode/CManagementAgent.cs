@@ -30,6 +30,10 @@ namespace ClientNode
        {
            portNum = 50000 + CConstrains.nodeNumber * 100;
            //portNum = 161;
+           Thread recieve = new Thread(new ThreadStart(SNMPMessagesListener));
+           recieve.Start();
+           Thread processMessage = new Thread(new ThreadStart(processReceivedData));
+           processMessage.Start();
        }
 
        public static CManagementAgent Instance
@@ -68,7 +72,7 @@ namespace ClientNode
                 {
                     //obiekty w słowniku: [from = CPortInfo1][to = CPortInfo2][add = null]
 
-                    foreach (Dictionary<Object, Object> d in queue.Dequeue().pdu.variablebinding)
+                    foreach (Dictionary<String, Object> d in queue.Dequeue().pdu.variablebinding)
                     {
                         
                         if (d.ContainsKey("setTopologyConnection"))

@@ -6,13 +6,14 @@ using System.Text;
 
 namespace Data
 {
+    [Serializable]
     public class CSNMPmessage
     {
         private string version;
         private string community;
-        public SNMPpdu pdu;
+        public SNMPpdu pdu = new SNMPpdu();
 
-        public CSNMPmessage(List<Dictionary<Object, Object>> list, string ver, string com)
+        public CSNMPmessage(List<Dictionary<String, Object>> list, string ver, string com)
         {
             this.version = ver;
             this.community = com;
@@ -55,13 +56,14 @@ namespace Data
             }
         }
     }
-
+    [Serializable]
     public class SNMPpdu
     {
         private string type;
-        public List<Dictionary<Object, Object>> variablebinding; //lista zawierajaca jedna lub wiecej par nazwa obiektu - wartosci, dalsze tlumaczenie tego w ksiazce jest dla mnie lekko niezrozumiale o tej porze...
+        public List<Dictionary<String, Object>> variablebinding; //lista zawierajaca jedna lub wiecej par nazwa obiektu - wartosci, dalsze tlumaczenie tego w ksiazce jest dla mnie lekko niezrozumiale o tej porze...
         private string requestIdentifier;
 
+        public SNMPpdu() { }
         string Type
         {
             get
@@ -88,8 +90,8 @@ namespace Data
 
 
     }
-    
 
+    [Serializable]
     class SNMPpduResponse : SNMPpdu
     {
         private int errorStatus;           // w SNMPpdu dla request na tych miejscach sa 0 wiec nie definiowalem nowej klasy dla niego

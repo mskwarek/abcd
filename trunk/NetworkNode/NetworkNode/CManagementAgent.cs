@@ -75,7 +75,7 @@ namespace NetworkNode
             return CCommutationTable.Instance.getCommutationTable();
         }
 
-
+        
         public void SNMPMessagesListener()
         {
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
@@ -107,10 +107,10 @@ namespace NetworkNode
             // przypadek wysyłania tablicy komutacji do ML
             if (table != null)
             {
-                Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+                Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
                 {"CommutationTable", table}
                 };
-                List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+                List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
                 pduList.Add(pduDict);
                 msg = new Data.CSNMPmessage(pduList, null, null);
             }
@@ -138,7 +138,7 @@ namespace NetworkNode
                 {
                     //obiekty w słowniku: [from = CPortInfo1][to = CPortInfo2][add = null]
 
-                    foreach (Dictionary<Object, Object> d in queue.Dequeue().pdu.variablebinding)
+                    foreach (Dictionary<String, Object> d in queue.Dequeue().pdu.variablebinding)
                     {
                         if (d.ContainsKey("add"))
                         {

@@ -81,12 +81,12 @@ namespace ManagementLayer
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
 
-            Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
             {"from", portIn},
             {"to", portOut},
             {"add", null}
             };
-            List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
             pduList.Add(pduDict);
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = "ADD" + nodeNumber.ToString();
@@ -101,12 +101,12 @@ namespace ManagementLayer
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
 
-            Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
             {"from", portIn},
             {"to", portOut},
             {"remove", null}
             };
-            List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
             pduList.Add(pduDict);
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = "REMOVE" + nodeNumber.ToString();
@@ -118,12 +118,12 @@ namespace ManagementLayer
 
         public void setNetworkConnections(int nodeNumber, Data.CLink link)
         {
-            Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
             {"from", link.from},
             {"to", link.to},
             {"setTopologyConnection", null}
             };
-            List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
             pduList.Add(pduDict);
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = "STC" + nodeNumber.ToString();
@@ -151,9 +151,9 @@ namespace ManagementLayer
         }
 
         // metoda wypisująca tablićę komutacji.
-        public void printCommutationTable(List<Dictionary<Object, Object>> lista)
+        public void printCommutationTable(List<Dictionary<String, Object>> lista)
         {
-            foreach (Dictionary<Object, Object> l in lista)
+            foreach (Dictionary<String, Object> l in lista)
             {
 
                 if (l.ContainsKey("CommutationTable"))
