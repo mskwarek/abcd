@@ -32,8 +32,7 @@ namespace ClientNode
            //portNum = 161;
            Thread recieve = new Thread(new ThreadStart(SNMPMessagesListener));
            recieve.Start();
-           Thread processMessage = new Thread(new ThreadStart(processReceivedData));
-           processMessage.Start();
+ 
        }
 
        public static CManagementAgent Instance
@@ -50,16 +49,19 @@ namespace ClientNode
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
             portListener.Start();
             Console.WriteLine("SNMPMessageListener in ON");
-            client = portListener.AcceptTcpClient(); 
-            clientStream = client.GetStream();  
-            Console.WriteLine("connection with ML ");
+            
             status = true;
 
             while (status) //uruchamiamy nasłuchiwanie
             {
+                client = portListener.AcceptTcpClient();
+                clientStream = client.GetStream();
+                Console.WriteLine("connection with ML ");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CSNMPmessage dane = (CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
+                Thread processMessage = new Thread(new ThreadStart(processReceivedData));
+                processMessage.Start();
                 Thread.Sleep(1000);
             }
         }
@@ -72,14 +74,17 @@ namespace ClientNode
                 {
                     //obiekty w słowniku: [from = CPortInfo1][to = CPortInfo2][add = null]
 
-                    foreach (Dictionary<String, Object> d in queue.Dequeue().pdu.variablebinding)
+                    Data.SNMPpdu pdu = queue.Dequeue().pdu;
+
+                    foreach (Dictionary<String, Object> d in pdu.variablebinding)
+                    
                     {
                         
                         if (d.ContainsKey("setTopologyConnection"))
                         {
                             //obsługa ustawienia portów wyjściowych.
                             startPort((Data.CLinkInfo)d["from"], (Data.CLinkInfo)d["to"]);
-                            sendResponse(queue.Dequeue().pdu.RequestIdentifier);
+                            sendResponse(pdu.RequestIdentifier);
                         }
                     }
                     Thread.Sleep(1000);

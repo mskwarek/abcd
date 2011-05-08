@@ -63,8 +63,8 @@ namespace ClientNode
 
         public CClientPort getOutputPort(int ID)
         {
-
-                CClientPortOut port = (CClientPortOut)OutputClientPortList.ElementAt(ID);
+            int id = ID - 1;
+                CClientPortOut port = (CClientPortOut)OutputClientPortList.ElementAt(id);
                 return port;
             
         }
