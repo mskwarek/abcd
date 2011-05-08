@@ -16,7 +16,7 @@ namespace NetworkNode
 
        private CCommutationTable()
        {
-           commutationTable = new Data.CCommutationTable(new PortInfo.EqualityComparer());
+           commutationTable = new Data.CCommutationTable(/*new PortInfo.EqualityComparer()*/);
        }
 
        public static CCommutationTable Instance

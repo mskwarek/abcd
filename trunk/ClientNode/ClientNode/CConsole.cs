@@ -30,6 +30,7 @@ namespace ClientNode
         public void consoleInit()
         {
             CPortManager cpm = CPortManager.Instance;
+            CManagementAgent cma = CManagementAgent.Instance;
 
             foreach (Thread t in CConstrains.threadList)
             {

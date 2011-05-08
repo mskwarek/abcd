@@ -62,20 +62,21 @@ namespace Data
             return this.getVCI().GetHashCode() + this.getVPI().GetHashCode() + this.getPortID().GetHashCode();
         }
             
-// rozwiązanie festera            
-       public class EqualityComparer : IEqualityComparer<PortInfo>
-        {
+// rozwiązanie festera
+       // [Serializable]    
+       //public class EqualityComparer : IEqualityComparer<PortInfo>
+       // {
 
-            public bool Equals(PortInfo x, PortInfo y)
-            {
-                return x.getPortID() == y.getPortID() && x.getVPI() == y.getVPI() && x.getVCI() == y.getVCI();
-            }
+       //     public bool Equals(PortInfo x, PortInfo y)
+       //     {
+       //         return x.getPortID() == y.getPortID() && x.getVPI() == y.getVPI() && x.getVCI() == y.getVCI();
+       //     }
 
-            public int GetHashCode(PortInfo x)
-            {
-                return x.getPortID() ^ x.getVCI();
-            }
+       //     public int GetHashCode(PortInfo x)
+       //     {
+       //         return x.getPortID() ^ x.getVCI();
+       //     }
 
-        }
+       // }
     }
 }

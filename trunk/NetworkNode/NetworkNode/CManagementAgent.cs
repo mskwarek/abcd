@@ -31,9 +31,9 @@ namespace NetworkNode
            //portNum = 161;
 
            Thread recieve = new Thread(new ThreadStart(SNMPMessagesListener));
+           
            recieve.Start();
-           Thread processMessage = new Thread(new ThreadStart(processReceivedData));
-           processMessage.Start();
+
        }
 
        public static CManagementAgent Instance
@@ -91,7 +91,7 @@ namespace NetworkNode
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
-
+                processReceivedData();
                 Thread.Sleep(1000);
             }
         }
@@ -125,7 +125,7 @@ namespace NetworkNode
             bf.Serialize(stream, msg);
             stream.Flush();
             Console.WriteLine("sending respnse " + msg + " to ML");
-            client.Close();
+            
         
         }
 
@@ -138,7 +138,9 @@ namespace NetworkNode
                 {
                     //obiekty w słowniku: [from = CPortInfo1][to = CPortInfo2][add = null]
 
-                    foreach (Dictionary<String, Object> d in queue.Dequeue().pdu.variablebinding)
+                    Data.SNMPpdu pdu = queue.Dequeue().pdu;
+
+                    foreach (Dictionary<String, Object> d in pdu.variablebinding)
                     {
                         if (d.ContainsKey("add"))
                         {
@@ -146,27 +148,27 @@ namespace NetworkNode
                             addConnection(
                                 (Data.PortInfo)d["from"],
                                 (Data.PortInfo)d["to"]);
-                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, null);
+                            sendResponse(pdu.RequestIdentifier, null);
         
                         }
                         else if (d.ContainsKey("remove"))
                         {
                             //obsługa usuniecia połaczenia w polu kom.
                             removeConnection((Data.PortInfo)d["from"], (Data.PortInfo)d["to"]);
-                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, null);
+                            sendResponse(pdu.RequestIdentifier, null);
         
                         }
                         else if (d.ContainsKey("setTopologyConnection"))
                         {
                             //obsługa ustawienia portów wyjściowych.
                             startPort((Data.CLinkInfo)d["from"], (Data.CLinkInfo)d["to"]);
-                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, null);
+                            sendResponse(pdu.RequestIdentifier, null);
         
                         }
                         else if (d.ContainsKey("getTable"))
                         {
                             //pobranie i wysłanie tablicy komutacji dla wybranego noda.
-                            sendResponse(queue.Dequeue().pdu.RequestIdentifier, getCommutationTable());
+                            sendResponse(pdu.RequestIdentifier, getCommutationTable());
                         }
 
                     }
