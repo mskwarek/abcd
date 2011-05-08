@@ -62,6 +62,7 @@
     <Content Include="config2.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="config3.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Data.csproj">
