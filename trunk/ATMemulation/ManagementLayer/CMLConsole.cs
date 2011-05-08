@@ -40,6 +40,9 @@ namespace ManagementLayer
             Console.WriteLine(helloMessage);
             CNetworkConfiguration cnc = CNetworkConfiguration.Instance;
             ConnectionsManager cm = ConnectionsManager.Instance;
+
+
+
             cnc.readConfig();
             while (true)
             {
