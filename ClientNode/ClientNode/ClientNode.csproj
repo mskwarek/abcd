@@ -72,9 +72,7 @@
     <Content Include="config1.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="config3.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="config4.xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
