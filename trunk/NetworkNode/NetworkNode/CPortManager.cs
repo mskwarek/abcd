@@ -92,7 +92,7 @@ namespace NetworkNode
                 }
 
 
-                int j = 0;
+                int j = 1;
             //tworzenie portów wyjsciowych
                 for (int y = 0; y < CConstrains.outputClientPortNumber; y++)
                 {
@@ -113,12 +113,14 @@ namespace NetworkNode
 
             if( OutputPortList.ElementAt(ID).GetType() == typeof(CClientPortOut) )
             {
-                CClientPortOut port = (CClientPortOut)OutputPortList.ElementAt(ID);
+                int id = ID - 1;
+                CClientPortOut port = (CClientPortOut)OutputPortList.ElementAt(id);
                 return port;
             }
             else
             {
-                CNetworkPortOut port = (CNetworkPortOut)OutputPortList.ElementAt(ID);
+                int id = ID - 1;
+                CNetworkPortOut port = (CNetworkPortOut)OutputPortList.ElementAt(id);
                 return port;
             }
         }
