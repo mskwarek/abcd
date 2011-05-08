@@ -18,7 +18,7 @@ namespace Data
             this.VPI = VPI;
             this.VCI = VCI;
         }
-        
+
 
         public int getPortID()
         {
@@ -39,11 +39,12 @@ namespace Data
         {
             // "portID;VCI;VPI"
             return Convert.ToString(this.portID) + ";" + Convert.ToString(this.VCI) + ";" + Convert.ToString(this.VPI);
-        } 
+        }
 
         // zmiana testowa do poprawienia
-// rozwiązanie maka
-        public bool Equals(PortInfo other) {
+        // rozwiązanie maka
+        public bool Equals(PortInfo other)
+        {
 
             if (this.getPortID() == other.getPortID() && this.getVPI() == other.getVPI() && this.getVCI() == other.getVCI())
             {
@@ -53,30 +54,30 @@ namespace Data
             {
                 return false;
             }
-        
+
         }
 
-        
+
         public override int GetHashCode()
         {
             return this.getVCI().GetHashCode() + this.getVPI().GetHashCode() + this.getPortID().GetHashCode();
         }
-            
-// rozwiązanie festera
-       // [Serializable]    
-       //public class EqualityComparer : IEqualityComparer<PortInfo>
-       // {
 
-       //     public bool Equals(PortInfo x, PortInfo y)
-       //     {
-       //         return x.getPortID() == y.getPortID() && x.getVPI() == y.getVPI() && x.getVCI() == y.getVCI();
-       //     }
+        // rozwiązanie festera
+        [Serializable]
+        public class EqualityComparer : IEqualityComparer<PortInfo>
+        {
 
-       //     public int GetHashCode(PortInfo x)
-       //     {
-       //         return x.getPortID() ^ x.getVCI();
-       //     }
+            public bool Equals(PortInfo x, PortInfo y)
+            {
+                return x.getPortID() == y.getPortID() && x.getVPI() == y.getVPI() && x.getVCI() == y.getVCI();
+            }
 
-       // }
+            public int GetHashCode(PortInfo x)
+            {
+                return x.getPortID() ^ x.getVCI();
+            }
+
+        }
     }
 }
