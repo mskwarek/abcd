@@ -40,12 +40,11 @@ namespace ManagementLayer
            portListener.Start();
            Console.WriteLine("ML nasłuchuje na porcie : " +CConstrains.LMportNumber);
            
-           TcpClient client = portListener.AcceptTcpClient();
-           NetworkStream clientStream = client.GetStream();
-           Console.WriteLine("connection from node accepted");
-
            while (status)
            {
+               TcpClient client = portListener.AcceptTcpClient();
+               NetworkStream clientStream = client.GetStream();
+               Console.WriteLine("connection from node accepted");
                BinaryFormatter binaryFormater = new BinaryFormatter();
                Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
 
@@ -94,7 +93,7 @@ namespace ManagementLayer
 
             send(nodeNumber, dataToSend);
 
-            Console.WriteLine("node : " + nodeNumber + "from : " + portNumber_A + " to : " + portNumber_B);
+            Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
         }
 
         public void removeConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B)

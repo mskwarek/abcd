@@ -81,17 +81,20 @@ namespace NetworkNode
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
             portListener.Start();
 
-            client = portListener.AcceptTcpClient(); 
-            clientStream = client.GetStream();  
-            Console.WriteLine("connection with ML ");
+            
             status = true;
 
             while (status) //uruchamiamy nasłuchiwanie
             {
+                client = portListener.AcceptTcpClient();
+                clientStream = client.GetStream();
+                Console.WriteLine("connection with ML ");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
-                processReceivedData();
+                Thread process = new Thread(new ThreadStart(processReceivedData));
+                process.Start();
+                
                 Thread.Sleep(1000);
             }
         }

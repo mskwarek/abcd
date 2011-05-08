@@ -63,7 +63,6 @@
     <Compile Include="CMLConsole.cs" />
     <Compile Include="CNetworkConfiguration.cs" />
     <Compile Include="ConnectionsManager.cs" />
-    <Compile Include="IdentifiersManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
