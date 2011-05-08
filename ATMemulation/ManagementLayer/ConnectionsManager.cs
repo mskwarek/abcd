@@ -70,10 +70,11 @@ namespace ManagementLayer
             
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
-            stream.Flush();
+            //stream.Flush();
             Console.WriteLine("sending " + msg + " to node : " +nodeNumber);
-            client.Close();
+            
         }
+
 
 
         public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B)
@@ -135,14 +136,14 @@ namespace ManagementLayer
         
         public void getNodeCommutationTable(int nodeNumber)
         {
-            Dictionary<Object, Object> pduDict = new Dictionary<Object, Object>() {
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
             {"getTable", null}
             };
-            List<Dictionary<Object, Object>> pduList = new List<Dictionary<Object, Object>>();
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
             pduList.Add(pduDict);
 
 
-            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(null, null, null);
+            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = "getTable" + nodeNumber.ToString();
 
             send(nodeNumber, dataToSend);

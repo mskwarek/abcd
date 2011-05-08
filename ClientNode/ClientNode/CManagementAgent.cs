@@ -49,7 +49,7 @@ namespace ClientNode
         {
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
             portListener.Start();
-
+            Console.WriteLine("SNMPMessageListener in ON");
             client = portListener.AcceptTcpClient(); 
             clientStream = client.GetStream();  
             Console.WriteLine("connection with ML ");

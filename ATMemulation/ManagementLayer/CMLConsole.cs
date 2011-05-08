@@ -39,6 +39,7 @@ namespace ManagementLayer
             //CPortManager cpm = CPortManager.Instance;
             Console.WriteLine(helloMessage);
             CNetworkConfiguration cnc = CNetworkConfiguration.Instance;
+            ConnectionsManager cm = ConnectionsManager.Instance;
             cnc.readConfig();
             while (true)
             {
@@ -107,7 +108,7 @@ namespace ManagementLayer
                                     args.Add(Convert.ToInt32(alt[i]));
                                 }
                                 // node number, port in port out
-                                ConnectionsManager.Instance.addConnection(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                                cm.addConnection(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
                                 //CShortestPathCalculatorWrapper.Instance.getShortestPath(args[0], args[1]);
 
                                 }
@@ -137,7 +138,7 @@ namespace ManagementLayer
                                     args.Add(Convert.ToInt32(alt[i]));
                                 }
                                 // node number, port in port out
-                                ConnectionsManager.Instance.removeConnection(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+                                cm.removeConnection(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
                             }
                             catch (Exception e)
                             {
@@ -174,7 +175,7 @@ namespace ManagementLayer
                             if (cnc.checkFormula(a))
                             {
                                 Console.WriteLine("Pobierasz dane z noda: " + args[0]);
-                                ConnectionsManager.Instance.getNodeCommutationTable(args[1]);
+                                cm.getNodeCommutationTable(args[0]);
                             }
                         }
                                 

@@ -10,6 +10,9 @@ namespace ManagementLayer
     {
         static readonly CNetworkConfiguration instance = new CNetworkConfiguration();
 
+        Dictionary<int, String> nodesType = new Dictionary<int, string>() {{1, "client" } };
+        private List<Data.CLink> LinkList = new List<Data.CLink>();
+        
         CNetworkConfiguration()
         {
         }
@@ -22,8 +25,6 @@ namespace ManagementLayer
             }
         }
 
-        Dictionary<int, String> nodesType = new Dictionary<int, string>() { {1,"client"}};
-        private List<Data.CLink> LinkList = new List<Data.CLink>();
 
         public List<Data.CLink> linkList
         {
@@ -44,11 +45,19 @@ namespace ManagementLayer
                         String[] fromArray = textReader.GetAttribute(0).Split(';');
                         String[] toArray = textReader.GetAttribute(1).Split(';');
 
-                        if (fromArray[1] != toArray[1])
+                        if (fromArray[1] == "c") {fromArray[1] = "client";}
+                        else if (fromArray[1] == "n") { fromArray[1] = "network"; }
+
+                        if (toArray[1] == "c") { toArray[1] = "client"; }
+                        else if (toArray[1] == "n") { toArray[1] = "network"; }
+
+                        try
                         {
-                            Console.WriteLine("błędne połączenie, łączysz port " + fromArray[1] + " z portem " + toArray[1]);
-                            break;
+                            nodesType.Add(Convert.ToInt32(fromArray[0]), fromArray[1]);
+                            nodesType.Add(Convert.ToInt32(toArray[0]), toArray[1]);
                         }
+                        catch (Exception) { }
+
 
                         Data.CLinkInfo from = new Data.CLinkInfo(Convert.ToInt32(fromArray[0]), fromArray[1], Convert.ToInt32(fromArray[2]));
                         Data.CLinkInfo to = new Data.CLinkInfo(Convert.ToInt32(toArray[0]), toArray[1], Convert.ToInt32(toArray[2]));

@@ -64,6 +64,8 @@ namespace Data
         private string requestIdentifier;
 
         public SNMPpdu() { }
+
+        
         string Type
         {
             get
