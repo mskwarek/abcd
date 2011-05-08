@@ -24,15 +24,6 @@ namespace NetworkNode
            
             CManagementAgent.Instance.resetCommutationTable();
 
-            ////----------------test
-
-            CCommutationTable.Instance.addEntry( new Data.PortInfo(1, 0, 0), new Data.PortInfo(2, 0, 4) );
-            CCommutationTable.Instance.addEntry( new Data.PortInfo(2, 0, 1), new Data.PortInfo(2, 0, 1) );
-            CCommutationTable.Instance.addEntry( new Data.PortInfo(1, 0, 3), new Data.PortInfo(1, 0, 3)) ;
-
-            CCommutationTable.Instance.showAll();
-
-            //\\----------------test
             System.Console.ReadKey();
             return 0;
         }

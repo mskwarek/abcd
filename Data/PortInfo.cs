@@ -18,7 +18,7 @@ namespace Data
             this.VPI = VPI;
             this.VCI = VCI;
         }
-
+        
 
         public int getPortID()
         {
@@ -39,12 +39,11 @@ namespace Data
         {
             // "portID;VCI;VPI"
             return Convert.ToString(this.portID) + ";" + Convert.ToString(this.VCI) + ";" + Convert.ToString(this.VPI);
-        }
+        } 
 
         // zmiana testowa do poprawienia
-        // rozwiązanie maka
-        public bool Equals(PortInfo other)
-        {
+// rozwiązanie maka
+        public bool Equals(PortInfo other) {
 
             if (this.getPortID() == other.getPortID() && this.getVPI() == other.getVPI() && this.getVCI() == other.getVCI())
             {
@@ -54,16 +53,16 @@ namespace Data
             {
                 return false;
             }
-
+        
         }
 
-
+        
         public override int GetHashCode()
         {
             return this.getVCI().GetHashCode() + this.getVPI().GetHashCode() + this.getPortID().GetHashCode();
         }
-
-        // rozwiązanie festera
+            
+// rozwiązanie festera
         [Serializable]
         public class EqualityComparer : IEqualityComparer<PortInfo>
         {

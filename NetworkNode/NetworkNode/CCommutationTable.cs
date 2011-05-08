@@ -39,10 +39,18 @@ namespace NetworkNode
             }
             else
             {
-                Exception ex = new Exception();
-                throw ex;
+                portOut = new PortInfo(0, 0, 0);
+                portOut = null;
+                try
+                {
+                    Exception ex = new Exception();
+                    throw ex;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Brak zadanego wpisu w tablicy komutacji " + e.StackTrace);
+                }
             }
-            
             return portOut;
         }
 
