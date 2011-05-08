@@ -110,16 +110,14 @@ namespace NetworkNode
 
         public CPort getOutputPort(int ID)
         {
-
-            if( OutputPortList.ElementAt(ID).GetType() == typeof(CClientPortOut) )
+            int id = ID - 1;
+            if( OutputPortList.ElementAt(id).GetType() == typeof(CClientPortOut) )
             {
-                int id = ID - 1;
                 CClientPortOut port = (CClientPortOut)OutputPortList.ElementAt(id);
                 return port;
             }
             else
             {
-                int id = ID - 1;
                 CNetworkPortOut port = (CNetworkPortOut)OutputPortList.ElementAt(id);
                 return port;
             }
