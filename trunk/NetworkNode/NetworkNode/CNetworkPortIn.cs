@@ -43,11 +43,12 @@ namespace NetworkNode
             portListener = new TcpListener(ip, base.PORTNUMBER);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
             Console.WriteLine(base.PORTCLASS + " o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
-            client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
-            clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
-            Console.WriteLine("connection accepted");
+            
             while (status) //uruchamiamy nasłuchiwanie
             {
+                client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
+                clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
+                Console.WriteLine("connection accepted");
                 //StreamReader sr = new StreamReader(clientStream);
                 //Stream stream = new Stream(clientStream.); 
                 BinaryFormatter binaryFormater =new BinaryFormatter();

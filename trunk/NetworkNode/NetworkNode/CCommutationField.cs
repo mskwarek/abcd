@@ -28,24 +28,28 @@ namespace NetworkNode
             int VPI = data.getCAdministrationData().getVPI();
             //na ich podstawie + port wejsciowy, pobieram dane o porcie wyjsciowym
             Data.PortInfo outputPortInfo = CCommutationTable.Instance.getOutputPortInfo(new Data.PortInfo(inputPort.ID, VPI, VCI));
+            if (outputPortInfo != null)
+                // pobieram obiekt portu
 
-            // pobieram obiekt portu
-            
-            if (CPortManager.Instance.getOutputPort(outputPortInfo.getPortID()).GetType() == typeof(CNetworkPortOut))
-            {
-                CNetworkPortOut outputPort;
-                outputPort = (CNetworkPortOut)CPortManager.Instance.getOutputPort(outputPortInfo.getPortID());
-                //testowe
-                outputPort.startPort(50101);
-                //---------------
-                outputPort.send(data, outputPortInfo);
-            }
+                if (CPortManager.Instance.getOutputPort(outputPortInfo.getPortID()).GetType() == typeof(CNetworkPortOut))
+                {
+                    CNetworkPortOut outputPort;
+                    outputPort = (CNetworkPortOut)CPortManager.Instance.getOutputPort(outputPortInfo.getPortID());
+                    //testowe
+                    outputPort.startPort(50101);
+                    //---------------
+                    outputPort.send(data, outputPortInfo);
+                }
+                else
+                {
+                    CClientPortOut outputPort;
+                    outputPort = (CClientPortOut)CPortManager.Instance.getOutputPort(outputPortInfo.getPortID());
+                    outputPort.send(data);
+                }
             else
             {
-                CClientPortOut outputPort;
-                outputPort = (CClientPortOut)CPortManager.Instance.getOutputPort(outputPortInfo.getPortID());
-                outputPort.send(data);
-            }        
+                System.Console.WriteLine("Blad doboru portu wyjsciowego");
+            }
 
         }
 
