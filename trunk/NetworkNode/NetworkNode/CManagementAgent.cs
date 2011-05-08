@@ -31,7 +31,7 @@ namespace NetworkNode
            //portNum = 161;
 
            Thread recieve = new Thread(new ThreadStart(SNMPMessagesListener));
-           
+           recieve.Name = "SNMPMessagesListener thread";
            recieve.Start();
 
        }

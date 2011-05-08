@@ -26,6 +26,7 @@ namespace ClientNode
             this.portNumber = systemPortNumber;
         
             Thread portListen = new Thread(init);
+            portListen.Name = "init " + portNumber;
             CConstrains.threadList.Add(portListen);
             
         }

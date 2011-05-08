@@ -21,6 +21,7 @@ namespace ManagementLayer
             this.client = inClient;
             this.clientNumber = clientNum;
             Thread clientThread = new Thread(handleClient);
+            clientThread.Name = "handleCLient thread";
             clientThread.Start();
         }
 

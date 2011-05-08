@@ -31,6 +31,7 @@ namespace ClientNode
            portNum = 50000 + CConstrains.nodeNumber * 100;
            //portNum = 161;
            Thread recieve = new Thread(new ThreadStart(SNMPMessagesListener));
+           recieve.Name = "SNMPMessagesListener thread";
            recieve.Start();
  
        }
@@ -61,6 +62,7 @@ namespace ClientNode
                 CSNMPmessage dane = (CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
                 Thread processMessage = new Thread(new ThreadStart(processReceivedData));
+                processMessage.Name = "processMessage thread";
                 processMessage.Start();
                 Thread.Sleep(1000);
             }

@@ -27,6 +27,7 @@ namespace ManagementLayer
         {
 
             Thread t = new Thread(responseListener);
+            t.Name = "responseListener thread";
             t.Start();
         }
 

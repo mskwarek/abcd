@@ -29,8 +29,10 @@ namespace NetworkNode
             base.PORTCLASS = CConstrains.PortType["NetworkPortClass"];
             base.PORTNUMBER = systemPortNumber;
             Thread t1 = new Thread(new ThreadStart(init));
+            t1.Name = "init " + base.PORTNUMBER;
             t1.Start();
             Thread t2 = new Thread(new ThreadStart(receiveData));
+            t2.Name = "receiveData " + base.PORTNUMBER;
             t2.Start();
             
         }
