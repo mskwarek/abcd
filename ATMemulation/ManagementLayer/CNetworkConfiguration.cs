@@ -65,7 +65,11 @@ namespace ManagementLayer
                         LinkList.Add(new Data.CLink(from, to, 1));
 
 
-                        //TODO wysyłanie do Nodów info o połączeniach
+                        ConnectionsManager cm = ConnectionsManager.Instance;
+                        foreach (Data.CLink l in LinkList) {
+
+                        cm.setNetworkConnections(l.from.nodeNumber, l);
+                         }
                     }
                 }
             }
@@ -82,6 +86,12 @@ namespace ManagementLayer
                 Console.WriteLine("node " + cl.from.nodeNumber + " port " + cl.from.portNumber + " type  " + cl.from.portType + " --> node " + cl.to.nodeNumber + " port " + cl.to.portNumber + " type " + cl.to.portType + " ");
 
         }
+
+        public List<Data.CLink> getLinkList()
+        {
+            return LinkList;
+        }
+
 
         public void addNodeToDictionary(int i, String type)
         {
