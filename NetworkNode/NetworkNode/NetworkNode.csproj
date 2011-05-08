@@ -59,9 +59,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config1.xml">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="config2.xml">
       <SubType>Designer</SubType>
     </Content>
