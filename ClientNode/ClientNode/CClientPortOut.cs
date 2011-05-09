@@ -36,6 +36,14 @@ namespace ClientNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, data);
             stream.Flush();
+
+            List<byte> lista = new List<byte>();
+            lista = data.getInformation();
+
+            foreach (byte b in lista)
+            {
+                Console.Write(b + " ");
+            }
         }
 
         public int getPortNumber()

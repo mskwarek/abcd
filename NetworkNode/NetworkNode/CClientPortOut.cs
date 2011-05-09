@@ -41,12 +41,20 @@ namespace  NetworkNode
             NetworkStream stream = client.GetStream();
 
             Data.CUserData cUserData = data.getCUserData();
-            Console.WriteLine("nadaje " + cUserData);
-
             BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(stream, data);
+            bf.Serialize(stream, cUserData);
+            Console.WriteLine("nadaje " + cUserData);
+            List<byte> lista = new List<byte>();
+            lista = cUserData.getInformation();
+
+            
+
             stream.Flush();
 
+            foreach (byte b in lista)
+            {
+                Console.Write(b + "  ");
+            }
             return PORTNUMBER;
         }
     }
