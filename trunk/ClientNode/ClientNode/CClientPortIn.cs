@@ -38,11 +38,12 @@ namespace ClientNode
         {
             Console.WriteLine("Port o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
             status = true;
-            
+            portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
+            portListener.Start();   
+
             while (status) //uruchamiamy nasłuchiwanie
             {
-                portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
-                portListener.Start();                      //uruchamiamy serwer
+                                   //uruchamiamy serwer
                 Thread.Sleep(10000);
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
@@ -50,7 +51,7 @@ namespace ClientNode
 
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);
-                Console.WriteLine(dane);
+                Console.WriteLine(dane.getInformation());
             }
 
         }
