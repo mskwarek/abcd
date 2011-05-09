@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using System.IO;
 
 namespace NetworkNode
 {
@@ -32,10 +33,18 @@ namespace NetworkNode
 
         private void readConfig()
         {
-
-            XmlTextReader textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
+            XmlTextReader textReader;
             try
             {
+                textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
+            }
+            catch (FileNotFoundException e)
+            {
+                Console.WriteLine("nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
+                textReader = new XmlTextReader(CConstrains.defaultConfigFileURL);
+            }            
+            try
+            {   
                 while (textReader.Read())
                 {
                     switch (textReader.NodeType)
@@ -62,7 +71,11 @@ namespace NetworkNode
             }
             catch (System.Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                StreamWriter sw = new StreamWriter("error.txt", true);
+                sw.Write(e.StackTrace);
+                sw.Flush();
+                sw.Close();
+                Console.WriteLine("ERROR!!! nie ma pliku konfiguracyjnego");
             }
         }
 

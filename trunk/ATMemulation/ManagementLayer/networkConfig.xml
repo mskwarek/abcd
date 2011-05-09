@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+
 <!-- schemat : numer noda; kliencki/sieciowy; numer portu-->
+
 <network>
   <link from="1;c;1" to="2;n;1"></link>
-  <link from="1;c;2" to="3;n;1"></link>
-  <link from="2;n;3" to="3;n;5"></link>
-  <link from="3;n;1" to="4;c;2"></link>
+  <link from="2;n;4" to="3;n;5"></link>
+  <link from="3;n;2" to="4;c;1"></link>
  
 </network>

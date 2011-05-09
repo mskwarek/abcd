@@ -17,7 +17,7 @@ namespace Data
 
         public void setInformation(List<byte> data)
         {
-            if (data.Capacity <= MAX_CAPACITY)
+            if (data.Count <= MAX_CAPACITY)
                 this.data = data;
         }
         public List<byte> getInformation()

@@ -62,9 +62,10 @@ namespace ClientNode
                         {
                             temp.Add((byte)x.Next(0, 127));        // dodawanie kolejnych bajtow do danych do wyslania
                         }
+
+
                         data.setInformation(temp);
                         cpm.sendMsg(data);
-                        //cpm.showPorts();
                     }
                     else if (ConsoleInput.StartsWith("stop"))
                     {

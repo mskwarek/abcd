@@ -15,6 +15,8 @@ namespace NetworkNode
         public const String nodeType = "NetworkNode";
         public static string ipAddress = "127.0.0.1";
         public static int managementLayerPort = 49999;
+        public static String configFileURL = "../../config" + nodeNumber + ".xml";
+        public static String defaultConfigFileURL = "../../defaultConfig.xml";
 
         public static Dictionary<string, string> PortType = new Dictionary<string, string>()
         {

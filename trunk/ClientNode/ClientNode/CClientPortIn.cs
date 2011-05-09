@@ -44,15 +44,23 @@ namespace ClientNode
             while (status) //uruchamiamy nasłuchiwanie
             {
                                    //uruchamiamy serwer
-                Thread.Sleep(10000);
+                
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
                 Console.WriteLine("connection accepted ");
 
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);
-                Console.WriteLine(dane.getInformation());
-            }
+                List<byte> lista = new List<byte>();
+                lista = dane.getInformation();
+
+                foreach (byte b in lista)
+                {
+                    Console.Write(b + "  ");
+                }
+                Console.WriteLine("odebrałem");
+                Thread.Sleep(10000);
+                }
 
         }
 
