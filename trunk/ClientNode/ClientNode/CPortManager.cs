@@ -96,6 +96,8 @@ namespace ClientNode
             CClientPortOut t = OutputClientPortList.Find(delegate(CClientPortOut p) {  return p.STATUS == false; });
             return t;
         }
+       
+        
         // metoda odpowiedzialna za nadawanie wiadomości
         public void sendMsg(Data.CUserData data) {
             Console.WriteLine("wyszukuje port...");
@@ -109,7 +111,7 @@ namespace ClientNode
                // OutputClientPortList[index].startPort(50201);
                 //------------------
                 OutputClientPortList[index].send(data);
-                OutputClientPortList[index].STATUS = true;
+                //OutputClientPortList[index].STATUS = true;
             }
         }
 
@@ -131,6 +133,20 @@ namespace ClientNode
             }
 
         }
+
+        public void getNodePortConfiguration()
+        {
+            Console.WriteLine("\n\nNode ID = " + CConstrains.nodeNumber + " PORT CONFIGURATION\n\n");
+            foreach (CClientPortIn p in InputClientPortList)
+            {
+                Console.WriteLine("ID = " + p.ID + " LISTENING ON PORT = " + p.getPortNumber());
+            }
+            foreach (CClientPortOut p in OutputClientPortList)
+            {
+                Console.WriteLine("ID = " + p.ID +  " SENDING TO PORT = " + p.getPortNumber());
+            }
+        }
+
 
 
     }

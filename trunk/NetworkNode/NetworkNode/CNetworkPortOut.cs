@@ -10,9 +10,7 @@ namespace NetworkNode
 {
     public class CNetworkPortOut:CNetworkPort
     {
-        private static TcpClient client;
-        private NetworkStream stream;
-        private StreamWriter clientStream;
+
 
 
 
@@ -27,9 +25,7 @@ namespace NetworkNode
             base.PORTNUMBER = systemPortNumber;
             try
             {
-                client = new TcpClient();
-                client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
-                stream = client.GetStream();
+
             }
             catch (Exception e)
             {
@@ -37,19 +33,6 @@ namespace NetworkNode
             }
         }
 
-        public void shutdown()
-        {
-            client.Close();
-        }
-
-        // metoda nawiązująca połączenie z węzłem sieciowym i nadająca do niego TO DO
-        public void send(String str)
-        {
-            Console.WriteLine("nadaje " + str);
-            clientStream = new StreamWriter(stream);
-            clientStream.WriteLine(str);
-            clientStream.Flush();
-        }
         private Data.CCharacteristicData prepareNewAdministrationData(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
         {
             //pobieram dawne dane administracyjne
@@ -64,6 +47,9 @@ namespace NetworkNode
 
         public int send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
         {
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
+            NetworkStream stream = client.GetStream();
             data = prepareNewAdministrationData(data, outputPortInfo);
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, data);

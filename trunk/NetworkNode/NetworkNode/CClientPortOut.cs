@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace  NetworkNode
 {
@@ -12,9 +13,7 @@ namespace  NetworkNode
 
     class CClientPortOut : CClientPort
     {
-        private static TcpClient client;
-        private NetworkStream stream;
-        private StreamWriter clientStream;
+
 
 
         //konstruktor
@@ -29,52 +28,24 @@ namespace  NetworkNode
         {
 
             base.PORTNUMBER = systemPortNumber;
-            try
-            {
-                client = new TcpClient();
-                client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
-                stream = client.GetStream();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error.... " + e.StackTrace);
-            }
-        }
-
-        // NIEPOTRZEBNE
-   /*     private Data.CCharacteristicData prepareAdministrationData(Data.CUserData userData, Data.PortInfo outputPortInfo)
-        {
             
-            Data.CAdministrationData newCAdministrationData = new Data.CAdministrationData(Data.Contact.UNI, Data.PT._000_, Data.CLP._0_);
-            newCAdministrationData.setVCI(outputPortInfo.getVCI());
-            newCAdministrationData.setVPI(outputPortInfo.getVPI());
-
-            Data.CCharacteristicData cCharacteristicData = new Data.CCharacteristicData(newCAdministrationData, userData);
-            
-            return cCharacteristicData;
-        }*/ 
-
-        public void shutdown()
-        {
-            client.Close();
         }
 
-        // metoda nawiązująca połączenie z węzłem sieciowym i nadająca do niego TO DO
-        public void send(String str)
-        {
-            Console.WriteLine("nadaje " + str);
-            clientStream = new StreamWriter(stream);
-            clientStream.WriteLine(str);
-            clientStream.Flush();
-        }
+
+
 
         public int send(Data.CCharacteristicData data)
         {
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
+            NetworkStream stream = client.GetStream();
+
             Data.CUserData cUserData = data.getCUserData();
             Console.WriteLine("nadaje " + cUserData);
-            clientStream = new StreamWriter(stream);
-            clientStream.WriteLine(cUserData);
-            clientStream.Flush();
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, data);
+            stream.Flush();
 
             return PORTNUMBER;
         }
