@@ -111,8 +111,11 @@ namespace NetworkNode
         public CPort getOutputPort(int ID)
         {
             int id = ID - 1;
+              
+
             if( OutputPortList.ElementAt(id).GetType() == typeof(CClientPortOut) )
             {
+                
                 CClientPortOut port = (CClientPortOut)OutputPortList.ElementAt(id);
                 return port;
             }
@@ -125,14 +128,15 @@ namespace NetworkNode
 
         public CPort getInputPort(int ID)
         {
-            if (OutputPortList.ElementAt(ID).GetType() == typeof(CClientPortOut))
+            int id = ID - 1;
+            if (OutputPortList.ElementAt(id).GetType() == typeof(CClientPortOut))
             {
-                CClientPortOut port = (CClientPortOut)InputPortList.ElementAt(ID);
+                CClientPortOut port = (CClientPortOut)InputPortList.ElementAt(id);
                 return port;
             }
             else
             {
-                CNetworkPortOut port = (CNetworkPortOut)InputPortList.ElementAt(ID);
+                CNetworkPortOut port = (CNetworkPortOut)InputPortList.ElementAt(id);
                 return port;
             }
         }

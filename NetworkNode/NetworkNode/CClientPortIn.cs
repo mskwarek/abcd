@@ -33,9 +33,6 @@ namespace NetworkNode
             Thread t1 = new Thread(new ThreadStart(init));
             t1.Name = "init " + base.PORTNUMBER;
             t1.Start();
-            Thread t2 = new Thread(new ThreadStart(receiveData));
-            t2.Name = "receiveData " + base.PORTNUMBER;
-            t2.Start();
             
         }
 
@@ -53,12 +50,13 @@ namespace NetworkNode
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
                 Console.WriteLine("connection accepted ");
-                //StreamReader sr = new StreamReader(clientStream);
-                //Stream stream = new Stream(clientStream.); 
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
                 Console.WriteLine(dane);
+                Thread  recieve = new Thread(receiveData);
+                recieve.Name = "receiveData " + base.PORTNUMBER;
+                 recieve.Start();
                 Thread.Sleep(1000);
             }
 

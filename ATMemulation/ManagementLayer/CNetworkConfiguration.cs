@@ -63,15 +63,15 @@ namespace ManagementLayer
                         Data.CLinkInfo to = new Data.CLinkInfo(Convert.ToInt32(toArray[0]), toArray[1], Convert.ToInt32(toArray[2]));
                         //add
                         LinkList.Add(new Data.CLink(from, to, 1));
-
-
-                        ConnectionsManager cm = ConnectionsManager.Instance;
-                        foreach (Data.CLink l in LinkList) {
-
-                        cm.setNetworkConnections(l.from.nodeNumber, l);
-                         }
+                        
                     }
                 }
+                ConnectionsManager cm = ConnectionsManager.Instance;
+                foreach (Data.CLink l in LinkList)
+                {
+
+                    cm.setNetworkConnections(l.from.nodeNumber, l);
+                } 
             }
             catch (System.Exception e)
             {

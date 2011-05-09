@@ -83,6 +83,11 @@ namespace ClientNode
                             Console.WriteLine(e.StackTrace);
                         }
                     }
+                    else if (ConsoleInput.StartsWith("show"))
+                    {
+
+                        cpm.getNodePortConfiguration();
+                    }
                     else Console.WriteLine(ConsoleInput);
 
                 }
