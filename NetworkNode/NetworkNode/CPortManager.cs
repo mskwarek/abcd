@@ -125,7 +125,6 @@ namespace NetworkNode
         {
             int id = ID - 1;
               
-
             if( OutputPortList.ElementAt(id).GetType() == typeof(CClientPortOut) )
             {
                 

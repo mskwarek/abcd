@@ -19,7 +19,7 @@ namespace NetworkNode
         private TcpListener portListener;
         private TcpClient client;
         private NetworkStream clientStream;
-    
+        private StreamWriter serwerStream;
 
 
         public CNetworkPortIn(int id, Boolean busy, int systemPortNumber)
@@ -41,20 +41,31 @@ namespace NetworkNode
             portListener = new TcpListener(ip, base.PORTNUMBER);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
             Console.WriteLine(base.PORTCLASS + " o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
-            
+
             while (status) //uruchamiamy nasłuchiwanie
             {
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
                 Console.WriteLine("connection accepted");
-                BinaryFormatter binaryFormater =new BinaryFormatter();
-                CCharacteristicData dane = (CCharacteristicData) binaryFormater.Deserialize(clientStream);
-                queue.Enqueue(dane);
-                Console.WriteLine(dane);
-                Thread t2 = new Thread(new ThreadStart(receiveData));
-                t2.Name = "receiveData " + base.PORTNUMBER;
-                t2.Start();
-                Thread.Sleep(1000);
+                serwerStream = new StreamWriter(clientStream);
+                BinaryFormatter binaryFormater = new BinaryFormatter();
+                CCharacteristicData dane = (CCharacteristicData)binaryFormater.Deserialize(clientStream);
+                //jeżeli przychodzi do nas coś na vpi = 0 i vci =5 
+                if ((dane.getCAdministrationData().getVCI() == 5) && (dane.getCAdministrationData().getVPI() == 0))
+                {
+                    Console.WriteLine("CNetworkPortIn : RECIEVED HELLO MSG");
+                    serwerStream.WriteLine(CConstrains.nodeNumber);
+                    serwerStream.Flush();
+                }
+                else
+                {
+                    queue.Enqueue(dane);
+                    Console.WriteLine(dane);
+                    Thread t2 = new Thread(new ThreadStart(receiveData));
+                    t2.Name = "receiveData " + base.PORTNUMBER;
+                    t2.Start();
+                    Thread.Sleep(1000);
+                }
             }
 
         }
