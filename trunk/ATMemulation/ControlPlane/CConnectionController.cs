@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Net;
+using System.Net.Sockets;
 
 namespace ControlPlane
 {
@@ -62,8 +64,34 @@ namespace ControlPlane
         // listener żądań od NCC jedno, czy wielowatkowy?
         private void nccListener()
         {
+            bool status = true;
+            IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);
+            TcpListener portListener = new TcpListener(ip, CConstrains.CPportNumber);
+            portListener.Start();
+            Console.WriteLine(" Control Plane nasluchuje na porcie : " + CConstrains.CPportNumber);
 
+            while (status)
+            {
+                TcpClient client = portListener.AcceptTcpClient();
+                new ClientHandler(client);
+            }
         }
 
+    }
+
+    private class ClientHandler
+    {
+        public ClientHandler(TcpClient client)
+        {
+            handling(client);
+        }
+        
+        private void handling(TcpClient client)
+        {
+            // nasluch
+
+
+
+        }
     }
 }
