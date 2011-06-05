@@ -12,7 +12,9 @@ namespace NetworkNode
         { }
 
         public void ConnectionRequestOut()
-        { }
+        { 
+            
+        }
 
 
         //uzywane przy wielu domenach
