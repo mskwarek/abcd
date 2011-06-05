@@ -2,11 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace ControlPlane
 {
-    class CConnectionControl
+    class CConnectionController
     {
+        
+        private static CConnectionController connectionController= new CConnectionController();
+
+        private CConnectionController()
+        {
+            Thread t = new Thread(nccListener);
+            t.Name = "NCC Listener";
+            t.Start();
+
+        }
+
+        public static  CConnectionController Instance
+        {
+            get
+            {
+                return connectionController;
+            }
+        }
+
         //metoda do wymiany pomiedzy CC
         // parametry: para SNP, SNP i SNPP, para SNPP
         // zwraca: potwierdzenie
@@ -15,6 +35,7 @@ namespace ControlPlane
             bool confirmation=false;
             return confirmation;
         }
+
         //metoda zadajaca zestawienia polaczenia. uzywana w trybie hierarchicznym
         //parametry: para SNP
         //zwraca: polaczenie podsieciowe
@@ -37,5 +58,12 @@ namespace ControlPlane
 
         public void LinkConnectionDeallocation(int SNP)
         { }
+
+        // listener żądań od NCC jedno, czy wielowatkowy?
+        private void nccListener()
+        {
+
+        }
+
     }
 }
