@@ -50,6 +50,7 @@
     <Compile Include="CCommutationTable.cs" />
     <Compile Include="CConstrains.cs" />
     <Compile Include="CManagementAgent.cs" />
+    <Compile Include="CNetworkCallController.cs" />
     <Compile Include="CNetworkPort.cs" />
     <Compile Include="CNetworkPortIn.cs" />
     <Compile Include="CNetworkPortOut.cs" />
