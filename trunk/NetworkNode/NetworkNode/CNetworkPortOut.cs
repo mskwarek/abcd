@@ -23,6 +23,7 @@ namespace NetworkNode
         public override void startPort(int systemPortNumber) 
         {
             base.PORTNUMBER = systemPortNumber;
+            base._busy = true;
             try
             {
 
@@ -45,16 +46,32 @@ namespace NetworkNode
             return data;
         }
 
-        public int send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo)
+        public int send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo, bool helloMsg)
         {
             TcpClient client = new TcpClient();
             client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
             NetworkStream stream = client.GetStream();
-            data = prepareNewAdministrationData(data, outputPortInfo);
+            // jeżeli helloMsg = true wysyła hello msg 
+            if (helloMsg == false)
+            {
+                data = prepareNewAdministrationData(data, outputPortInfo);
+            }
+             
+                
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, data);
             stream.Flush();
-            Console.WriteLine("nadaje " + data);
+            if (helloMsg == true)
+            {
+                Console.WriteLine(" CNetworkPortOut :  SENDING HELLO  ON PORT " + base.PORTNUMBER);
+                StreamReader sr = new StreamReader(stream);
+                String dane = sr.ReadLine();
+                CNetManager.Instance.fillTable(base.ID, Convert.ToInt16(dane));
+                
+            }
+            else
+                Console.WriteLine(" CNetworkPortOut :  SENDING " + data + " ON PORT " + base.PORTNUMBER);
+
 
             return PORTNUMBER;
         }

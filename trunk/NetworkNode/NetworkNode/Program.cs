@@ -24,6 +24,23 @@ namespace NetworkNode
            
             CManagementAgent.Instance.resetCommutationTable();
 
+
+
+
+            while (true)
+            {
+                String input = Console.ReadLine();
+                if (input.StartsWith("send"))
+                {
+                    CNetManager.Instance.init();
+                }
+                if (input.StartsWith("stop"))
+                {
+                    CNetManager.Instance.stopSending();
+                }
+                
+            }
+
             System.Console.ReadKey();
             return 0;
         }

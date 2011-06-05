@@ -40,7 +40,7 @@ namespace NetworkNode
                     //testowe
                     //outputPort.startPort(50101);
                     //---------------
-                    portnumber = outputPort.send(data, outputPortInfo);
+                    portnumber = outputPort.send(data, outputPortInfo, false);
                 }
                 else
                 {
