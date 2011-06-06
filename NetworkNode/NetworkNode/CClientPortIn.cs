@@ -92,7 +92,7 @@ namespace NetworkNode
                 {
                     CCharacteristicData cCharacteristicData = prepareCharacteristicData(queue.Dequeue());
                     CCommutationField.Instance.passOnData(cCharacteristicData, this);
-                    System.Console.WriteLine("Data sent on port :" + PORTNUMBER + " with VPI :" + cCharacteristicData.getCAdministrationData().getVPI() + " and VCI :" + cCharacteristicData.getCAdministrationData().getVCI()); 
+                    System.Console.WriteLine("--> Data sent on port :" + PORTNUMBER + " with VPI :" + cCharacteristicData.getCAdministrationData().getVPI() + " and VCI :" + cCharacteristicData.getCAdministrationData().getVCI()); 
                     Thread.Sleep(1000);
                 }
                 Thread.Sleep(1000);

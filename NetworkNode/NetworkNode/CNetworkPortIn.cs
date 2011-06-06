@@ -46,14 +46,15 @@ namespace NetworkNode
             {
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
-                Console.WriteLine("connection accepted");
+                Console.WriteLine("*** CONNECTION ACCEPTED ***");
                 serwerStream = new StreamWriter(clientStream);
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CCharacteristicData dane = (CCharacteristicData)binaryFormater.Deserialize(clientStream);
+                
                 //jeżeli przychodzi do nas coś na vpi = 0 i vci =5 
                 if ((dane.getCAdministrationData().getVCI() == 5) && (dane.getCAdministrationData().getVPI() == 0))
                 {
-                    Console.WriteLine("CNetworkPortIn : RECIEVED HELLO MSG");
+                    Console.WriteLine("<-- CNetworkPortIn : RECIEVED HELLO MSG");
                     serwerStream.WriteLine(CConstrains.nodeNumber);
                     serwerStream.Flush();
                 }

@@ -32,8 +32,8 @@ namespace ClientNode
             TcpClient client = new TcpClient();
             client.Connect(CConstrains.ipAddress, portNumber);
             NetworkStream stream = client.GetStream();
-            Console.WriteLine("nadaje " + data);
             BinaryFormatter bf = new BinaryFormatter();
+            Console.WriteLine("--> SENDING : " + data);
             bf.Serialize(stream, data);
             stream.Flush();
 
@@ -42,7 +42,9 @@ namespace ClientNode
 
             foreach (byte b in lista)
             {
+                Console.WriteLine(" *** ");
                 Console.Write(b + " ");
+                Console.WriteLine(" *** ");
             }
         }
 

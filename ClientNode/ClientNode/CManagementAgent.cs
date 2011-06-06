@@ -49,7 +49,7 @@ namespace ClientNode
         {
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
             portListener.Start();
-            Console.WriteLine("SNMPMessageListener in ON");
+            Console.WriteLine("*** SNMPMessageListener in ON ***");
             
             status = true;
 
@@ -57,7 +57,7 @@ namespace ClientNode
             {
                 client = portListener.AcceptTcpClient();
                 clientStream = client.GetStream();
-                Console.WriteLine("connection with ML ");
+                Console.WriteLine("*** ML CONNECTED ***");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CSNMPmessage dane = (CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
@@ -95,6 +95,37 @@ namespace ClientNode
             }
         }
 
+
+        public void sendHelloMsgToML(int nodeNumber)
+        {
+            Data.CSNMPmessage msg;
+
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
+            NetworkStream stream = client.GetStream();
+
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                {"NodeNumber", nodeNumber},
+                {"helloMsg",null}
+                };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            msg = new Data.CSNMPmessage(pduList, null, null);
+
+
+            msg.pdu.RequestIdentifier = "helloMsgtoML : " + CConstrains.nodeNumber.ToString();
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("--> Sending helloMsg  " + msg + " to ML " + nodeNumber);
+
+            StreamReader sr = new StreamReader(stream);
+            String dane = sr.ReadLine();
+            Console.WriteLine("<-- " + dane);
+
+        }
+
        
         private void sendResponse(String responseId) 
         { 
@@ -109,7 +140,7 @@ namespace ClientNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("sending respnse " + msg + " to ML");
+            Console.WriteLine("--> Sending Respnse " + msg + " to ML");
             client.Close();
         
         }

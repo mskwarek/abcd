@@ -50,7 +50,7 @@ namespace NetworkNode
                 }
             else
             {
-                System.Console.WriteLine("Blad doboru portu wyjsciowego");
+                System.Console.WriteLine("ERROR : Blad doboru portu wyjsciowego");
             }
 
             return portnumber;

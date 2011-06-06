@@ -35,15 +35,16 @@ namespace ClientNode
 
         public void readConfig() {
             XmlTextReader textReader;
-            try
+            if (File.Exists("../../config" + CConstrains.nodeNumber + ".xml"))
             {
                 textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
             }
-            catch (FileNotFoundException e)
+            else
             {
-                Console.WriteLine("nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
+                Console.WriteLine("ERROR : nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
                 textReader = new XmlTextReader(CConstrains.defaultConfigFileURL);
-            } 
+            }
+
             try
             {
                 while (textReader.Read()) {
@@ -116,12 +117,12 @@ namespace ClientNode
         
         // metoda odpowiedzialna za nadawanie wiadomości
         public void sendMsg(Data.CUserData data) {
-            Console.WriteLine("wyszukuje port...");
+            Console.WriteLine("*** wyszukuje port... ***");
             CClientPortOut free = findFreePort();
-            if (free == null) { Console.WriteLine("Wszystkie porty zajete"); }
+            if (free == null) { Console.WriteLine("ERROR : Wszystkie porty zajete"); }
             else
             {
-                Console.WriteLine("port o id= " + free.ID + " jest wolny");
+                Console.WriteLine("*** port o id= " + free.ID + " jest wolny ***");
                 int index = OutputClientPortList.IndexOf(free);
                 //testowa zmiana------------
                // OutputClientPortList[index].startPort(50201);

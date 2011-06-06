@@ -39,6 +39,7 @@ namespace ClientNode
 
                 Console.Title = "ClientNode ID = " + CConstrains.nodeNumber;
                 Console.WriteLine("Wszystkie porty wstały");
+                CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);
                 Console.WriteLine(helloMessage);
                 while (true)
                 {
@@ -80,7 +81,7 @@ namespace ClientNode
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine("argument nie jest liczbą");
+                            Console.WriteLine(" ERROR : argument nie jest liczbą");
                             Console.WriteLine(e.StackTrace);
                         }
                     }
@@ -89,6 +90,11 @@ namespace ClientNode
 
                         cpm.getNodePortConfiguration();
                     }
+                    /*else if (ConsoleInput.StartsWith("turnOn"))
+                    {
+                        CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);
+                    }*/
+                    
                     else Console.WriteLine(ConsoleInput);
 
                 }

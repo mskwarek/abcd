@@ -85,13 +85,13 @@ namespace ManagementLayer
                         }
                         else
                         {
-                            Console.WriteLine("Błędny argument");
+                            Console.WriteLine("ERROR : Błędny argument");
                             continue;
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Brak podanego argumentu...");
+                        Console.WriteLine("ERROR : Brak podanego argumentu...");
                         continue;
                     }
 
@@ -117,12 +117,12 @@ namespace ManagementLayer
                                 }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Błędny argument " + e.Message);
+                                Console.WriteLine("ERROR : Błędny argument " + e.Message);
                             }
                         }
-                        else { Console.WriteLine("Błęda liczba argumentów"); }
+                        else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
                     }
-                    else { Console.WriteLine("Błęda liczba argumentów"); }
+                    else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
                     
                 }
 
@@ -145,12 +145,12 @@ namespace ManagementLayer
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Błędny argument " + e.Message);
+                                Console.WriteLine("ERROR : Błędny argument " + e.Message);
                             }
                         }
-                        else { Console.WriteLine("Błęda liczba argumentów"); }
+                        else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
                     }
-                    else { Console.WriteLine("Błęda liczba argumentów"); }
+                    else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
 
                 }
                 else if (ConsoleInput.StartsWith("getConnections"))
@@ -167,7 +167,7 @@ namespace ManagementLayer
                                 }
                             }
                         catch (Exception e) {
-                            Console.WriteLine("Błędny argument " + e.Message);
+                            Console.WriteLine("ERROR : Błędny argument " + e.Message);
                             }
                         // usuwam powtarzające sie argumenty
                         int[] var = args.Distinct().ToArray();
@@ -177,13 +177,13 @@ namespace ManagementLayer
                         {
                             if (cnc.checkFormula(a))
                             {
-                                Console.WriteLine("Pobierasz dane z noda: " + args[0]);
+                                Console.WriteLine("<-- Pobierasz dane z noda: " + args[0]);
                                 cm.getNodeCommutationTable(args[0]);
                             }
                         }
                                 
                     }
-                    else { Console.WriteLine("Nie podałeś numeru węzła"); continue; }
+                    else { Console.WriteLine("ERROR : Nie podałeś numeru węzła"); continue; }
                 }
 
              else Console.WriteLine(ConsoleInput);

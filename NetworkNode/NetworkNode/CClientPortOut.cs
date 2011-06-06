@@ -43,7 +43,8 @@ namespace  NetworkNode
             Data.CUserData cUserData = data.getCUserData();
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, cUserData);
-            Console.WriteLine("nadaje " + cUserData);
+            
+            Console.WriteLine("--> SENDING : " + cUserData);
             List<byte> lista = new List<byte>();
             lista = cUserData.getInformation();
 
@@ -53,7 +54,9 @@ namespace  NetworkNode
 
             foreach (byte b in lista)
             {
+                Console.WriteLine("***");
                 Console.Write(b + "  ");
+                Console.WriteLine("***");
             }
             return PORTNUMBER;
         }

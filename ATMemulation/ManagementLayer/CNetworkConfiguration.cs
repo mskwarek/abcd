@@ -66,22 +66,50 @@ namespace ManagementLayer
                         
                     }
                 }
-                ConnectionsManager cm = ConnectionsManager.Instance;
+                //Fragment powodujący że ML musi być włączony ostatni. Automatycznie rozsyła ustawienie portów do nodów.
+                /*ConnectionsManager cm = ConnectionsManager.Instance;
                 foreach (Data.CLink l in LinkList)
                 {
+                    try{
+         
+                        cm.setNetworkConnections(l.from.nodeNumber, l);
 
-                    cm.setNetworkConnections(l.from.nodeNumber, l);
-                } 
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("node : " + l.from.nodeNumber + " seems to be off");
+                    }
+                    
+                }//**/ 
             }
             catch (System.Exception e)
             {
                 Console.WriteLine(e.StackTrace);
             }
         }
+        // metoda doadjąca połączenie fizyczne, używana przy zgłaszaniu sie nowego noda. 
+        public bool addNewLink(Data.CLink fromNode, Data.CLink toNode, int nodeNumber, String type) 
+        {
+            if(addNodeToDictionary(nodeNumber, type)){
+
+            LinkList.Add(fromNode);
+            ConnectionsManager.Instance.setNetworkConnections(fromNode.A.nodeNumber, fromNode);
+            LinkList.Add(toNode);
+            ConnectionsManager.Instance.setNetworkConnections(toNode.A.nodeNumber, toNode);
+            return true;
+            
+            }
+            else 
+            {
+              return false;
+            }
+        }
+
+
 
         public void showNetworkConfiguration()
         {
-            Console.WriteLine("Konfiguracja sieci : ");
+            Console.WriteLine("*** Konfiguracja sieci : *** ");
             foreach (Data.CLink cl in LinkList)
                 Console.WriteLine("node " + cl.from.nodeNumber + " port " + cl.from.portNumber + " type  " + cl.from.portType + " --> node " + cl.to.nodeNumber + " port " + cl.to.portNumber + " type " + cl.to.portType + " ");
 
@@ -93,24 +121,36 @@ namespace ManagementLayer
         }
 
 
-        public void addNodeToDictionary(int i, String type)
+        private bool addNodeToDictionary(int i, String type)
         {
             try
             {
                 nodesType.Add(i, type);
-                Console.WriteLine("dodałem " + i + " " + type);
+                Console.WriteLine("*** DODAŁEM NODE : " + i + " type :  " + type + " TO DICTIONARY ***" );
+                return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Błąd przy dodawaniu węzła do słownika, węzeł o id = " + i + " juz isnieje " + e.Message);
+                Console.WriteLine("ERROR : Błąd przy dodawaniu węzła do słownika, węzeł o id = " + i + " juz isnieje " + e.Message);
+                return false;
             }
         }
 
-        public void showNodes()
+        public bool getNodeNumberFromDict(int nodeNumber) 
         {
+            if(nodesType.ContainsKey(nodeNumber) )
+            {
+            return true;
+            }
+            else
+                return false;
+        }
+
+        public void showNodes()
+        {   
+            Console.WriteLine("\t Wezly w sieci");
             foreach(KeyValuePair<int, String> pair in nodesType)
             {
-                Console.WriteLine("\t Wezly w sieci");
                 Console.WriteLine("{0}, {1}",
                 pair.Key,
                 pair.Value);

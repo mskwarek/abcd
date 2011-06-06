@@ -34,15 +34,20 @@ namespace NetworkNode
         private void readConfig()
         {
             XmlTextReader textReader;
-            try
+           
+
+
+            
+            if(File.Exists("../../config" + CConstrains.nodeNumber + ".xml" )) 
             {
                 textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
             }
-            catch (FileNotFoundException e)
+            else
             {
-                Console.WriteLine("nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
+                Console.WriteLine("ERROR : nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
                 textReader = new XmlTextReader(CConstrains.defaultConfigFileURL);
-            }            
+            }
+
             try
             {   
                 while (textReader.Read())
