@@ -30,7 +30,7 @@ namespace NetworkNode
 
         public PortInfo getOutputPortInfo(PortInfo portIn)
         {
-            Console.WriteLine("Getting output port Info");
+            Console.WriteLine("*** Getting output port Info ***");
             PortInfo portOut;
             if (commutationTable.ContainsKey(portIn))
             {
@@ -48,7 +48,7 @@ namespace NetworkNode
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Brak zadanego wpisu w tablicy komutacji " + e.StackTrace);
+                    Console.WriteLine("ERROR : Brak zadanego wpisu w tablicy komutacji " + e.StackTrace);
                 }
             }
             return portOut;

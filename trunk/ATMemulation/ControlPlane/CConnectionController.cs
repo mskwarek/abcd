@@ -79,7 +79,7 @@ namespace ControlPlane
 
     }
 
-    private class ClientHandler
+    class ClientHandler
     {
         public ClientHandler(TcpClient client)
         {

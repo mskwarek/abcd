@@ -52,7 +52,6 @@
     <Compile Include="CManagementAgent.cs" />
     <Compile Include="CNetManager.cs" />
     <Compile Include="CNetworkCallController.cs" />
-
     <Compile Include="CNetworkPort.cs" />
     <Compile Include="CNetworkPortIn.cs" />
     <Compile Include="CNetworkPortOut.cs" />
@@ -66,6 +65,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="config3.xml" />
+    <Content Include="defaultConfig.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Data.csproj">

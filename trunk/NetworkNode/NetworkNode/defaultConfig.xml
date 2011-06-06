@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<node>
+  <port>
+    <InputClientPort>4</InputClientPort>
+    <OutputClientPort>2</OutputClientPort>
+    <InputNetworkPort>5</InputNetworkPort>
+    <OutputNetworkPort>3</OutputNetworkPort>
+  </port>
+</node>

@@ -88,7 +88,7 @@ namespace NetworkNode
             {
                 client = portListener.AcceptTcpClient();
                 clientStream = client.GetStream();
-                Console.WriteLine("connection with ML ");
+                Console.WriteLine("*** ML CONNECTED ***");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
@@ -102,9 +102,9 @@ namespace NetworkNode
         private void sendResponse(String responseId, Data.CCommutationTable table) 
         {
             Data.CSNMPmessage msg;
-            int portNumber = CConstrains.managementLayerPort;
+            
             TcpClient client = new TcpClient();
-            client.Connect(CConstrains.ipAddress,portNumber);
+            client.Connect(CConstrains.ipAddress,CConstrains.managementLayerPort);
             NetworkStream stream = client.GetStream();
 
             // przypadek wysyłania tablicy komutacji do ML
@@ -127,12 +127,75 @@ namespace NetworkNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("sending respnse " + msg + " to ML");
-            
-        
+            Console.WriteLine("--> Sending Respnse " + msg + " to ML");
+        }
+
+        // metoda kontaktująca sie z ML aby zestawić nowe fizyczne połączenie w sieci. 
+        // nie używana 
+        private void newLinkRequest(Data.CLink fromNode, Data.CLink toNode) 
+        {
+            Data.CSNMPmessage msg;
+
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
+            NetworkStream stream = client.GetStream();
+
+                Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                {"FromLink", fromNode},
+                {"ToLink", toNode},
+                {"NodeNumber", CConstrains.nodeNumber},
+                {"requestNewLink",null}
+                };
+                List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+                pduList.Add(pduDict);
+                msg = new Data.CSNMPmessage(pduList, null, null);
+
+
+                msg.pdu.RequestIdentifier = "newLinkRequest : " + CConstrains.nodeNumber.ToString() ;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("--> Sending newLinkRequest " + msg + " to ML " + fromNode.A.nodeNumber + " ->" + toNode.B.nodeNumber + "<--");
+
+            StreamReader sr = new StreamReader(stream);
+            String dane = sr.ReadLine();
+            Console.WriteLine("<-- " + dane);
+
         }
 
 
+        public void sendHelloMsgToML(int nodeNumber)
+        {
+            Data.CSNMPmessage msg;
+
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
+            NetworkStream stream = client.GetStream();
+
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                {"NodeNumber", nodeNumber},
+                {"helloMsg",null}
+                };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            msg = new Data.CSNMPmessage(pduList, null, null);
+
+
+            msg.pdu.RequestIdentifier = "helloMsgtoML : " + CConstrains.nodeNumber.ToString();
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("--> Sending helloMsg  " + msg + " to ML " + nodeNumber );
+
+            StreamReader sr = new StreamReader(stream);
+            String dane = sr.ReadLine();
+            Console.WriteLine("<-- " + dane);
+
+        }
+        
+        
         public void processReceivedData()
         {
             while (status)

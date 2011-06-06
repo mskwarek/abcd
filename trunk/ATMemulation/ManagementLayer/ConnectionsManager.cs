@@ -39,13 +39,15 @@ namespace ManagementLayer
            IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
            TcpListener portListener = new TcpListener(ip, CConstrains.LMportNumber);
            portListener.Start();
-           Console.WriteLine("ML nasłuchuje na porcie : " +CConstrains.LMportNumber);
+           Console.WriteLine("*** ML nasłuchuje na porcie : " +CConstrains.LMportNumber + " *** ");
            
            while (status)
            {
                TcpClient client = portListener.AcceptTcpClient();
                NetworkStream clientStream = client.GetStream();
-               Console.WriteLine("connection from node accepted");
+               StreamWriter downStream = new StreamWriter(clientStream);
+               
+               Console.WriteLine("*** CONNECTION FROM NODE ACCEPTED ***");
                BinaryFormatter binaryFormater = new BinaryFormatter();
                Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
 
@@ -55,6 +57,53 @@ namespace ManagementLayer
 
                    printCommutationTable(dane.pdu.variablebinding);  
                 
+               }
+               else if(dane.pdu.RequestIdentifier.StartsWith("newLinkRequest")) 
+               {
+                   String nodeType = "network";
+                   foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
+                   { 
+                    if(d.ContainsKey("requestNewLink")) 
+                    {
+                        if (CNetworkConfiguration.Instance.addNewLink((Data.CLink)d["FromLink"], (Data.CLink)d["ToLink"], Convert.ToInt16(d["NodeNumber"]) ,nodeType))
+                        {
+                            downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK- ");
+                            downStream.Flush();
+                        }
+                        else
+                        {
+                            downStream.WriteLine(dane.pdu.RequestIdentifier + " -ERROR- ");
+                            downStream.Flush();
+                        }
+                    }
+                  }
+               }
+               else if (dane.pdu.RequestIdentifier.StartsWith("helloMsgtoML"))
+               {
+                   foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
+                   {
+                       if (d.ContainsKey("helloMsg"))
+                       {
+                           if (CNetworkConfiguration.Instance.getNodeNumberFromDict(Convert.ToInt16(d["NodeNumber"])))
+                           {
+                               for (int i = 0; i < CNetworkConfiguration.Instance.linkList.Count; i++)
+                               {
+                                   if (CNetworkConfiguration.Instance.linkList.ElementAt(i).from.nodeNumber == (Convert.ToInt16(d["NodeNumber"])))
+                                   {
+                                       setNetworkConnections((Convert.ToInt16(d["NodeNumber"])),CNetworkConfiguration.Instance.linkList.ElementAt(i) );
+                                   }
+                               }
+
+                               downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK- ");
+                               downStream.Flush();
+                           }
+                           else
+                           {
+                               downStream.WriteLine(dane.pdu.RequestIdentifier + " -ERROR- ");
+                               downStream.Flush();
+                           }
+                       }
+                   }
                }
                
                Console.WriteLine(dane.pdu.RequestIdentifier);
@@ -71,7 +120,7 @@ namespace ManagementLayer
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             //stream.Flush();
-            Console.WriteLine("sending " + msg + " to node : " +nodeNumber);
+            Console.WriteLine("--> SENDING " + msg + " TO NODE : " +nodeNumber);
             
         }
 
@@ -129,10 +178,12 @@ namespace ManagementLayer
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = "STC" + nodeNumber.ToString();
 
-            send(nodeNumber, dataToSend);
+                send(nodeNumber, dataToSend);
 
-            Console.WriteLine("node : " + nodeNumber + " Setting link on port : " + link.from.portNumber + " to port : " + link.to.portNumber + " on node : " + link.to.nodeNumber);
-        }
+                Console.WriteLine("node : " + nodeNumber + " Setting link on port : " + link.from.portNumber + " to port : " + link.to.portNumber + " on node : " + link.to.nodeNumber);
+
+            
+            }
         
         public void getNodeCommutationTable(int nodeNumber)
         {

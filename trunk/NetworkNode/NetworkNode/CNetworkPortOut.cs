@@ -63,14 +63,26 @@ namespace NetworkNode
             stream.Flush();
             if (helloMsg == true)
             {
-                Console.WriteLine(" CNetworkPortOut :  SENDING HELLO  ON PORT " + base.PORTNUMBER);
+                Console.WriteLine("--> CNetworkPortOut :  SENDING HELLO  ON PORT " + base.PORTNUMBER);
                 StreamReader sr = new StreamReader(stream);
                 String dane = sr.ReadLine();
                 CNetManager.Instance.fillTable(base.ID, Convert.ToInt16(dane));
                 
             }
             else
-                Console.WriteLine(" CNetworkPortOut :  SENDING " + data + " ON PORT " + base.PORTNUMBER);
+                Console.WriteLine("--> CNetworkPortOut :  SENDING " + data + " ON PORT " + base.PORTNUMBER);
+
+            
+            List<byte> lista = new List<byte>();
+            lista = data.getCUserData().getInformation();
+
+            foreach (byte b in lista)
+            {
+                Console.WriteLine(" *** ");
+                Console.Write(b + " ");
+                Console.WriteLine(" *** ");
+            }
+
 
 
             return PORTNUMBER;

@@ -9,6 +9,8 @@ namespace NetworkNode
     {
         static int Main(string[] args)
         {
+            String exitMessage = "Exiting...";
+            
             try
             {
                 CConstrains.nodeNumber = Convert.ToInt32(args[0]);
@@ -20,23 +22,34 @@ namespace NetworkNode
             }
             System.Console.WriteLine("Network Node!");
             Console.Title = "NetworkNode ID = " + CConstrains.nodeNumber;
-            CPortManager.Instance.getNodePortConfiguration();
+            
            
             CManagementAgent.Instance.resetCommutationTable();
-
-
-
+            CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);
 
             while (true)
             {
                 String input = Console.ReadLine();
-                if (input.StartsWith("send"))
+                if (input.StartsWith("startHelloMsg"))
                 {
                     CNetManager.Instance.init();
                 }
-                if (input.StartsWith("stop"))
+                else if (input.StartsWith("stopHelloMsg"))
                 {
                     CNetManager.Instance.stopSending();
+                }
+                /*else if (input.StartsWith("turnOn"))
+                {
+                    CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);
+                }*/
+                else if (input.Equals("q"))
+                {
+                    Console.WriteLine(exitMessage);
+                    Environment.Exit(1);
+                }
+                else if (input.StartsWith("show portCfg"))
+                {
+                    CPortManager.Instance.getNodePortConfiguration();
                 }
                 
             }

@@ -17,7 +17,7 @@ namespace ClientNode
             }
             catch (Exception e)
             {
-                Console.WriteLine("Argument musi być liczbą!!");
+                Console.WriteLine("ERROR : Argument musi być liczbą!!");
                 Console.WriteLine(e.StackTrace);
             }
             //while (true)
