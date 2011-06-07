@@ -41,14 +41,45 @@ namespace ControlPlane
             return confirmation;
         }
 
+        public bool ConnectionRequestIn(int fromNode, int toNode)
+        {
+            if (ConnectionRequestOut(fromNode, toNode))
+                return true;
+            else
+                return false;
+        }
+
         //metoda zadajaca zestawienia polaczenia. uzywana w trybie hierarchicznym
         //parametry: para SNP
         //zwraca: polaczenie podsieciowe
-        public void ConnectionRequestOut(int SNP_s, int SNP_d)
+        public bool ConnectionRequestOut(int SNP_s, int SNP_d)
         {
+            RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
+            List<CLink> links = route.Connections;
+            int i=0;
+            CLink link;
+            Boolean failed=false;
+            do
+            {
+                link = links[i];
+                CLink temp;
+                if ((temp = cLinkResourceManager.SNPLinkConnectionRequest(link)) == null)
+                    failed = true;
+            } while (failed != true && i < links.Count);
+            if (failed)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    link = links[i];
+                    cLinkResourceManager.SNPLinkConnectionDeallocation(link);
+                }
+                return false;
+            }
+            else
+                return true;
             
         }
-        
+
 
         //metoda kierowana do RC by uzyskac sciezke pomiedzy dwoma punktami 
         //parametry: 'unresolved route fragment'
