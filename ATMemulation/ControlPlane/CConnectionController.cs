@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
+using RoutingController;
+using LinkResourceManager;
+using Data;
 
 namespace ControlPlane
 {
     class CConnectionController
     {
+        CLinkResourceManager cLinkResourceManager = CLinkResourceManager.Instance;
+        CRoutingController cRoutingController = CRoutingController.Instance;
         
         private static CConnectionController connectionController= new CConnectionController();
 
@@ -42,24 +45,31 @@ namespace ControlPlane
         //parametry: para SNP
         //zwraca: polaczenie podsieciowe
         public void ConnectionRequestOut(int SNP_s, int SNP_d)
-        {}
+        {
+            
+        }
         
 
         //metoda kierowana do RC by uzyskac sciezke pomiedzy dwoma punktami 
         //parametry: 'unresolved route fragment'
         //zwraca: zbior SNPP
-        public void RouteTableQuery()
-        {}
+        public RouteEngine.Route RouteTableQuery(int source, int destination)
+        {
+            return cRoutingController.RouteTableQuery(source, destination);
+        }
 
         //metoda do zestawienia polaczenia? kierowana do LRM
         //parametry:brak
         //zwraca: link connection ( pare SNP)
-        public void LinkConnectionRequest()
+        public void LinkConnectionRequest( CLink SNPtoSNP )
         {
+            cLinkResourceManager.SNPLinkConnectionRequest(SNPtoSNP);
         }
 
-        public void LinkConnectionDeallocation(int SNP)
-        { }
+        public void LinkConnectionDeallocation(CLink SNPtoSNP)
+        {
+            cLinkResourceManager.SNPLinkConnectionDeallocation(SNPtoSNP);
+        }
 
         // listener żądań od NCC jedno, czy wielowatkowy?
         private void nccListener()
