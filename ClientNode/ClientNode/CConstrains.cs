@@ -16,6 +16,7 @@ namespace ClientNode
         public static String defaultConfigFileURL = "../../defaultConfig.xml";
         public static string ipAddress = "127.0.0.1";
         public static int managementLayerPort = 49999;
+        public static int ControlPlanePortNumber = 50009;
 
     }
 }

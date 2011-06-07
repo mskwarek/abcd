@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 
-namespace NetworkNode
+namespace ControlPlane
 {
     class CNetworkCallController
     {
@@ -35,16 +35,16 @@ namespace NetworkNode
         public void ConnectionRequestOut()
         {
             TcpClient client = new TcpClient();
-            client.Connect(CConstrains.ipAddress, CConstrains.callControlport);
+            client.Connect(CConstrains.ipAddress, CConstrains.CCportNumber);
             NetworkStream stream = client.GetStream();
             //wyslanie wiadomosc - pytanie jest jaki format ma byc tej wiadomosci?
             BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(stream, new String[]{"connection request","source identifier", "dest identifier"});
+            bf.Serialize(stream, new String[] { "connection request", "source identifier", "dest identifier" });
             stream.Flush();
             Console.WriteLine(" Sending Connection Request Out");
             stream.Close();
             client.Close();
-            
+
         }
 
 
@@ -67,9 +67,4 @@ namespace NetworkNode
 
 
     }
-
-
-
-
 }
-
