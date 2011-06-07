@@ -46,6 +46,7 @@
     <Compile Include="CConnectionController.cs" />
     <Compile Include="CConstrains.cs" />
     <Compile Include="CDirectory.cs" />
+    <Compile Include="CNetworkCallController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
