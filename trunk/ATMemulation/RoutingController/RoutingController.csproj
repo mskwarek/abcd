@@ -5,18 +5,14 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F9CF54D3-ED5F-4C87-8C0C-8067E306CC5E}</ProjectGuid>
+    <ProjectGuid>{53E81484-2AED-41DF-A06D-420303EBA3A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Data</RootNamespace>
-    <AssemblyName>Data</AssemblyName>
+    <RootNamespace>RoutingController</RootNamespace>
+    <AssemblyName>RoutingController</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>Svn</SccProjectName>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -50,16 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CAdministrationData.cs" />
-    <Compile Include="CCharacteristicData.cs" />
-    <Compile Include="CCommutationTable.cs" />
-    <Compile Include="CLink.cs" />
-    <Compile Include="CLinkInfo.cs" />
-    <Compile Include="CSNMPmessage.cs" />
-    <Compile Include="CSNPP.cs" />
-    <Compile Include="CUserData.cs" />
-    <Compile Include="PortInfo.cs" />
+    <Compile Include="CConstrains.cs" />
+    <Compile Include="CRoutingController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RouteHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Data.csproj">
+      <Project>{F9CF54D3-ED5F-4C87-8C0C-8067E306CC5E}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RouteEngine\RouteEngine.csproj">
+      <Project>{DC7D3B5F-9BF1-4702-BEE2-0487C96A5291}</Project>
+      <Name>RouteEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

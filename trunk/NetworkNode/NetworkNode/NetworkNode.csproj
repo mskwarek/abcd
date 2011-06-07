@@ -68,6 +68,10 @@
     <Content Include="defaultConfig.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ATMemulation\LinkResourceManager\LinkResourceManager.csproj">
+      <Project>{CC710602-216A-4B3E-A1E4-025C1524B37F}</Project>
+      <Name>LinkResourceManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Data\Data.csproj">
       <Project>{F9CF54D3-ED5F-4C87-8C0C-8067E306CC5E}</Project>
       <Name>Data</Name>
