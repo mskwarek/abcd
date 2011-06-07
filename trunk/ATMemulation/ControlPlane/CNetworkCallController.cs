@@ -18,7 +18,7 @@ namespace ControlPlane
         RouteHandler routeHandler = RouteHandler.Instance;
         CConnectionController cCConectionController = CConnectionController.Instance;
         static CNetworkCallController instance = new CNetworkCallController();
-
+        public List<Data.CPNNITable> PNNIList = new List<Data.CPNNITable>();
         public static CNetworkCallController Instance
         {
             get
@@ -38,9 +38,9 @@ namespace ControlPlane
         {
             bool status = true;
             IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
-            TcpListener portListener = new TcpListener(ip, CConstrains.CCportNumber);
+            TcpListener portListener = new TcpListener(ip, CConstrains.NCCportNumber);
             portListener.Start();
-            Console.WriteLine("*** NCC nasłuchuje na porcie : " + CConstrains.CCportNumber + " *** ");
+            Console.WriteLine("*** NCC nasłuchuje na porcie : " + CConstrains.NCCportNumber + " *** ");
             while (status)
             {
                 TcpClient client = portListener.AcceptTcpClient();
@@ -69,6 +69,32 @@ namespace ControlPlane
                                 downStream.Flush();
                             }
                         }
+                    }
+                }
+                else if (dane.pdu.RequestIdentifier.StartsWith("PNNIList ML"))
+                {
+
+
+                    foreach (Data.CPNNITable t in dane.pdu.PNNIList)
+                    {
+                        if (PNNIList.Contains(t))
+                        {
+                            int index = PNNIList.IndexOf(t);
+
+                            if (PNNIList.ElementAt(index).IsNeighbourActive != t.IsNeighbourActive)
+                            {
+                                PNNIList.ElementAt(index).IsNeighbourActive = t.IsNeighbourActive;
+                                Console.WriteLine("*** PNNIList Updated  " + PNNIList.ElementAt(index).NodeNumber + " " + PNNIList.ElementAt(index).NodeType + " ACTIVITY :  " + PNNIList.ElementAt(index).IsNeighbourActive);
+                            }
+                        }
+                        else
+                        {
+                            PNNIList.Add(t);
+                            Console.WriteLine("PNNIList  ADDED : " + t.NodeNumber + " " + t.NodeType + " " + t.NodePortNumberSender + " " + t.NeighbourNodeNumber + " " + t.NeighbourNodeType + " " + t.NeighbourPortNumberReciever + " " + t.IsNeighbourActive);
+
+                        }
+                        downStream.WriteLine("--> SENDING RESPONSE : " + dane.pdu.RequestIdentifier + " -OK- ");
+                        downStream.Flush();
                     }
                 }
                 Console.WriteLine(dane.pdu.RequestIdentifier);

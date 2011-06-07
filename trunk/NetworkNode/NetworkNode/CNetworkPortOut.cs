@@ -49,40 +49,49 @@ namespace NetworkNode
         public int send(Data.CCharacteristicData data, Data.PortInfo outputPortInfo, bool helloMsg)
         {
             TcpClient client = new TcpClient();
-            client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
-            NetworkStream stream = client.GetStream();
-            // jeżeli helloMsg = true wysyła hello msg 
-            if (helloMsg == false)
+            try
             {
-                data = prepareNewAdministrationData(data, outputPortInfo);
+                client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
+                NetworkStream stream = client.GetStream();
+                // jeżeli helloMsg = true wysyła hello msg 
+                if (helloMsg == false)
+                {
+                    data = prepareNewAdministrationData(data, outputPortInfo);
+                }
+
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(stream, data);
+                stream.Flush();
+                if (helloMsg == true)
+                {
+                    Console.WriteLine("--> CNetworkPortOut :  SENDING HELLO  ON PORT " + base.PORTNUMBER);
+                    StreamReader sr = new StreamReader(stream);
+                    String dane = sr.ReadLine();
+                    CNetManager.Instance.fillTable(base.ID, dane, true);
+
+                }
+                else
+                    Console.WriteLine("--> CNetworkPortOut :  SENDING " + data + " ON PORT " + base.PORTNUMBER);
+
+
+                List<byte> lista = new List<byte>();
+                lista = data.getCUserData().getInformation();
+
+                foreach (byte b in lista)
+                {
+                    Console.WriteLine(" *** ");
+                    Console.Write(b + " ");
+                    Console.WriteLine(" *** ");
+                }
+
             }
-             
-                
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(stream, data);
-            stream.Flush();
-            if (helloMsg == true)
+            catch (Exception e)
             {
-                Console.WriteLine("--> CNetworkPortOut :  SENDING HELLO  ON PORT " + base.PORTNUMBER);
-                StreamReader sr = new StreamReader(stream);
-                String dane = sr.ReadLine();
-                CNetManager.Instance.fillTable(base.ID, Convert.ToInt16(dane));
-                
+                Console.WriteLine(base.PORTNUMBER + " is unreachable ");
+                CNetManager.Instance.fillTable(base.ID, "0;x;0", false);
+
             }
-            else
-                Console.WriteLine("--> CNetworkPortOut :  SENDING " + data + " ON PORT " + base.PORTNUMBER);
-
-            
-            List<byte> lista = new List<byte>();
-            lista = data.getCUserData().getInformation();
-
-            foreach (byte b in lista)
-            {
-                Console.WriteLine(" *** ");
-                Console.Write(b + " ");
-                Console.WriteLine(" *** ");
-            }
-
 
 
             return PORTNUMBER;

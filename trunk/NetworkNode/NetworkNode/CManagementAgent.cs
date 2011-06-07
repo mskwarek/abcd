@@ -192,10 +192,48 @@ namespace NetworkNode
             StreamReader sr = new StreamReader(stream);
             String dane = sr.ReadLine();
             Console.WriteLine("<-- " + dane);
-
         }
+
+        public void sendNodeActivityToML(List<Data.CPNNITable> lista)
+        {
+            Data.CSNMPmessage msg;
+
+            TcpClient client = new TcpClient();
+            try
+            {
+                client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
+                NetworkStream stream = client.GetStream();
+                
+                
+                msg = new Data.CSNMPmessage(null, null, null);
+                msg.pdu.PNNIList = lista;
+
+
+                msg.pdu.RequestIdentifier = "NodeActivity : " + CConstrains.nodeNumber.ToString();
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(stream, msg);
+                stream.Flush();
+                Console.WriteLine("--> Sending NodeActivityMsg  " + msg + " to ML ");
+
+                StreamReader sr = new StreamReader(stream);
+                String dane = sr.ReadLine();
+                Console.WriteLine("<-- " + dane);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR : ML niesdostępny" );
+            }
+        }
+
         
-        
+
+
+
+
+
+
+
         public void processReceivedData()
         {
             while (status)

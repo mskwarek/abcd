@@ -108,9 +108,9 @@ namespace ControlPlane
         {
             bool status = true;
             IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);
-            TcpListener portListener = new TcpListener(ip, CConstrains.CCportNumber);
+            TcpListener portListener = new TcpListener(ip, CConstrains.NCCportNumber);
             portListener.Start();
-            Console.WriteLine(" Control Plane nasluchuje na porcie : " + CConstrains.CCportNumber);
+            Console.WriteLine(" Control Plane nasluchuje na porcie : " + CConstrains.NCCportNumber);
 
             while (status)
             {
