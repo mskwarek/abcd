@@ -13,6 +13,7 @@ namespace ControlPlane
     class CNetworkCallController
     {
 
+        CConnectionController cCConectionController = CConnectionController.Instance;
         static CNetworkCallController instance = new CNetworkCallController();
 
         public static CNetworkCallController Instance
@@ -81,14 +82,22 @@ namespace ControlPlane
         // tu wywołujemy metody CC aby dalej zestawić połączenie - na końcu musi CC zwrócić true albo false
         public bool ConnectionRequest(int fromNode, int toNode)
         {
-            return true;
+
+            if (cCConectionController.ConnectionRequestIn(fromNode, toNode))
+                return true;
+            else
+                return false;
 
         }
 
 
         //uzywane przy wielu domenach
         public void NetworkCallCoordinationOut()
-        { }
+        { 
+            
+            
+        
+        }
 
         // metoda zamieniajaca nazwe lokalna na identyfikator polaczenia 
         // kierowane do directory
