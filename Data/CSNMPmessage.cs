@@ -62,7 +62,7 @@ namespace Data
         private string type;
         public List<Dictionary<String, Object>> variablebinding; //lista zawierajaca jedna lub wiecej par nazwa obiektu - wartosci, dalsze tlumaczenie tego w ksiazce jest dla mnie lekko niezrozumiale o tej porze...
         private string requestIdentifier;
-
+        public List<CPNNITable> PNNIList;
         public SNMPpdu() { }
 
         

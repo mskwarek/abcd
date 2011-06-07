@@ -11,7 +11,7 @@ namespace NetworkNode
 
         private static readonly CNetManager instance = new CNetManager();
         private bool state = true;
-
+        private List<Data.CPNNITable> PNNIList = new List<Data.CPNNITable>();
         private CNetManager()
         {
 
@@ -47,10 +47,30 @@ namespace NetworkNode
         }
 
 
-        public void fillTable(int portNumber, int nodeNumber)
+        public void fillTable(int portNumber, String nodeResponse, bool isActive)
         {
-            Console.WriteLine(" CNetworkPortOut :  RECIEVED : " + portNumber + " AND : " + nodeNumber);
+            String[] array = nodeResponse.Split(';');
+            Data.CPNNITable table = new Data.CPNNITable(CConstrains.nodeNumber, CConstrains.nodeType, portNumber, Convert.ToInt16(array[0]), array[1], Convert.ToInt16(array[2]), isActive);
+            Console.WriteLine("<-- RESPONSE FOR HELLO MSG RECIEVED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " "  + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive);
 
+            if (PNNIList.Contains(table))
+            {
+                int index = PNNIList.IndexOf(table);
+                
+                if (PNNIList.ElementAt(index).IsNeighbourActive != isActive)
+                {
+                    PNNIList.ElementAt(index).IsNeighbourActive = isActive;
+                    Console.WriteLine("*** Zmieniłem flagę na " + isActive);
+                    CManagementAgent.Instance.sendNodeActivityToML(PNNIList);
+                }
+            }
+            else
+            {
+                PNNIList.Add(table);
+                Console.WriteLine("PNNIList ADDED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " " + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive);
+                CManagementAgent.Instance.sendNodeActivityToML(PNNIList);
+                
+            }
         }
 
 
@@ -59,7 +79,6 @@ namespace NetworkNode
         {
             Data.CCharacteristicData helloMsg = prepareHelloMsg();
             while (state)
-            
             {
                 for (int i = 1; i <= CConstrains.outputPortNumber; i++)
                 {

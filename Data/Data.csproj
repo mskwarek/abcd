@@ -55,6 +55,7 @@
     <Compile Include="CCommutationTable.cs" />
     <Compile Include="CLink.cs" />
     <Compile Include="CLinkInfo.cs" />
+    <Compile Include="CPNNITable.cs" />
     <Compile Include="CSNMPmessage.cs" />
     <Compile Include="CSNPP.cs" />
     <Compile Include="CUserData.cs" />

@@ -13,6 +13,8 @@ namespace ManagementLayer
     public sealed class ConnectionsManager
     {
         static readonly ConnectionsManager instance = new ConnectionsManager();
+        public List<Data.CPNNITable> PNNIList = new List<Data.CPNNITable>();
+
 
         public static ConnectionsManager Instance
         {
@@ -105,11 +107,76 @@ namespace ManagementLayer
                        }
                    }
                }
+               else if (dane.pdu.RequestIdentifier.StartsWith("NodeActivity"))
+               {
+
+
+                   foreach(Data.CPNNITable t in dane.pdu.PNNIList)
+                   {
+                       if (PNNIList.Contains(t))
+                       {
+                           int index = PNNIList.IndexOf(t);
+
+                           if (PNNIList.ElementAt(index).IsNeighbourActive != t.IsNeighbourActive)
+                           {
+                               PNNIList.ElementAt(index).IsNeighbourActive = t.IsNeighbourActive;
+                               Console.WriteLine("*** PNNIList Updated  " + PNNIList.ElementAt(index).NodeNumber + " " + PNNIList.ElementAt(index).NodeType + " ACTIVITY :  " + PNNIList.ElementAt(index).IsNeighbourActive);
+                               sendPNNIListToCP(PNNIList); 
+                           }
+                       }
+                       else
+                       {
+                           PNNIList.Add(t);
+                           Console.WriteLine("PNNIList  ADDED : " + t.NodeNumber + " " + t.NodeType + " " + t.NodePortNumberSender + " " + t.NeighbourNodeNumber + " " + t.NeighbourNodeType + " " + t.NeighbourPortNumberReciever + " " + t.IsNeighbourActive);
+                           sendPNNIListToCP(PNNIList); 
+                       }
+                       downStream.WriteLine("--> SENDING RESPONSE : " + dane.pdu.RequestIdentifier + " -OK- ");
+                       downStream.Flush();
+                   }
+               }
+
+
                
                Console.WriteLine(dane.pdu.RequestIdentifier);
                Thread.Sleep(1000);
            }
         }
+
+
+        public void sendPNNIListToCP(List<Data.CPNNITable> lista)
+        {
+            Data.CSNMPmessage msg;
+
+            TcpClient client = new TcpClient();
+            try
+            {
+                client.Connect(CConstrains.ipAddress, CConstrains.NCCportNumber);
+                NetworkStream stream = client.GetStream();
+
+
+                msg = new Data.CSNMPmessage(null, null, null);
+                msg.pdu.PNNIList = lista;
+
+
+                msg.pdu.RequestIdentifier = "PNNIList ML";
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(stream, msg);
+                stream.Flush();
+                Console.WriteLine("--> Sending PNNIListMsg  " + msg + " to NCC ");
+
+                StreamReader sr = new StreamReader(stream);
+                String dane = sr.ReadLine();
+                Console.WriteLine("<-- " + dane);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR : NCC niesdostępny");
+            }
+        }
+
+
+
         private void send(int nodeNumber, Data.CSNMPmessage msg)
         {
             int portNumber = 50000 + 100 * nodeNumber;

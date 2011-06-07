@@ -55,7 +55,7 @@ namespace NetworkNode
                 if ((dane.getCAdministrationData().getVCI() == 5) && (dane.getCAdministrationData().getVPI() == 0))
                 {
                     Console.WriteLine("<-- CNetworkPortIn : RECIEVED HELLO MSG");
-                    serwerStream.WriteLine(CConstrains.nodeNumber);
+                    serwerStream.WriteLine(CConstrains.nodeNumber+";"+CConstrains.nodeType+";"+base.ID);
                     serwerStream.Flush();
                 }
                 else
