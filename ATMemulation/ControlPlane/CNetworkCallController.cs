@@ -7,12 +7,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Net;
 using System.IO;
+using RoutingController;
+using LinkResourceManager;
 
 namespace ControlPlane
 {
     class CNetworkCallController
     {
-
+        CLinkResourceManager cLinkResourceManager = CLinkResourceManager.Instance;
+        RouteHandler routeHandler = RouteHandler.Instance;
         CConnectionController cCConectionController = CConnectionController.Instance;
         static CNetworkCallController instance = new CNetworkCallController();
 
@@ -104,8 +107,15 @@ namespace ControlPlane
         public void DirectoryRequest(string localName)
         { }
 
-        public void CallTeardownOut()
-        { }
+        public void CallTeardownOut(int source, int destination)
+        {
+            
+            //potrzeba metody ktora zamienii source i destination na cala sciezke od source do destination
+            //niby w route handlerze jest lista routow, ale duzo operacji chyba trzeba robic zeby wyluskac
+            //to co trzeba, moze dodac do klasy route pole source i destination i napisac jakas metode?
+
+        
+        }
 
 
 
