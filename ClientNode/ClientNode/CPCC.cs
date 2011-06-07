@@ -7,8 +7,24 @@ namespace ClientNode
 {
     class CPCC
     {
-        public void CallRequest()
-        {}
+
+        static CPCC instance = new CPCC();
+
+        private CPCC()
+        { }
+
+        public static CPCC Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        public void CallRequest(String CallSourceIdentifier, String CallDestinationIdentifier)
+        {
+            
+        }
         public void CallTeardown()
         {}
 
