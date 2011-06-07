@@ -63,7 +63,7 @@ namespace ControlPlane
             {
                 link = links[i];
                 CLink temp;
-                if ((temp = cLinkResourceManager.SNPLinkConnectionRequest(link)) == null)
+                if ((temp = LinkConnectionRequest(link)) == null)
                     failed = true;
             } while (failed != true && i < links.Count);
             if (failed)
@@ -71,12 +71,13 @@ namespace ControlPlane
                 for (int j = 0; j < i; j++)
                 {
                     link = links[i];
-                    cLinkResourceManager.SNPLinkConnectionDeallocation(link);
+                    LinkConnectionDeallocation(link);
                 }
                 return false;
             }
             else
-                return true;
+           
+               return true;
             
         }
 
@@ -92,14 +93,14 @@ namespace ControlPlane
         //metoda do zestawienia polaczenia? kierowana do LRM
         //parametry:brak
         //zwraca: link connection ( pare SNP)
-        public void LinkConnectionRequest( CLink SNPtoSNP )
+        public CLink LinkConnectionRequest( CLink SNPtoSNP )
         {
-            cLinkResourceManager.SNPLinkConnectionRequest(SNPtoSNP);
+            return cLinkResourceManager.SNPLinkConnectionRequest(SNPtoSNP);
         }
 
-        public void LinkConnectionDeallocation(CLink SNPtoSNP)
+        public CLink LinkConnectionDeallocation(CLink SNPtoSNP)
         {
-            cLinkResourceManager.SNPLinkConnectionDeallocation(SNPtoSNP);
+            return cLinkResourceManager.SNPLinkConnectionDeallocation(SNPtoSNP);
         }
 
         // listener żądań od NCC jedno, czy wielowatkowy?
