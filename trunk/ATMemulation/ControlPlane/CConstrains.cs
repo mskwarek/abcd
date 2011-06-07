@@ -8,6 +8,6 @@ namespace ControlPlane
     public static class CConstrains
     {
         public static string ipAddress = "127.0.0.1";
-        public static int CPportNumber = 50009;
+        public static int CCportNumber = 50009;
     }
 }
