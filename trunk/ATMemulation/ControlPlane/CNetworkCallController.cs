@@ -25,8 +25,8 @@ namespace ControlPlane
 
         private CNetworkCallController()
         {
-            Thread t = new Thread(ccListener);
-            t.Name = "Call Controller listener";
+            Thread t = new Thread(NCCListener);
+            t.Name = " Network Call Controller listener";
             t.Start();
         }
 
@@ -76,7 +76,9 @@ namespace ControlPlane
 
         public void CallIndication()
         { }
+        
 
+        // tu wywołujemy metody CC aby dalej zestawić połączenie - na końcu musi CC zwrócić true albo false
         public bool ConnectionRequest(int fromNode, int toNode)
         {
             return true;
@@ -96,10 +98,7 @@ namespace ControlPlane
         public void CallTeardownOut()
         { }
 
-        public void ccListener()
-        {
-            //nasluch CC
-        }
+
 
 
     }
