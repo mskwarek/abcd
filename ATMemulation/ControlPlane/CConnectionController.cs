@@ -74,38 +74,61 @@ namespace ControlPlane
                
                 
                 // zamiana lacz na tablice komutacji
-                //Dictionary<int, Dictionary<Data.PortInfo, Data.PortInfo>> listOfCommutationT = new Dictionary<int, Dictionary<PortInfo, PortInfo>>();
+                Dictionary<int, Dictionary<Data.PortInfo, Data.PortInfo>> listOfCommutationT = new Dictionary<int, Dictionary<PortInfo, PortInfo>>();
 
-                
+                Dictionary<int,tablica> zbiortablic=new Dictionary<int,tablica>();
 
                 for (int k = 0; k < links.Count; k++)
                 {
                     CLink connection = links[k];
-                    tablica[] listatablic= new tablica[k+1];
-                    listatablic[connection.from.nodeNumber].port_d=connection.from.portNumber;
-                    listatablic[connection.to.nodeNumber].port_s = connection.to.portNumber;
+                    //tablica[] listatablic= new tablica[k+2];  zakomentowane to werrsja na tablicy, ale ssala, wiec zmienilem na slownik
+                    
+                    tablica temp=zbiortablic[connection.from.nodeNumber];
+                    temp.port_d=connection.from.portNumber;
+                    
+                    tablica temp2=zbiortablic[connection.to.nodeNumber];
+                    temp2.port_s=connection.to.portNumber;
+                    
+                    //listatablic[connection.from.nodeNumber].port_d=connection.from.portNumber;
+                   // listatablic[connection.to.nodeNumber].port_s = connection.to.portNumber;
                     int VCItemp=VCIPole.Dequeue();
                     int VPItemp=VPIPole.Dequeue();
 
-                    listatablic[connection.from.nodeNumber].vci_d = VCItemp;
-                    listatablic[connection.to.nodeNumber].vci_s = VCItemp;
-                    listatablic[connection.from.nodeNumber].vpi_d = VPItemp;
-                    listatablic[connection.to.nodeNumber].vpi_s = VPItemp;
+                    temp.vci_d=VCItemp;
+                    temp2.vci_s=VCItemp;
+                    temp.vpi_d=VPItemp;
+                    temp2.vpi_s=VPItemp;
+                    //listatablic[connection.from.nodeNumber].vci_d = VCItemp;
+                    //listatablic[connection.to.nodeNumber].vci_s = VCItemp;
+                    //listatablic[connection.from.nodeNumber].vpi_d = VPItemp;
+                    //listatablic[connection.to.nodeNumber].vpi_s = VPItemp;
                 }
+                
+
+
 
                 //
 
 
-                int i = 0;
+                //int i = 0;
+                int i=1;
                 CLink link;
+                Dictionary<PortInfo, PortInfo> table;
                 Boolean failed = false;
                 int identifier = setIdentifier(SNP_s, SNP_d);
                 System.Console.WriteLine("Identifier is " + identifier);
                 do
                 {
-                    link = links[i];
+                    //link = links[i];
+                    
+                    table = new Dictionary<PortInfo, PortInfo>();
+                    table.Add(new PortInfo(zbiortablic[i].port_s,zbiortablic[i].vpi_s, zbiortablic[i].vci_s), 
+                        new PortInfo(zbiortablic[i].port_s,zbiortablic[i].vpi_s, zbiortablic[i].vci_s));  //stworzona tablica komutacji taka jaka jest w Data
+
+
                     CLink temp;
-                    if ((temp = LinkConnectionRequest(link)) == null)
+                    if ((temp = LinkConnectionRequest(link)) == null)     // w tym miejscu zmiana z Clink na Data.CComutationTable + nr wezla i powinno dzialac, 
+                                                                           // tylko tak jak mowie jak juz bawic sie w tablice komutacji to chyba lepiej same wpisy?
                         failed = true;
                     i++;
                 } while (failed != true && i < links.Count);
