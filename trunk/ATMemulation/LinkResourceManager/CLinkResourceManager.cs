@@ -19,22 +19,13 @@ namespace LinkResourceManager
         private static CLinkResourceManager cLinkResourceManager = new CLinkResourceManager();
 
 
-        Queue<int> VCIPole;
-        Queue<int> VPIPole;
+        
         private List<Data.CLink> establishedLinksList = new List<Data.CLink>();
 
 
         private CLinkResourceManager()
         {
-            for (int i = 0; i <= Data.CAdministrationData.VCI_MAX; i++)
-            {
-                VCIPole.Enqueue(i);
-            }
-
-            for (int i = 0; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
-            {
-                VPIPole.Enqueue(i);
-            }
+            
             Console.WriteLine("CLinkResourceManager");
             
         }
