@@ -158,47 +158,7 @@ namespace ClientNode
             upStreamWriter.Flush();
         }
 
-        // metoda zgłaszająca call request do CP
-        public bool CallRequest(int fromNode, int toNode)
-        {
 
-            TcpClient client = new TcpClient();
-            client.Connect(CConstrains.ipAddress, CConstrains.ControlPlanePortNumber);
-            NetworkStream stream = client.GetStream();
-
-            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
-                {"FromNode", fromNode},
-                {"ToNode",toNode},
-                {"CallRequest",null}
-                };
-            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
-            pduList.Add(pduDict);
-            CSNMPmessage msg = new Data.CSNMPmessage(pduList, null, null);
-            msg.pdu.RequestIdentifier = "CallRequest:" + fromNode;
-
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(stream, msg);
-            stream.Flush();
-            Console.WriteLine("--> Sending CallRequest " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
-            client.Close();
-
-
-            StreamReader sr = new StreamReader(stream);
-            String responseFromCP = sr.ReadLine();
-
-            if (responseFromCP.Equals("OK"))
-            {
-                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
-                return false;
-            }
-
-
-        }
 
         // metoda która uruchamia port wyjściowy na podstawie informacji z ML
         public void startPort(CLinkInfo from, CLinkInfo to)

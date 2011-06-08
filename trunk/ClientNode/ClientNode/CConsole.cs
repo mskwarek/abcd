@@ -90,6 +90,35 @@ namespace ClientNode
 
                         cpm.getNodePortConfiguration();
                     }
+                    else if (ConsoleInput.StartsWith("requestConnection"))
+                    {
+                        String[] command = ConsoleInput.Split(' ');
+                        if (command.Count() != 3)
+                        {
+                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                        }
+                        
+                        try
+                        {
+                            // wywołanie metod związanych z zestawieniem połączenia 
+                            int arg1 = Convert.ToInt32(command[1]);
+                            int arg2 = Convert.ToInt16(command[2]);
+
+                            CPCC.Instance.CallRequest(arg1, arg2);
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(" ERROR : argument nie jest liczbą");
+                            Console.WriteLine(e.StackTrace);
+                        }
+                        
+
+
+                    }
+
+
+
                     /*else if (ConsoleInput.StartsWith("turnOn"))
                     {
                         CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);

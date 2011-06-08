@@ -54,9 +54,14 @@ namespace ManagementLayer
                         try
                         {
                             nodesType.Add(Convert.ToInt32(fromArray[0]), fromArray[1]);
+                        }
+                        catch (Exception) {}
+
+                        try
+                        {
                             nodesType.Add(Convert.ToInt32(toArray[0]), toArray[1]);
                         }
-                        catch (Exception) { }
+                        catch (Exception) { } 
 
 
                         Data.CLinkInfo from = new Data.CLinkInfo(Convert.ToInt32(fromArray[0]), fromArray[1], Convert.ToInt32(fromArray[2]));
