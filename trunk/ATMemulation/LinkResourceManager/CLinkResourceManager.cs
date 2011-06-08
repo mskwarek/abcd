@@ -7,6 +7,9 @@ using System.Net;
 using System.Net.Sockets;
 using Data;
 using RouteEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
 
 namespace LinkResourceManager
 {
@@ -15,12 +18,23 @@ namespace LinkResourceManager
 
         private static CLinkResourceManager cLinkResourceManager = new CLinkResourceManager();
 
+
+        Queue<int> VCIPole;
+        Queue<int> VPIPole;
         private List<Data.CLink> establishedLinksList = new List<Data.CLink>();
 
 
         private CLinkResourceManager()
         {
+            for (int i = 0; i <= Data.CAdministrationData.VCI_MAX; i++)
+            {
+                VCIPole.Enqueue(i);
+            }
 
+            for (int i = 0; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
+            {
+                VPIPole.Enqueue(i);
+            }
             Console.WriteLine("CLinkResourceManager");
             
         }
@@ -46,11 +60,48 @@ namespace LinkResourceManager
                 Console.WriteLine("RLM: Reserving connection ");
                 reserveCLink(SNPtoSNP);
                 CShortestPathCalculatorWrapper.Instance.reserveCLink(SNPtoSNP);
-
-                return SNPtoSNP;
+                int sourceNode = SNPtoSNP.from.nodeNumber;
+                int sourcePort = SNPtoSNP.from.portNumber;
+                int destinationNode = SNPtoSNP.to.nodeNumber;
+                int destinationPort = SNPtoSNP.to.portNumber;
+                if (sendLinkConnectionRequest(sourceNode, sourcePort, VPIPole.Dequeue(), VCIPole.Dequeue()) &&
+                    sendLinkConnectionRequest(destinationNode, destinationPort, VPIPole.Dequeue(), VCIPole.Dequeue()))
+                    return SNPtoSNP;
+                else
+                    return null;
             }
 
             return null;
+        }
+
+        public bool sendLinkConnectionRequest(int nodeNumber, int portNumber,int VPI, int VCI)
+        {
+            Data.RequestConnectionMessage msg;
+
+            TcpClient client = new TcpClient();
+            try
+            {
+                client.Connect(CConstrains.ipAddress, CConstrains.calculateSocketPort(nodeNumber,portNumber));
+                NetworkStream stream= client.GetStream();
+                msg = new Data.RequestConnectionMessage(VPI, VCI);
+                BinaryFormatter binaryFormater = new BinaryFormatter();
+                binaryFormater.Serialize(stream, msg);
+                stream.Flush();
+
+                StreamReader sr = new StreamReader(stream);
+                String dane = sr.ReadLine();
+                if (dane.Equals("Done"))
+                    return true;
+                else
+                    return false;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR : Node"+ nodeNumber +" Port "+ portNumber+" niesdostępny");
+                return false;
+            }
+
         }
 
         public CLink SNPLinkConnectionDeallocation(CLink SNPtoSNP)
