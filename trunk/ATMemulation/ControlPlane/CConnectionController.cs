@@ -109,7 +109,7 @@ namespace ControlPlane
         //metoda zwraca identyfikator połączenia
         public int setIdentifier(int SNP_s, int SNP_d)
         {
-            return SNP_s + 350 * SNP_d;
+            return SNP_s * SNP_d;
         }
 
         //metoda kierowana do RC by uzyskac sciezke pomiedzy dwoma punktami 
