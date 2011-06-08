@@ -17,14 +17,23 @@ namespace ControlPlane
         private Dictionary<int, RouteEngine.Route> establishedRoutes = new Dictionary<int, RouteEngine.Route>();
         
         private static CConnectionController connectionController= new CConnectionController();
+    
+        Queue<int> VCIPole;
+        Queue<int> VPIPole;
 
         private CConnectionController()
         {
-            Console.WriteLine("ConnectionController");
-           // Thread t = new Thread(nccListener);
-           // t.Name = "NCC Listener";
-           // t.Start();
+            for (int i = 0; i <= Data.CAdministrationData.VCI_MAX; i++)
+            {
+                VCIPole.Enqueue(i);
+            }
 
+            for (int i = 0; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
+            {
+                VPIPole.Enqueue(i);
+            }
+
+            Console.WriteLine("ConnectionController");
         }
 
         public static  CConnectionController Instance
