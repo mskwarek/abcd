@@ -90,10 +90,10 @@ namespace ClientNode
 
                         cpm.getNodePortConfiguration();
                     }
-                    else if (ConsoleInput.StartsWith("requestConnection"))
+                    else if (ConsoleInput.StartsWith("rc"))
                     {
                         String[] command = ConsoleInput.Split(' ');
-                        if (command.Count() != 3)
+                        if (command.Count() != 2)
                         {
                             Console.WriteLine(" ERROR : Błędna liczba argumentów.");
                         }
@@ -102,9 +102,9 @@ namespace ClientNode
                         {
                             // wywołanie metod związanych z zestawieniem połączenia 
                             int arg1 = Convert.ToInt32(command[1]);
-                            int arg2 = Convert.ToInt16(command[2]);
+                            //int arg2 = Convert.ToInt16(command[2]);
 
-                            CPCC.Instance.CallRequest(arg1, arg2);
+                            CPCC.Instance.CallRequest(CConstrains.nodeNumber, arg1);
 
                         }
                         catch (Exception e)

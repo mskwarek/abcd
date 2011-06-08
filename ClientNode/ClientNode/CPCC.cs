@@ -49,7 +49,7 @@ namespace ClientNode
             Console.WriteLine("--> Sending CallRequest " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
             client.Close();
 
-
+            //TU JEST COŚ NIE TAK!!
             StreamReader sr = new StreamReader(stream);
             String responseFromCP = sr.ReadLine();
 

@@ -61,7 +61,7 @@ namespace ControlPlane
                 {
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
                     {
-                        if (d.ContainsKey("requestNewLink"))
+                        if (d.ContainsKey("CallRequest"))
                         {
                             int fromNode = Convert.ToInt16(d["FromNode"]);
                             int toNode = Convert.ToInt16(d["ToNode"]);
