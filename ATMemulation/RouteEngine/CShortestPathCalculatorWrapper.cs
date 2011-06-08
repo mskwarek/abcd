@@ -14,7 +14,7 @@ namespace RouteEngine
 
         static readonly CShortestPathCalculatorWrapper instance = new CShortestPathCalculatorWrapper();
 
-        CShortestPathCalculatorWrapper()
+        private CShortestPathCalculatorWrapper()
         {
         }
 
@@ -38,6 +38,27 @@ namespace RouteEngine
             }
         }
 
+        // aktualizacja listy polaczen
+        public void updateLink(CLink link, bool isActive)
+        {
+            if (linkList.Contains(link))
+            {
+                int index = linkList.IndexOf(link);
+
+                if ( !isActive )
+                {
+                    linkList.RemoveAt(index);
+                }
+            }
+            else
+            {
+                if (isActive)
+                {
+                    linkList.Add(link);
+                }
+            }
+        }
+
         // zmienia stan danego CLink na busy
         public void reserveCLink(CLink cLink)
         {
@@ -58,6 +79,7 @@ namespace RouteEngine
             LinkList.Add(cLink);
         }
 
+        //ustala najkrotsze polaczenie miedzy dwoma node'ami w ramach dostepnych zasobow
         public Route getShortestPath(int startNodeNumber, int endNodeNumber)
         {
             HashSet<int> locationIDs = new HashSet<int>();
