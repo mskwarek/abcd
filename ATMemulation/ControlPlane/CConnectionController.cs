@@ -17,12 +17,21 @@ namespace ControlPlane
         private Dictionary<int, RouteEngine.Route> establishedRoutes = new Dictionary<int, RouteEngine.Route>();
         
         private static CConnectionController connectionController= new CConnectionController();
-    
-       
+
+        Queue<int> VCIPole;
+        Queue<int> VPIPole;
 
         private CConnectionController()
         {
-            
+            for (int i = 0; i <= Data.CAdministrationData.VCI_MAX; i++)
+            {
+                VCIPole.Enqueue(i);
+            }
+
+            for (int i = 0; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
+            {
+                VPIPole.Enqueue(i);
+            }
 
             Console.WriteLine("ConnectionController");
         }
@@ -62,6 +71,30 @@ namespace ControlPlane
             {
                 Console.WriteLine(" Route " + SNP_s + " to " + SNP_d + " set up ");
                 List<CLink> links = route.Connections;
+               
+                
+                // zamiana lacz na tablice komutacji
+                //Dictionary<int, Dictionary<Data.PortInfo, Data.PortInfo>> listOfCommutationT = new Dictionary<int, Dictionary<PortInfo, PortInfo>>();
+
+                
+
+                for (int k = 0; k < links.Count; k++)
+                {
+                    CLink connection = links[k];
+                    tablica[] listatablic= new tablica[k+1];
+                    listatablic[connection.from.nodeNumber].port_d=connection.from.portNumber;
+                    listatablic[connection.to.nodeNumber].port_s = connection.to.portNumber;
+                    int VCItemp=VCIPole.Dequeue();
+                    int VPItemp=VPIPole.Dequeue();
+
+                    listatablic[connection.from.nodeNumber].vci_d = VCItemp;
+                    listatablic[connection.to.nodeNumber].vci_s = VCItemp;
+                    listatablic[connection.from.nodeNumber].vpi_d = VPItemp;
+                    listatablic[connection.to.nodeNumber].vpi_s = VPItemp;
+                }
+
+                //
+
 
                 int i = 0;
                 CLink link;
@@ -149,7 +182,15 @@ namespace ControlPlane
         }
 
     }
-
+    struct tablica
+    {
+        public int port_s;
+        public int port_d;
+        public int vpi_s;
+        public int vpi_d;
+        public int vci_s;
+        public int vci_d;
+    };
     class ClientHandler
     {
         public ClientHandler(TcpClient client)
