@@ -58,34 +58,42 @@ namespace ControlPlane
         public bool ConnectionRequestOut(int SNP_s, int SNP_d)
         {
             RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
-            List<CLink> links = route.Connections;
-            int i=0;
-            CLink link;
-            Boolean failed=false;
-            int identifier = setIdentifier(SNP_s, SNP_d);
-            System.Console.WriteLine("Identifier is " + identifier);
-            do
+            if (route != null)
             {
-                link = links[i];
-                CLink temp;
-                if ((temp = LinkConnectionRequest(link)) == null)
-                    failed = true;
-                i++;
-            } while (failed != true && i < links.Count);
-            if (failed)
-            {
-                for (int j = 0; j < i; j++)
+                Console.WriteLine(" Route " + SNP_s + " to " + SNP_d + " set up ");
+                List<CLink> links = route.Connections;
+
+                int i = 0;
+                CLink link;
+                Boolean failed = false;
+                int identifier = setIdentifier(SNP_s, SNP_d);
+                System.Console.WriteLine("Identifier is " + identifier);
+                do
                 {
                     link = links[i];
-                    LinkConnectionDeallocation(link);
+                    CLink temp;
+                    if ((temp = LinkConnectionRequest(link)) == null)
+                        failed = true;
+                    i++;
+                } while (failed != true && i < links.Count);
+                if (failed)
+                {
+                    for (int j = 0; j < i; j++)
+                    {
+                        link = links[i];
+                        LinkConnectionDeallocation(link);
+                    }
+                    return false;
                 }
-                return false;
+                else
+                {
+                    establishedRoutes.Add(identifier, route);
+                    Console.WriteLine(" Connection " + identifier + " established ");
+                    return true;
+                }
             }
             else
-            {
-                establishedRoutes.Add(identifier, route);
-                return true;
-            }
+                return false;
             
         }
 

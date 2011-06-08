@@ -43,6 +43,7 @@ namespace LinkResourceManager
         {
             if (!establishedLinksList.Contains(SNPtoSNP))
             {
+                Console.WriteLine("RLM: Reserving connection ");
                 reserveCLink(SNPtoSNP);
                 CShortestPathCalculatorWrapper.Instance.reserveCLink(SNPtoSNP);
 
@@ -56,6 +57,7 @@ namespace LinkResourceManager
         {
             if (!establishedLinksList.Contains(SNPtoSNP))
             {
+                Console.WriteLine("RLM: Deallocating connection ");
                 releaseCLink(SNPtoSNP);
                 CShortestPathCalculatorWrapper.Instance.releaseCLink(SNPtoSNP);
 
