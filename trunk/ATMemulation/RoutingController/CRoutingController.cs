@@ -15,6 +15,7 @@ namespace RoutingController
     {
         private static CRoutingController cRoutingController = new CRoutingController();
 
+
         private CRoutingController()
         {
             Thread t = new Thread(routingInfoListener);
@@ -31,9 +32,20 @@ namespace RoutingController
         }
 
         //inicjalizacja RC
-        public void initRC( List<Data.CLink> linkList )
+        public void initRC( List<CPNNITable> PNNITable )
         {
-            CShortestPathCalculatorWrapper.Instance.linkList = linkList;
+            List<CLink> newLinkList = new List<CLink>();
+
+            foreach (CPNNITable i in PNNITable)
+            {
+                if (i.IsNeighbourActive)
+                {
+                    CLinkInfo from = new CLinkInfo(i.NodeNumber, i.NodeType, i.NodePortNumberSender);
+                    CLinkInfo to = new CLinkInfo(i.NeighbourNodeNumber, i.NeighbourNodeType, i.NeighbourPortNumberReciever);
+                    newLinkList.Add(new CLink(from, to, 1));
+                }
+            }
+            CShortestPathCalculatorWrapper.Instance.linkList = newLinkList;
         }
 
         // listener nasluchuje komunikatow o routingu
@@ -71,16 +83,15 @@ namespace RoutingController
             }
         }
 
+        // aktualizacja listy polaczen
+        public void updateRCTable(CPNNITable PNNITable)
+        {
+            CLinkInfo from = new CLinkInfo(PNNITable.NodeNumber, PNNITable.NodeType, PNNITable.NodePortNumberSender);
+            CLinkInfo to = new CLinkInfo(PNNITable.NeighbourNodeNumber, PNNITable.NeighbourNodeType, PNNITable.NeighbourPortNumberReciever);
 
-
-
-
-
-
-
-
-
-
+            CShortestPathCalculatorWrapper.Instance.updateLink(new CLink(from, to, 1), PNNITable.IsNeighbourActive);
+            Console.WriteLine("Routing Table UPDATED : " + PNNITable.NodeNumber + " " + PNNITable.NodeType + " " + PNNITable.NodePortNumberSender + " " + PNNITable.NeighbourNodeNumber + " " + PNNITable.NeighbourNodeType + " " + PNNITable.NeighbourPortNumberReciever + " " + PNNITable.IsNeighbourActive);
+        }
 
 
 

@@ -11,16 +11,19 @@ namespace ControlPlane
 {
     class CConnectionController
     {
-        CLinkResourceManager cLinkResourceManager = CLinkResourceManager.Instance;
-        CRoutingController cRoutingController = CRoutingController.Instance;
+        private CLinkResourceManager cLinkResourceManager = CLinkResourceManager.Instance;
+        private CRoutingController cRoutingController = CRoutingController.Instance;
+
+        private Dictionary<int, RouteEngine.Route> establishedRoutes = new Dictionary<int, RouteEngine.Route>();
         
         private static CConnectionController connectionController= new CConnectionController();
 
         private CConnectionController()
         {
-            Thread t = new Thread(nccListener);
-            t.Name = "NCC Listener";
-            t.Start();
+            Console.WriteLine("ConnectionController");
+           // Thread t = new Thread(nccListener);
+           // t.Name = "NCC Listener";
+           // t.Start();
 
         }
 
@@ -59,12 +62,15 @@ namespace ControlPlane
             int i=0;
             CLink link;
             Boolean failed=false;
+            int identifier = setIdentifier(SNP_s, SNP_d);
+            System.Console.WriteLine("Identifier is " + identifier);
             do
             {
                 link = links[i];
                 CLink temp;
                 if ((temp = LinkConnectionRequest(link)) == null)
                     failed = true;
+                i++;
             } while (failed != true && i < links.Count);
             if (failed)
             {
@@ -76,11 +82,18 @@ namespace ControlPlane
                 return false;
             }
             else
-           
-               return true;
+            {
+                establishedRoutes.Add(identifier, route);
+                return true;
+            }
             
         }
 
+        //metoda zwraca identyfikator połączenia
+        public int setIdentifier(int SNP_s, int SNP_d)
+        {
+            return SNP_s + 350 * SNP_d;
+        }
 
         //metoda kierowana do RC by uzyskac sciezke pomiedzy dwoma punktami 
         //parametry: 'unresolved route fragment'
@@ -119,6 +132,14 @@ namespace ControlPlane
             }
         }
 
+        public RouteEngine.Route getRouteByIdentifier(int identifier)
+        {
+            if (establishedRoutes.ContainsKey(identifier))
+                return establishedRoutes[identifier];
+            else
+                return null;
+        }
+
     }
 
     class ClientHandler
@@ -131,9 +152,6 @@ namespace ControlPlane
         private void handling(TcpClient client)
         {
             // nasluch
-
-
-
         }
     }
 }

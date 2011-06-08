@@ -88,14 +88,20 @@ namespace ManagementLayer
                        {
                            if (CNetworkConfiguration.Instance.getNodeNumberFromDict(Convert.ToInt16(d["NodeNumber"])))
                            {
+                               int index = 0;
                                for (int i = 0; i < CNetworkConfiguration.Instance.linkList.Count; i++)
                                {
                                    if (CNetworkConfiguration.Instance.linkList.ElementAt(i).from.nodeNumber == (Convert.ToInt16(d["NodeNumber"])))
                                    {
+                                       index = i;
                                        setNetworkConnections((Convert.ToInt16(d["NodeNumber"])),CNetworkConfiguration.Instance.linkList.ElementAt(i) );
                                    }
                                }
-
+                               Data.CLink link = CNetworkConfiguration.Instance.linkList.ElementAt(index);
+                               //Wysylanie informacji o wezle klienckim
+                               PNNIList.Add(new Data.CPNNITable(link.A.nodeNumber, link.A.portType, link.A.portNumber, link.B.nodeNumber, link.B.portType, link.B.portNumber, true));
+                               Console.WriteLine("PNNIList  ADDED Client NODE");
+                               sendPNNIListToCP(PNNIList); 
                                downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK- ");
                                downStream.Flush();
                            }

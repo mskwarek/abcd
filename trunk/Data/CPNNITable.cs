@@ -7,6 +7,7 @@ namespace Data
 {[Serializable]
     public class CPNNITable : IEquatable<CPNNITable>
     {
+        // typ node'a
         private String _NodeType;
 
             public String NodeType
@@ -14,8 +15,8 @@ namespace Data
              get { return _NodeType; }
              set { _NodeType = value; }
             }
-        
-    
+
+        // numer node'a
         private int _NodeNumber;
 
             public int NodeNumber
@@ -23,7 +24,8 @@ namespace Data
              get { return _NodeNumber; }
              set { _NodeNumber = value; }
             }
-        
+
+            // numer portu node'a
         private int _NodePortNumber;
 
             public int NodePortNumberSender
@@ -31,6 +33,7 @@ namespace Data
                 get { return _NodePortNumber; }
                 set { _NodePortNumber = value; }
             }
+            // numer node'a sasiada
         private int _NeighbourNodeNumber;
 
         public int NeighbourNodeNumber
@@ -38,7 +41,7 @@ namespace Data
             get { return _NeighbourNodeNumber; }
             set { _NeighbourNodeNumber = value; }
         }
-
+        // numer portu node'a sasiada
         private int _NeighbourPortNumber;
 
             public int NeighbourPortNumberReciever
@@ -47,8 +50,8 @@ namespace Data
                 set { _NeighbourPortNumber = value; }
             }
 
-            
 
+        // typ node'a sasiada
         private String _NeighbourNodeType;
 
         public String NeighbourNodeType
@@ -56,6 +59,8 @@ namespace Data
             get { return _NeighbourNodeType; }
             set { _NeighbourNodeType = value; }
         }
+
+        // stan node'a sasiada
         private bool _isNeighbourActive;
 
         public bool IsNeighbourActive

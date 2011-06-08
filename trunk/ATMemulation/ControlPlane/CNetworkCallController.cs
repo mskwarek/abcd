@@ -9,31 +9,39 @@ using System.Net;
 using System.IO;
 using RoutingController;
 using LinkResourceManager;
+using RouteEngine;
+using Data;
 
 namespace ControlPlane
 {
-    class CNetworkCallController
+    public sealed class CNetworkCallController
     {
         CLinkResourceManager cLinkResourceManager = CLinkResourceManager.Instance;
-        RouteHandler routeHandler = RouteHandler.Instance;
         CConnectionController cCConectionController = CConnectionController.Instance;
-        static CNetworkCallController instance = new CNetworkCallController();
         public List<Data.CPNNITable> PNNIList = new List<Data.CPNNITable>();
+
+        static readonly CNetworkCallController instance = new CNetworkCallController();
+
         public static CNetworkCallController Instance
         {
             get
             {
-                return Instance;
+                return instance;
             }
         }
 
         private CNetworkCallController()
         {
+            Console.WriteLine("CNetworkCallController");
+        }
+
+        public void CNetworkCallControllerStart()
+        {
             Thread t = new Thread(NCCListener);
             t.Name = " Network Call Controller listener";
             t.Start();
+        
         }
-
         public void NCCListener() 
         {
             bool status = true;
@@ -84,12 +92,14 @@ namespace ControlPlane
                             if (PNNIList.ElementAt(index).IsNeighbourActive != t.IsNeighbourActive)
                             {
                                 PNNIList.ElementAt(index).IsNeighbourActive = t.IsNeighbourActive;
+                                CRoutingController.Instance.updateRCTable(t);
                                 Console.WriteLine("*** PNNIList Updated  " + PNNIList.ElementAt(index).NodeNumber + " " + PNNIList.ElementAt(index).NodeType + " ACTIVITY :  " + PNNIList.ElementAt(index).IsNeighbourActive);
                             }
                         }
                         else
                         {
                             PNNIList.Add(t);
+                            CRoutingController.Instance.updateRCTable(t);
                             Console.WriteLine("PNNIList  ADDED : " + t.NodeNumber + " " + t.NodeType + " " + t.NodePortNumberSender + " " + t.NeighbourNodeNumber + " " + t.NeighbourNodeType + " " + t.NeighbourPortNumberReciever + " " + t.IsNeighbourActive);
 
                         }
@@ -139,12 +149,19 @@ namespace ControlPlane
             //potrzeba metody ktora zamienii source i destination na cala sciezke od source do destination
             //niby w route handlerze jest lista routow, ale duzo operacji chyba trzeba robic zeby wyluskac
             //to co trzeba, moze dodac do klasy route pole source i destination i napisac jakas metode?
+            RouteEngine.Route route = CConnectionController.Instance.getRouteByIdentifier(CConnectionController.Instance.setIdentifier(source, destination));
 
-        
+            List<CLink> links = route.Connections;
+            int i = 0;
+            CLink link;
+            do
+            {
+                link = links[i];
+                CLink temp;
+                temp = CConnectionController.Instance.LinkConnectionDeallocation(link);
+                i++;
+            } while (i < links.Count);
+                        
         }
-
-
-
-
     }
 }
