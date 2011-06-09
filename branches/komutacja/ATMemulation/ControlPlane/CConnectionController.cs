@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using RoutingController;
 using LinkResourceManager;
 using Data;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ControlPlane
 {
@@ -18,17 +19,18 @@ namespace ControlPlane
         
         private static CConnectionController connectionController= new CConnectionController();
     
-        Queue<int> VCIPole;
-        Queue<int> VPIPole;
+        Queue<int> VCIPole = new Queue<int>();
+        Queue<int> VPIPole = new Queue<int>();
 
         private CConnectionController()
         {
-            for (int i = 0; i <= Data.CAdministrationData.VCI_MAX; i++)
+            for (int i = 1; i <= Data.CAdministrationData.VCI_MAX; i++)
             {
-                VCIPole.Enqueue(i);
+                if ( i != 5)
+                    VCIPole.Enqueue(i);
             }
 
-            for (int i = 0; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
+            for (int i = 1; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
             {
                 VPIPole.Enqueue(i);
             }
@@ -67,7 +69,7 @@ namespace ControlPlane
         public bool ConnectionRequestOut(int SNP_s, int SNP_d)
         {
             RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
-            if (route != null)
+            if (route != null && route.Connections.Count != 0)
             {
                 Console.WriteLine(" Route " + SNP_s + " to " + SNP_d + " set up ");
                 List<CLink> links = route.Connections;
@@ -97,6 +99,39 @@ namespace ControlPlane
                 else
                 {
                     establishedRoutes.Add(identifier, route);
+
+                    //tworzenie tablic komutacji
+
+                    int[] VPIs =new int[links.Count];
+                    int[] VCIs =new int[links.Count];
+
+                    for( int a = 0 ; a < links.Count ; a++)
+                    {
+                        VPIs[a] = VPIPole.Dequeue();
+                        VCIs[a] = VCIPole.Dequeue();
+                    }
+                    
+                    for ( int a = 0; a < links.Count - 1; a++)
+                    {
+                        int nodeNumber = links[a].B.nodeNumber;
+                        int portIn = links[a].B.portNumber;
+                        int portOut = links[a+1].A.portNumber;
+                        int VPIIn = VPIs[a];
+                        int VCIIn = VCIs[a];
+                        int VPIOut = VPIs[a+1];
+                        int VCIOut = VCIs[a+1];
+                        if (a == 0 )
+                        {
+                            VCIIn = 0;
+                            VPIIn = 0;
+                        }
+                        if ( a == links.Count -2 )
+                        {
+                            VCIOut = 0;
+                            VPIOut = 0;
+                        }
+                        addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut); 
+                    }
                     Console.WriteLine(" Connection " + identifier + " established ");
                     return true;
                 }
@@ -157,7 +192,43 @@ namespace ControlPlane
                 return null;
         }
 
+        public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B)
+        {
+            Console.WriteLine("\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A);
+            Console.WriteLine(" portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B);
+            Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
+            Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
+
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+            {"from", portIn},
+            {"to", portOut},
+            {"add", null}
+            };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
+            dataToSend.pdu.RequestIdentifier = "ADD" + nodeNumber.ToString();
+
+            send(nodeNumber, dataToSend);
+
+            Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
+        }
+        private void send(int nodeNumber, Data.CSNMPmessage msg)
+        {
+            int portNumber = 50000 + 100 * nodeNumber;
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, portNumber);
+            NetworkStream stream = client.GetStream();
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            //stream.Flush();
+            Console.WriteLine("--> SENDING " + msg + " TO NODE : " + nodeNumber);
+
+        }
+
     }
+
 
     class ClientHandler
     {
