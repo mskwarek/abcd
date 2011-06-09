@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using RoutingController;
 using LinkResourceManager;
 using Data;
+using System.Collections;
 
 namespace ControlPlane
 {
@@ -110,34 +111,54 @@ namespace ControlPlane
                 //
 
 
-                //int i = 0;
-                int i=1;
+                int i = 0;
+                //int i=1;
                 CLink link;
                 Dictionary<PortInfo, PortInfo> table;
                 Boolean failed = false;
                 int identifier = setIdentifier(SNP_s, SNP_d);
                 System.Console.WriteLine("Identifier is " + identifier);
+               
+                //IEnumerator e=zbiortablic.Keys.GetEnumerator();
+                int[] nodes;
+                zbiortablic.Keys.CopyTo(nodes,0);
+               // int currentNode = (int)e.Current;
+                Data.CSNMPmessage dataToSend;
                 do
                 {
                     //link = links[i];
                     
                     table = new Dictionary<PortInfo, PortInfo>();
-                    table.Add(new PortInfo(zbiortablic[i].port_s,zbiortablic[i].vpi_s, zbiortablic[i].vci_s), 
-                        new PortInfo(zbiortablic[i].port_s,zbiortablic[i].vpi_s, zbiortablic[i].vci_s));  //stworzona tablica komutacji taka jaka jest w Data
+                    Data.PortInfo portIn = new PortInfo(zbiortablic[nodes[i]].port_s, zbiortablic[nodes[i]].vpi_s, zbiortablic[currentNode].vci_s);
+                    Data.PortInfo portOut = new PortInfo(zbiortablic[nodes[i]].port_d, zbiortablic[nodes[i]].vpi_d, zbiortablic[currentNode].vci_d);
+                    Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                    {"from", portIn},
+                    {"to", portOut},
+                    {"add", null}
+                    };
+                    List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+                    pduList.Add(pduDict);
+                     dataToSend = new Data.CSNMPmessage(pduList, null, null);
+                    dataToSend.pdu.RequestIdentifier = "ADD" + nodes[i].ToString();
+
+
+
 
 
                     CLink temp;
-                    if ((temp = LinkConnectionRequest(link)) == null)     // w tym miejscu zmiana z Clink na Data.CComutationTable + nr wezla i powinno dzialac, 
+                    if ((temp = LinkConnectionRequest(dataToSend,nodes[i])) == null)     // w tym miejscu zmiana z Clink na Data.CComutationTable + nr wezla i powinno dzialac, 
                                                                            // tylko tak jak mowie jak juz bawic sie w tablice komutacji to chyba lepiej same wpisy?
                         failed = true;
+
+                   // e.MoveNext();
                     i++;
-                } while (failed != true && i < links.Count);
+                } while (failed != true && i < nodes.Length);
                 if (failed)
                 {
                     for (int j = 0; j < i; j++)
                     {
                         link = links[i];
-                        LinkConnectionDeallocation(link);
+                        LinkConnectionDeallocation(dataToSend,nodes[j]);
                     }
                     return false;
                 }
@@ -170,14 +191,14 @@ namespace ControlPlane
         //metoda do zestawienia polaczenia? kierowana do LRM
         //parametry:brak
         //zwraca: link connection ( pare SNP)
-        public CLink LinkConnectionRequest( CLink SNPtoSNP )
+        public CLink LinkConnectionRequest(Data.CSNMPmessage message, int node)             //CLink SNPtoSNP )
         {
-            return cLinkResourceManager.SNPLinkConnectionRequest(SNPtoSNP);
+            return cLinkResourceManager.SNPLinkConnectionRequest(message, node);
         }
 
-        public CLink LinkConnectionDeallocation(CLink SNPtoSNP)
+        public CLink LinkConnectionDeallocation(Data.CSNMPmessage message, int node) //CLink SNPtoSNP)
         {
-            return cLinkResourceManager.SNPLinkConnectionDeallocation(SNPtoSNP);
+            return cLinkResourceManager.SNPLinkConnectionDeallocation(message, node);
         }
 
         // listener żądań od NCC jedno, czy wielowatkowy?
