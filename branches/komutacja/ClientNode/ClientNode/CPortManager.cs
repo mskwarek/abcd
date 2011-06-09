@@ -35,9 +35,10 @@ namespace ClientNode
 
         public void readConfig() {
             XmlTextReader textReader;
-            if (File.Exists("../../config" + CConstrains.nodeNumber + ".xml"))
+            
+            if (File.Exists(CConstrains.configFileURL))
             {
-                textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
+                textReader = new XmlTextReader(CConstrains.configFileURL);
             }
             else
             {
@@ -47,18 +48,41 @@ namespace ClientNode
 
             try
             {
-                while (textReader.Read()) {
-                    switch (textReader.NodeType) {
-                        case XmlNodeType.Element:
-                            switch (textReader.Name) {
-                                case "InputClientPort":
-                                    CConstrains.inputPortNumber = Convert.ToInt16(textReader.ReadString());
-                                    continue;
-                                case "OutputClientPort":
-                                    CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString());
-                                    continue;
-                            }
-                            break;
+                while (textReader.Read())
+                {
+                    if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "managementLayerPort")
+                    {
+                        CConstrains.managementLayerPort = Convert.ToInt32(textReader.ReadElementContentAsInt());
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "nccPort")
+                    {
+                        CConstrains.ControlPlanePortNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "domainName")
+                    {
+                        CConstrains.domainName = textReader.ReadElementContentAsString();
+                    }
+                    if (textReader.NodeType == XmlNodeType.Element && textReader.Name == ("node" + CConstrains.nodeNumber))
+                    {
+                        while (textReader.Read())
+                        {
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
+                            { CConstrains.inputPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
+                            { CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                        }
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "defaultNode")
+                    {
+                        Console.WriteLine("zaczytałem default");
+                        while (textReader.Read())
+                        {
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
+                            { CConstrains.inputPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
+                            { CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                     
+                        }
                     }
                 }
                 textReader.Close();

@@ -2,12 +2,42 @@
 
 <!-- schemat : numer noda; kliencki/sieciowy; numer portu-->
 <network>
+  <domainName>1</domainName>
   <managementLayerPort>49999</managementLayerPort>
   <nccPort>50009</nccPort>
   <neighbourNccPort>50010</neighbourNccPort>
   <link from="1;c;1" to="2;n;1"></link>
   <link from="2;n;4" to="3;n;5"></link>
-  <link from="3;n;2" to="4;c;1"></link>
-  <!-- <link from="2;n;5" to="5;n;3"></link>
-  <link from="5;n;3" to="3;n;6"></link> -->
+  <link from="3;n;1" to="4;c;1"></link>
+  <link from="3;b;4" to="5;b;5"></link>
+  <defaultNode>
+    <InputClientPort>4</InputClientPort>
+    <OutputClientPort>2</OutputClientPort>
+    <InputNetworkPort>5</InputNetworkPort>
+    <OutputNetworkPort>3</OutputNetworkPort>
+  </defaultNode>
+  <node1>
+    <InputClientPort>4</InputClientPort>
+    <OutputClientPort>2</OutputClientPort>
+    <InputNetworkPort>5</InputNetworkPort>
+    <OutputNetworkPort>3</OutputNetworkPort>
+  </node1>
+  <node2>
+    <InputClientPort>4</InputClientPort>
+    <OutputClientPort>2</OutputClientPort>
+    <InputNetworkPort>5</InputNetworkPort>
+    <OutputNetworkPort>3</OutputNetworkPort>
+  </node2>
+  <node3>
+    <InputClientPort>4</InputClientPort>
+    <OutputClientPort>2</OutputClientPort>
+    <InputNetworkPort>5</InputNetworkPort>
+    <OutputNetworkPort>3</OutputNetworkPort>
+  </node3>
+  <node4>
+    <InputClientPort>4</InputClientPort>
+    <OutputClientPort>2</OutputClientPort>
+    <InputNetworkPort>5</InputNetworkPort>
+    <OutputNetworkPort>3</OutputNetworkPort>
+  </node4>
 </network>
