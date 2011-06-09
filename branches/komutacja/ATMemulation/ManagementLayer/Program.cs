@@ -12,7 +12,16 @@ namespace ManagementLayer
     {
         static void Main(string[] args)
         {
-
+            try
+            {
+                CConstrains.domainName = args[0];
+                CConstrains.configFileURL = CConstrains.defaultconfigFileURL + CConstrains.domainName + CConstrains.xmlEnding;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR : Brak argumentu!");
+                Console.WriteLine(e.StackTrace);
+            }
             //while (true)
             //{
             //    String input = Console.ReadLine();
@@ -21,7 +30,7 @@ namespace ManagementLayer
             //        Console.WriteLine("zawiera " + input);
             //    }
             //}
-            Console.Title = "Management Layer";
+            Console.Title = "Management Layer domainName = " + CConstrains.domainName ;
             CMLConsole.Instance.consoleInit();
             
          }

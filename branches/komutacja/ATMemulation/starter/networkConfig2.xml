@@ -3,7 +3,7 @@
 <!-- schemat : numer noda; kliencki/sieciowy; numer portu-->
 <network>
   <managementLayerPort>50000</managementLayerPort>
-  <nccPort>500010</nccPort>
+  <nccPort>50010</nccPort>
   <neighbourNccPort>50009</neighbourNccPort>
   <link from="5;b;6" to="6;n;6"></link>
   <link from="6;n;6" to="7;c;1"></link>

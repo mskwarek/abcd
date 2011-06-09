@@ -9,7 +9,19 @@ namespace ControlPlane
     {
         static void Main(string[] args)
         {
-            Console.Title = "Control Plane";
+            try
+            {
+                CConstrains.domainName = args[0];
+                CConstrains.configFileURL = CConstrains.defaultconfigFileURL + CConstrains.domainName + CConstrains.xmlEnding;
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR : Brak argumentu");
+                Console.WriteLine(e.StackTrace);
+            }
+
+            Console.Title = "Control Plane domainName = " + CConstrains.domainName;
             if (CConfigReader.Instance.readConfig())
             {
                 CNetworkCallController.Instance.CNetworkCallControllerStart();

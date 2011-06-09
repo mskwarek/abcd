@@ -34,7 +34,7 @@ namespace ManagementLayer
 
         public bool readConfig()
         {
-            XmlTextReader textReader = new XmlTextReader("../../../starter/networkConfig.xml");
+            XmlTextReader textReader = new XmlTextReader(CConstrains.configFileURL);
             try
             {
                 while (textReader.Read())
@@ -46,10 +46,6 @@ namespace ManagementLayer
                     else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "nccPort")
                     {
                         CConstrains.NCCportNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
-                    }
-                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "domainName")
-                    {
-                        CConstrains.domainName = textReader.ReadElementContentAsString();
                     }
                     else if (textReader.NodeType == XmlNodeType.Element && textReader.Name =="link")
                     {

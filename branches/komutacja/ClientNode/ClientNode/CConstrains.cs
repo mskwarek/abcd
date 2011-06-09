@@ -12,8 +12,9 @@ namespace ClientNode
         public static int nodeNumber;
         public  const String nodeType = "ClientNode";
         public static List<Thread> threadList = new List<Thread>();
-        public static String configFileURL = "../../../../ATMemulation/starter/networkConfig.xml";
-        public static String defaultConfigFileURL = "../../defaultConfig.xml";
+        public static String defaultconfigFileURL = "../../../../ATMemulation/starter/networkConfig";
+        public static String configFileURL; // = "../../defaultConfig.xml";
+        public static String xmlEnding = ".xml";
         public static string ipAddress = "127.0.0.1";
         public static int managementLayerPort; //= 49999;
         public static int ControlPlanePortNumber;// = 50009;

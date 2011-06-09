@@ -43,7 +43,7 @@ namespace ClientNode
             else
             {
                 Console.WriteLine("ERROR : nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
-                textReader = new XmlTextReader(CConstrains.defaultConfigFileURL);
+                textReader = new XmlTextReader(CConstrains.configFileURL);
             }
 
             try
@@ -58,10 +58,7 @@ namespace ClientNode
                     {
                         CConstrains.ControlPlanePortNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
                     }
-                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "domainName")
-                    {
-                        CConstrains.domainName = textReader.ReadElementContentAsString();
-                    }
+                    
                     if (textReader.NodeType == XmlNodeType.Element && textReader.Name == ("node" + CConstrains.nodeNumber))
                     {
                         while (textReader.Read())
@@ -72,18 +69,18 @@ namespace ClientNode
                             { CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString()); }
                         }
                     }
-                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "defaultNode")
-                    {
-                        Console.WriteLine("zaczytałem default");
-                        while (textReader.Read())
-                        {
-                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
-                            { CConstrains.inputPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
-                            { CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                    //else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "defaultNode")
+                    //{
+                    //    Console.WriteLine("zaczytałem default");
+                    //    while (textReader.Read())
+                    //    {
+                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
+                    //        { CConstrains.inputPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
+                    //        { CConstrains.outputPortNumber = Convert.ToInt16(textReader.ReadString()); }
                      
-                        }
-                    }
+                    //    }
+                    //}
                 }
                 textReader.Close();
                 Console.WriteLine("Config loaded. " + showConfig());
