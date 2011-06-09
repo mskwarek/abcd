@@ -9,6 +9,7 @@ namespace ControlPlane
     {
         static void Main(string[] args)
         {
+            Console.Title = "Control Plane";
             CNetworkCallController.Instance.CNetworkCallControllerStart();
         }
     }

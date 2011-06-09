@@ -60,6 +60,17 @@ namespace NetworkNode
                 }
                 else
                 {
+                    Console.WriteLine("<-- CNetworkPortIn :  RECIEVED DATA");
+                    List<byte> lista = new List<byte>();
+                    lista = dane.getCUserData().getInformation();
+                    Console.WriteLine(" *** ");
+                    foreach (byte b in lista)
+                    {
+                        Console.Write(b + " ");
+                    }
+                    Console.WriteLine(" *** ");
+
+
                     queue.Enqueue(dane);
                     Console.WriteLine(dane);
                     Thread t2 = new Thread(new ThreadStart(receiveData));
