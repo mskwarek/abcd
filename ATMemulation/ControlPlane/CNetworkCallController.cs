@@ -108,13 +108,17 @@ namespace ControlPlane
                 }
                 else if (dane.pdu.RequestIdentifier.StartsWith("NetworkCallCoordination"))
                 {
+
                     bool exist = false;
+                    int nodeNumber=0;
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
+
                     {
                         if (d.ContainsKey("NetworkCallCoordination"))
                         {
-                            int nodeNumber = (int)d["ToNode"];
-                            foreach (Data.CPNNITable t in PNNIList)
+
+                            nodeNumber = (int)d["ToNode"];
+            foreach (Data.CPNNITable t in PNNIList)
                             {
                                 if (t.NodeNumber == nodeNumber)
                                 {
@@ -129,7 +133,25 @@ namespace ControlPlane
                     }
                     if (!exist)
                         downStream.WriteLine("Rejected");
+      else
+                    {
+                        int borderNodeNumber=0;
+                        foreach (Data.CPNNITable t in PNNIList)
+                        {
+                            if (t.NodeType.Equals("border"))
+                            {
+                                borderNodeNumber = t.NodeNumber;
+                                
+                                break; //bo i tak jeden border
+                            }
+                        }
+
+
+                        ConnectionRequest(borderNodeNumber, nodeNumber);
+                    }
                 }
+
+
                 Console.WriteLine(dane.pdu.RequestIdentifier);
                 Thread.Sleep(1000);
             }
@@ -178,9 +200,22 @@ namespace ControlPlane
                 StreamReader sr = new StreamReader(stream);
                 String responseFromNCC = sr.ReadLine();
                 client.Close();
-                if(responseFromNCC.Equals("Confirmation"))
+                if (responseFromNCC.Equals("Confirmation"))
+                {
+                    int borderNodeNumber = 0;
+                    foreach (Data.CPNNITable t in PNNIList)
+                    {
+                        if (t.NodeType.Equals("border"))
+                        {
+                            borderNodeNumber = t.NodeNumber;
+
+                            break; //bo i tak jeden border
+                        }
+                    }
+                    ConnectionRequest(fromNode, borderNodeNumber);
                     break;
-                else if(responseFromNCC.Equals("Rejected"))
+                }
+                else if (responseFromNCC.Equals("Rejected"))
                     continue;
 
 

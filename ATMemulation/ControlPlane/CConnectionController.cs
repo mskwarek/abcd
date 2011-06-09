@@ -57,7 +57,7 @@ namespace ControlPlane
 
         public bool ConnectionRequestIn(int fromNode, int toNode)
         {
-            if (ConnectionRequestOut(fromNode, toNode))
+            if (ConnectionRequestOut(fromNode, toNode)!=null)
                 return true;
             else
                 return false;
@@ -66,7 +66,7 @@ namespace ControlPlane
         //metoda zadajaca zestawienia polaczenia. uzywana w trybie hierarchicznym
         //parametry: para SNP
         //zwraca: polaczenie podsieciowe
-        public bool ConnectionRequestOut(int SNP_s, int SNP_d)
+        public Object ConnectionRequestOut(int SNP_s, int SNP_d)
         {
             RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
             if (route != null && route.Connections.Count != 0)
@@ -94,7 +94,7 @@ namespace ControlPlane
                         link = links[i];
                         LinkConnectionDeallocation(link);
                     }
-                    return false;
+                    return null;
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace ControlPlane
                 }
             }
             else
-                return false;
+                return null;
             
         }
 
