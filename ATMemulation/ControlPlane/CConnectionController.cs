@@ -87,10 +87,13 @@ namespace ControlPlane
 
         public bool ConnectionRequestIn(int fromNode, int toNode)
         {
+
             if (ConnectionRequestOut(fromNode, toNode))
                 return true;
+       
             else
                 return false;
+            
         }
 
         //metoda zadajaca zestawienia polaczenia. uzywana w trybie hierarchicznym

@@ -61,22 +61,47 @@ namespace ControlPlane
                 {
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
                     {
-                        if (d.ContainsKey("CallRequest"))
-                        {
-                            int fromNode = Convert.ToInt16(d["FromNode"]);
-                            int toNode = Convert.ToInt16(d["ToNode"]);
-                            //Metoda zlecająca CC ustanowienie połączenia.
-                            if (ConnectionRequest(fromNode, toNode))
-                            {
-                                downStream.WriteLine("OK");
-                                downStream.Flush();
-                            }
-                            else
-                            {
-                                downStream.WriteLine("ERROR");
-                                downStream.Flush();
-                            }
-                        }
+                      if (d.ContainsKey("CallRequest"))
+　　　　　　　　　　　　{
+　　　　　　　　　　　　　　int fromNode = Convert.ToInt16(d["FromNode"]);
+　　　　　　　　　　　　　　int toNode = Convert.ToInt16(d["ToNode"]);
+　　　　　　　　　　　　　　bool exists=false;
+　　　　　　　　　　　　　　foreach ( Data.CPNNITable t in PNNIList)
+　　　　　　　　　　　　　　{
+　　　　　　　　　　　　　　　　if (t.NodeNumber == toNode)
+　　　　　　　　　　　　　　　　　　exists = true;
+　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　if (exists)
+　　　　　　　　　　　　　　{
+
+
+　　　　　　　　　　　　　　　　if (ConnectionRequest(fromNode, toNode))
+　　　　　　　　　　　　　　　　{
+　　　　　　　　　　　　　　　　　　downStream.WriteLine("OK");
+　　　　　　　　　　　　　　　　　　downStream.Flush();
+　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　　　else
+　　　　　　　　　　　　　　　　{
+　　　　　　　　　　　　　　　　　　downStream.WriteLine("ERROR");
+　　　　　　　　　　　　　　　　　　downStream.Flush();
+　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　else
+　　　　　　　　　　　　　　{
+
+　　　　　　　　　　　　　　　　if (NetworkCallCoordinationOut(fromNode, toNode))
+　　　　　　　　　　　　　　　　{
+　　　　　　　　　　　　　　　　　　downStream.WriteLine("OK");
+　　　　　　　　　　　　　　　　　　downStream.Flush();
+　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　　　else
+　　　　　　　　　　　　　　　　{
+　　　　　　　　　　　　　　　　　　downStream.WriteLine("ERROR");
+　　　　　　　　　　　　　　　　　　downStream.Flush();
+　　　　　　　　　　　　　　　　}
+　　　　　　　　　　　　　　}
+
+　　　　　　　　　　　　} 
                     }
                 }
                 else if (dane.pdu.RequestIdentifier.StartsWith("CallTeardown"))
@@ -136,11 +161,11 @@ namespace ControlPlane
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
 
                     {
-                        if (d.ContainsKey("NetworkCallCoordination"))
+                        if (d.ContainsKey("CallRequest"))
                         {
 
                             nodeNumber = (int)d["ToNode"];
-            foreach (Data.CPNNITable t in PNNIList)
+                            foreach (Data.CPNNITable t in PNNIList)
                             {
                                 if (t.NodeNumber == nodeNumber)
                                 {
@@ -155,7 +180,7 @@ namespace ControlPlane
                     }
                     if (!exist)
                         downStream.WriteLine("Rejected");
-      else
+                    else
                     {
                         int borderNodeNumber=0;
                         foreach (Data.CPNNITable t in PNNIList)
@@ -190,15 +215,18 @@ namespace ControlPlane
         {
 
             if (cCConectionController.ConnectionRequestIn(fromNode, toNode))
+            {
                 return true;
+            }
             else
+            {
                 return false;
-
+            }
         }
 
 
         //uzywane przy wielu domenach
-        public void NetworkCallCoordinationOut(int fromNode, int toNode)
+        public bool NetworkCallCoordinationOut(int fromNode, int toNode)
         {
             List<int> adjacentNCCs = CConstrains.NCCList;
             foreach (int NCC in adjacentNCCs)
@@ -221,7 +249,8 @@ namespace ControlPlane
                 Console.WriteLine(" --> Sending NetworkCallCordination" + msg + " to other NCC [" + CConstrains.NCCportNumber + "->" + NCC + "]");
                 StreamReader sr = new StreamReader(stream);
                 String responseFromNCC = sr.ReadLine();
-                client.Close();
+                Console.WriteLine(responseFromNCC);
+                //client.Close();
                 if (responseFromNCC.Equals("Confirmation"))
                 {
                     int borderNodeNumber = 0;
@@ -231,17 +260,18 @@ namespace ControlPlane
                         {
                             borderNodeNumber = t.NodeNumber;
 
-                            break; //bo i tak jeden border
+                            break ; //bo i tak jeden border
                         }
                     }
                     ConnectionRequest(fromNode, borderNodeNumber);
-                    break;
+                    return true;
                 }
                 else if (responseFromNCC.Equals("Rejected"))
+                    
                     continue;
             }
+            return false;
             
-        
         }
 
         // metoda zamieniajaca nazwe lokalna na identyfikator polaczenia 

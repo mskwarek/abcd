@@ -96,6 +96,7 @@ namespace ManagementLayer
                                        index = i;
                                        setNetworkConnections((Convert.ToInt16(d["NodeNumber"])),CNetworkConfiguration.Instance.linkList.ElementAt(i) );
                                    }
+
                                    if (index != -1)
                                    {
                                        Data.CLink link = CNetworkConfiguration.Instance.linkList.ElementAt(index);
@@ -104,7 +105,10 @@ namespace ManagementLayer
                                        Console.WriteLine("PNNIList  ADDED Client NODE");
                                        sendPNNIListToCP(PNNIList);
                                    }
+
                                }
+
+
 
                                downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK-;"+CConstrains.domainName);
                                downStream.Flush();
