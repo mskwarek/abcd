@@ -99,6 +99,9 @@ namespace ControlPlane
                     temp2.vci_s=VCItemp;
                     temp.vpi_d=VPItemp;
                     temp2.vpi_s=VPItemp;
+
+                    zbiortablic[connection.from.nodeNumber] = temp;
+                    zbiortablic[connection.to.nodeNumber] = temp2;
                     //listatablic[connection.from.nodeNumber].vci_d = VCItemp;
                     //listatablic[connection.to.nodeNumber].vci_s = VCItemp;
                     //listatablic[connection.from.nodeNumber].vpi_d = VPItemp;
