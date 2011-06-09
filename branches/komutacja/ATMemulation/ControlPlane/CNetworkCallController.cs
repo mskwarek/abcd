@@ -106,6 +106,29 @@ namespace ControlPlane
                         downStream.Flush();
                     }
                 }
+                else if (dane.pdu.RequestIdentifier.StartsWith("NetworkCallCoordination"))
+                {
+                    bool exist=false;
+                    foreach(Dictionary<String,Object> d in dane.pdu.variablebinding)
+                    {
+                        if(d.ContainsKey("NetworkCallCoordination"))
+                        {
+                            int nodeNumber=(int)d["ToNode"];
+                            foreach (Data.CPNNITable t in PNNIList)
+                            {
+                                if (t.NodeNumber == nodeNumber) 
+                                {
+                                    exist=true;
+                                    downStream.WriteLine("Confirmation");
+                                    break;
+                                }
+
+                            }
+                        }
+
+                    }
+                    if(!exist)
+                        downStream.WriteLine("Rejected");
                 Console.WriteLine(dane.pdu.RequestIdentifier);
                 Thread.Sleep(1000);
             }
@@ -130,9 +153,37 @@ namespace ControlPlane
 
 
         //uzywane przy wielu domenach
-        public void NetworkCallCoordinationOut()
-        { 
-            
+        public void NetworkCallCoordinationOut(int fromNode, int toNode)
+        {
+            List<int> adjacentNCCs = CConstrains.NCCList;
+            foreach (int NCC in adjacentNCCs)
+            {
+                TcpClient client = new TcpClient();
+                client.Connect(CConstrains.ipAddress, NCC);
+                NetworkStream stream = client.GetStream();
+                Dictionary<String, Object> pduDict = new Dictionary<String, Object>(){
+                    {"FromNode",fromNode},
+                    {"ToNode", toNode},
+                    {"CallRequest", null}
+                };
+                List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+                pduList.Add(pduDict);
+                CSNMPmessage msg = new Data.CSNMPmessage(pduList, null, null);
+                msg.pdu.RequestIdentifier = "NetworkCallCoordination:" + CConstrains.NCCportNumber;
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(stream, msg);
+                stream.Flush();
+                Console.WriteLine(" --> Sending NetworkCallCordination" + msg + " to other NCC [" + CConstrains.NCCportNumber + "->" + NCC + "]");
+                StreamReader sr = new StreamReader(stream);
+                String responseFromNCC = sr.ReadLine();
+                client.Close();
+                if(responseFromNCC.Equals("Confirmation"))
+                    break;
+                else if(responseFromNCC.Equals("Rejected"))
+                    continue;
+
+
+            }
             
         
         }
