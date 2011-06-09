@@ -40,12 +40,14 @@ namespace ClientNode
             List<byte> lista = new List<byte>();
             lista = data.getInformation();
 
+            Console.WriteLine(" *** ");
             foreach (byte b in lista)
             {
-                Console.WriteLine(" *** ");
+                
                 Console.Write(b + " ");
-                Console.WriteLine(" *** ");
             }
+            Console.WriteLine(" *** ");
+            
         }
 
         public int getPortNumber()

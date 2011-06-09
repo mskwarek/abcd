@@ -21,6 +21,7 @@ namespace ManagementLayer
             //        Console.WriteLine("zawiera " + input);
             //    }
             //}
+            Console.Title = "Management Layer";
             CMLConsole.Instance.consoleInit();
             
          }

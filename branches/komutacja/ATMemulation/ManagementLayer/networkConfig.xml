@@ -6,6 +6,6 @@
   <link from="1;c;1" to="2;n;1"></link>
   <link from="2;n;4" to="3;n;5"></link>
   <link from="3;n;2" to="4;c;1"></link>
-  <link from="2;n;5" to="5;n;3"></link>
-  <link from="5;n;3" to="3;n;6"></link>
+  <!--> <link from="2;n;5" to="5;n;3"></link>
+  <link from="5;n;3" to="3;n;6"></link> -->
 </network>

@@ -51,13 +51,14 @@ namespace  NetworkNode
             
 
             stream.Flush();
-
+            Console.WriteLine("***");
             foreach (byte b in lista)
             {
-                Console.WriteLine("***");
+
                 Console.Write(b + "  ");
-                Console.WriteLine("***");
+
             }
+            Console.WriteLine("***");
             return PORTNUMBER;
         }
     }

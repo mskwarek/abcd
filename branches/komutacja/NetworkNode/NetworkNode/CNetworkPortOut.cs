@@ -78,12 +78,12 @@ namespace NetworkNode
                 List<byte> lista = new List<byte>();
                 lista = data.getCUserData().getInformation();
 
+                Console.WriteLine(" *** ");
                 foreach (byte b in lista)
                 {
-                    Console.WriteLine(" *** ");
                     Console.Write(b + " ");
-                    Console.WriteLine(" *** ");
                 }
+                Console.WriteLine(" *** ");
 
             }
             catch (Exception e)
