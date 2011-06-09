@@ -257,7 +257,7 @@ namespace ControlPlane
             //to co trzeba, moze dodac do klasy route pole source i destination i napisac jakas metode?
             RouteEngine.Route route = CConnectionController.Instance.getRouteByIdentifier(CConnectionController.Instance.setIdentifier(source, destination));
 
-            if (route.Connections != null)
+            if (route != null && route.Connections != null)
             {
                 List<CLink> links = route.Connections;
                 int i = 0;

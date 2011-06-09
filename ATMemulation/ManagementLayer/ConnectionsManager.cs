@@ -96,15 +96,16 @@ namespace ManagementLayer
                                        index = i;
                                        setNetworkConnections((Convert.ToInt16(d["NodeNumber"])),CNetworkConfiguration.Instance.linkList.ElementAt(i) );
                                    }
+                                   if (index != -1)
+                                   {
+                                       Data.CLink link = CNetworkConfiguration.Instance.linkList.ElementAt(index);
+                                       //Wysylanie informacji o wezle klienckim
+                                       PNNIList.Add(new Data.CPNNITable(link.A.nodeNumber, link.A.portType, link.A.portNumber, link.B.nodeNumber, link.B.portType, link.B.portNumber, CConstrains.domainName, true));
+                                       Console.WriteLine("PNNIList  ADDED Client NODE");
+                                       sendPNNIListToCP(PNNIList);
+                                   }
                                }
-                               if (index != -1)
-                               {
-                                   Data.CLink link = CNetworkConfiguration.Instance.linkList.ElementAt(index);
-                                   //Wysylanie informacji o wezle klienckim
-                                   PNNIList.Add(new Data.CPNNITable(link.A.nodeNumber, link.A.portType, link.A.portNumber, link.B.nodeNumber, link.B.portType, link.B.portNumber,CConstrains.domainName, true));
-                                   Console.WriteLine("PNNIList  ADDED Client NODE");
-                                   sendPNNIListToCP(PNNIList);
-                               }
+
                                downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK-;"+CConstrains.domainName);
                                downStream.Flush();
                            }
@@ -301,6 +302,88 @@ namespace ManagementLayer
                 }
 
             }
+        }
+
+        // metoda zgłaszająca call request do NCC
+        public bool CallRequest(int fromNode, int toNode)
+        {
+
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, CConstrains.NCCportNumber);
+            NetworkStream stream = client.GetStream();
+
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                {"FromNode", fromNode},
+                {"ToNode",toNode},
+                {"CallRequest",null}
+                };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage msg = new Data.CSNMPmessage(pduList, null, null);
+            msg.pdu.RequestIdentifier = "CallRequest:" + fromNode;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("--> Sending CallRequest " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
+
+            StreamReader sr = new StreamReader(stream);
+            String responseFromCP = sr.ReadLine();
+            client.Close();
+
+
+            if (responseFromCP.Equals("OK"))
+            {
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
+                return false;
+            }
+
+
+        }
+        public bool CallTeardown(int fromNode, int toNode)
+        {
+
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, CConstrains.NCCportNumber);
+            NetworkStream stream = client.GetStream();
+
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                {"FromNode", fromNode},
+                {"ToNode",toNode},
+                {"CallTeardown",null}
+                };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage msg = new Data.CSNMPmessage(pduList, null, null);
+            msg.pdu.RequestIdentifier = "CallTeardown:" + fromNode;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("--> Sending CallTeardown " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
+
+            StreamReader sr = new StreamReader(stream);
+            String responseFromCP = sr.ReadLine();
+            client.Close();
+
+
+            if (responseFromCP.Equals("OK"))
+            {
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
+                return false;
+            }
+
+
         }
 
     

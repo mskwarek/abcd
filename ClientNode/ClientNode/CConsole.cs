@@ -50,7 +50,7 @@ namespace ClientNode
                     if (ConsoleInput.Equals("q"))
                     {
                         Console.WriteLine(exitMessage);
-                        //cpm.shutdownAllPorts();
+
                         Environment.Exit(1);
                     }
                     else if (ConsoleInput.StartsWith("start"))
@@ -65,8 +65,7 @@ namespace ClientNode
                     {
 
                         String[] command = ConsoleInput.Split(' ');
-                        //try
-                       // {
+
                         if (sender != null)
                         {
                             sender.Abort();
@@ -77,16 +76,6 @@ namespace ClientNode
                             Console.WriteLine("Węzeł obecnie nie nadaje");
                         }
                             
-                            // wywołanie metod związanych z zaprzestaniem nadawnia
-                            //int arg = Convert.ToInt32(command[1]);
-                           // cpm.stopSending(arg);
-
-                       // }
-                       // catch (Exception e)
-                       // {
-                       //     Console.WriteLine(" ERROR : argument nie jest liczbą");
-                      //      Console.WriteLine(e.StackTrace);
-                       // }
                     }
                     else if (ConsoleInput.StartsWith("show"))
                     {
@@ -105,13 +94,8 @@ namespace ClientNode
                         {
                             // wywołanie metod związanych z zestawieniem połączenia 
                             int arg1 = Convert.ToInt32(command[1]);
-                            //int arg2 = Convert.ToInt16(command[2]);
 
                             CPCC.Instance.CallRequest(CConstrains.nodeNumber, arg1);
-                            sender = new Thread(CSender.Instance.sendData);
-                            sender.Name = " CSender";
-                            sender.Start();
-
                         }
                         catch (Exception e)
                         {
@@ -150,15 +134,9 @@ namespace ClientNode
                             Console.WriteLine(e.StackTrace);
                         }
                     }
-
-
-
-                    /*else if (ConsoleInput.StartsWith("turnOn"))
-                    {
-                        CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);
-                    }*/
                     
-                    else Console.WriteLine(ConsoleInput);
+                    else 
+                        Console.WriteLine(ConsoleInput);
 
                 }
             
