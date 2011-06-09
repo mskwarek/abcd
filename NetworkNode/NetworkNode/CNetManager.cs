@@ -50,8 +50,8 @@ namespace NetworkNode
         public void fillTable(int portNumber, String nodeResponse, bool isActive)
         {
             String[] array = nodeResponse.Split(';');
-            Data.CPNNITable table = new Data.CPNNITable(CConstrains.nodeNumber, CConstrains.nodeType, portNumber, Convert.ToInt16(array[0]), array[1], Convert.ToInt16(array[2]), isActive);
-            Console.WriteLine("<-- RESPONSE FOR HELLO MSG RECIEVED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " "  + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive);
+            Data.CPNNITable table = new Data.CPNNITable(CConstrains.nodeNumber, CConstrains.nodeType, portNumber, Convert.ToInt16(array[0]), array[1], Convert.ToInt16(array[2]),array[3], isActive);
+            Console.WriteLine("<-- RESPONSE FOR HELLO MSG RECIEVED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " "  + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive + " " + table.DomainName );
 
             if (PNNIList.Contains(table))
             {
@@ -67,7 +67,7 @@ namespace NetworkNode
             else
             {
                 PNNIList.Add(table);
-                Console.WriteLine("PNNIList ADDED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " " + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive);
+                Console.WriteLine("PNNIList ADDED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " " + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive + " " + table.DomainName);
                 CManagementAgent.Instance.sendNodeActivityToML(PNNIList);
                 
             }

@@ -18,8 +18,10 @@ namespace NetworkNode
 
         private CPortManager()
         {
-            readConfig();
-            createPorts();
+            if (readConfig())
+            {
+                createPorts();
+            }
         }
 
         public static CPortManager Instance
@@ -31,16 +33,14 @@ namespace NetworkNode
         }
 
 
-        private void readConfig()
+        private bool readConfig()
         {
             XmlTextReader textReader;
-           
 
 
-            
-            if(File.Exists("../../config" + CConstrains.nodeNumber + ".xml" )) 
+            if (File.Exists(CConstrains.configFileURL))
             {
-                textReader = new XmlTextReader("../../config" + CConstrains.nodeNumber + ".xml");
+                textReader = new XmlTextReader(CConstrains.configFileURL);
             }
             else
             {
@@ -49,30 +49,56 @@ namespace NetworkNode
             }
 
             try
-            {   
+            {
                 while (textReader.Read())
                 {
-                    switch (textReader.NodeType)
+                    if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "managementLayerPort")
                     {
-                        case XmlNodeType.Element:
-                            switch (textReader.Name)
-                            {
-                                case "InputClientPort":
-                                    CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString());                              
-                                    continue;
-                                case "OutputClientPort":
-                                    CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString());
-                                    continue;
-                                case "InputNetworkPort":
-                                    CConstrains.inputNetworkPortNumber = Convert.ToInt16(textReader.ReadString());
-                                    continue;
-                                case "OutputNetworkPort":
-                                    CConstrains.outputNetworkPortNumber = Convert.ToInt16(textReader.ReadString());
-                                    continue;
-                            }
-                            break;
+                        CConstrains.managementLayerPort = Convert.ToInt32(textReader.ReadElementContentAsInt());
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "nccPort")
+                    {
+                        CConstrains.nccPort = Convert.ToInt32(textReader.ReadElementContentAsInt());
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "domainName")
+                    {
+                        CConstrains.domainName = textReader.ReadElementContentAsString();
+                    }
+                    if (textReader.NodeType == XmlNodeType.Element && textReader.Name == ("node" + CConstrains.nodeNumber))
+                    {
+                        while (textReader.Read())
+                        {
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
+                            { CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
+                            { CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputNetworkPort")
+                            { CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputNetworkPort")
+                            { CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                        
+                        }
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "defaultNode")
+                    {
+                        Console.WriteLine("zaczytałem default");
+                        while (textReader.Read())
+                        {
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
+                            { CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
+                            { CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputNetworkPort")
+                            { CConstrains.inputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputNetworkPort")
+                            { CConstrains.outputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
+
+                        }
                     }
                 }
+                textReader.Close();
+                Console.WriteLine("Config loaded. ");
+                return true;
             }
             catch (System.Exception e)
             {
@@ -80,7 +106,9 @@ namespace NetworkNode
                 sw.Write(e.StackTrace);
                 sw.Flush();
                 sw.Close();
+
                 Console.WriteLine("ERROR!!! nie ma pliku konfiguracyjnego");
+                return false;
             }
         }
 

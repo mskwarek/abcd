@@ -22,7 +22,7 @@ namespace NetworkNode
             }
             System.Console.WriteLine("Network Node!");
             Console.Title = "NetworkNode ID = " + CConstrains.nodeNumber;
-            
+            CPortManager cpm = CPortManager.Instance;
            
             CManagementAgent.Instance.resetCommutationTable();
             CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);

@@ -47,6 +47,10 @@ namespace ManagementLayer
                     {
                         CConstrains.NCCportNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
                     }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "domainName")
+                    {
+                        CConstrains.domainName = textReader.ReadElementContentAsString();
+                    }
                     else if (textReader.NodeType == XmlNodeType.Element && textReader.Name =="link")
                     {
                         //from
@@ -55,9 +59,11 @@ namespace ManagementLayer
 
                         if (fromArray[1] == "c") {fromArray[1] = "client";}
                         else if (fromArray[1] == "n") { fromArray[1] = "network"; }
+                        else if (fromArray[1] == "b") { fromArray[1] = "border"; }
 
                         if (toArray[1] == "c") { toArray[1] = "client"; }
                         else if (toArray[1] == "n") { toArray[1] = "network"; }
+                        else if (toArray[1] == "b") { toArray[1] = "border"; }
 
                         try
                         {
@@ -67,7 +73,10 @@ namespace ManagementLayer
 
                         try
                         {
+                            if(toArray[1] !="border")
+                            {
                             nodesType.Add(Convert.ToInt32(toArray[0]), toArray[1]);
+                            }
                         }
                         catch (Exception) { } 
 

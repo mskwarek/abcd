@@ -122,7 +122,10 @@ namespace ClientNode
 
             StreamReader sr = new StreamReader(stream);
             String dane = sr.ReadLine();
-            Console.WriteLine("<-- " + dane);
+
+            String[] array = dane.Split(';');
+            //CConstrains.domainName = array[1];
+            Console.WriteLine("<-- " + array[0] + " domainName : " +array[1] );
 
         }
 

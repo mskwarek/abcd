@@ -101,11 +101,11 @@ namespace ManagementLayer
                                {
                                    Data.CLink link = CNetworkConfiguration.Instance.linkList.ElementAt(index);
                                    //Wysylanie informacji o wezle klienckim
-                                   PNNIList.Add(new Data.CPNNITable(link.A.nodeNumber, link.A.portType, link.A.portNumber, link.B.nodeNumber, link.B.portType, link.B.portNumber, true));
+                                   PNNIList.Add(new Data.CPNNITable(link.A.nodeNumber, link.A.portType, link.A.portNumber, link.B.nodeNumber, link.B.portType, link.B.portNumber,CConstrains.domainName, true));
                                    Console.WriteLine("PNNIList  ADDED Client NODE");
                                    sendPNNIListToCP(PNNIList);
                                }
-                               downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK- ");
+                               downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK-;"+CConstrains.domainName);
                                downStream.Flush();
                            }
                            else

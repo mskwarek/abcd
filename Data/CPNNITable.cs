@@ -69,8 +69,15 @@ namespace Data
             set { _isNeighbourActive = value; }
         }
 
+        private string domainName;
 
-        public CPNNITable(int NodeNumber, String NodeType, int NodePortNumber, int NeighbourNodeNumber, String NeighbourNodeType,int NeighbourPortNumber ,bool isActive) 
+        public string DomainName
+        {
+            get { return domainName; }
+            set { domainName = value; }
+        }
+
+        public CPNNITable(int NodeNumber, String NodeType, int NodePortNumber, int NeighbourNodeNumber, String NeighbourNodeType,int NeighbourPortNumber ,string domainName,bool isActive) 
         {
             this.NodeNumber = NodeNumber;
             this.NodeType = NodeType;
@@ -78,6 +85,7 @@ namespace Data
             this.NeighbourNodeNumber = NeighbourNodeNumber;
             this.NeighbourNodeType = NeighbourNodeType;
             this.NeighbourPortNumberReciever = NeighbourPortNumber;
+            this.domainName = domainName;
             this.IsNeighbourActive = isActive;
         }
 
