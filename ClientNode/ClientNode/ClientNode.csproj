@@ -66,6 +66,7 @@
     <Compile Include="CManagementAgent.cs" />
     <Compile Include="CPCC.cs" />
     <Compile Include="CPortManager.cs" />
+    <Compile Include="CSender.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

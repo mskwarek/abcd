@@ -8,6 +8,7 @@ namespace ClientNode
     sealed class CConsole 
     {
         private String ConsoleInput;
+        Thread sender;
         private String helloMessage = "****************************************************************************** \n*\n*" 
                                        + " Hello in ClientNode. \n* ID = "+CConstrains.nodeNumber+ " To exit type 'q' " 
                                        +"\n*\n****************************************************************************** ";
@@ -55,35 +56,37 @@ namespace ClientNode
                     else if (ConsoleInput.StartsWith("start"))
                     {
                         // wywołanie metod związanych z nadawaniem 
-
-                        Data.CUserData data = new Data.CUserData();
-                        List<byte> temp = new List<byte>();
-                        System.Random x = new Random(System.DateTime.Now.Millisecond);
-                        for (int i = 0; i < 48; i++)
-                        {
-                            temp.Add((byte)x.Next(0, 127));        // dodawanie kolejnych bajtow do danych do wyslania
-                        }
-
-
-                        data.setInformation(temp);
-                        cpm.sendMsg(data);
+                        sender = new Thread(CSender.Instance.sendData);
+                        sender.Name = " CSender";
+                        sender.Start();
+                        
                     }
                     else if (ConsoleInput.StartsWith("stop"))
                     {
 
                         String[] command = ConsoleInput.Split(' ');
-                        try
+                        //try
+                       // {
+                        if (sender != null)
                         {
+                            sender.Abort();
+                            Console.WriteLine("Wstrzymywanie nadawania ");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Węzeł obecnie nie nadaje");
+                        }
+                            
                             // wywołanie metod związanych z zaprzestaniem nadawnia
-                            int arg = Convert.ToInt32(command[1]);
-                            cpm.stopSending(arg);
+                            //int arg = Convert.ToInt32(command[1]);
+                           // cpm.stopSending(arg);
 
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(" ERROR : argument nie jest liczbą");
-                            Console.WriteLine(e.StackTrace);
-                        }
+                       // }
+                       // catch (Exception e)
+                       // {
+                       //     Console.WriteLine(" ERROR : argument nie jest liczbą");
+                      //      Console.WriteLine(e.StackTrace);
+                       // }
                     }
                     else if (ConsoleInput.StartsWith("show"))
                     {
@@ -112,9 +115,6 @@ namespace ClientNode
                             Console.WriteLine(" ERROR : argument nie jest liczbą");
                             Console.WriteLine(e.StackTrace);
                         }
-                        
-
-
                     }
 
 

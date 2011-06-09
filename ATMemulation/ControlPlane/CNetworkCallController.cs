@@ -108,17 +108,17 @@ namespace ControlPlane
                 }
                 else if (dane.pdu.RequestIdentifier.StartsWith("NetworkCallCoordination"))
                 {
-                    bool exist=false;
-                    foreach(Dictionary<String,Object> d in dane.pdu.variablebinding)
+                    bool exist = false;
+                    foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
                     {
-                        if(d.ContainsKey("NetworkCallCoordination"))
+                        if (d.ContainsKey("NetworkCallCoordination"))
                         {
-                            int nodeNumber=(int)d["ToNode"];
+                            int nodeNumber = (int)d["ToNode"];
                             foreach (Data.CPNNITable t in PNNIList)
                             {
-                                if (t.NodeNumber == nodeNumber) 
+                                if (t.NodeNumber == nodeNumber)
                                 {
-                                    exist=true;
+                                    exist = true;
                                     downStream.WriteLine("Confirmation");
                                     break;
                                 }
@@ -127,8 +127,9 @@ namespace ControlPlane
                         }
 
                     }
-                    if(!exist)
+                    if (!exist)
                         downStream.WriteLine("Rejected");
+                }
                 Console.WriteLine(dane.pdu.RequestIdentifier);
                 Thread.Sleep(1000);
             }

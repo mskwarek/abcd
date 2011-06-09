@@ -59,7 +59,7 @@ namespace ClientNode
                     Console.Write(b + "  ");
                 }
                 Console.WriteLine("odebrałem");
-                Thread.Sleep(10000);
+                Thread.Sleep(5000);
                 }
 
         }
