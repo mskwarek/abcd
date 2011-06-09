@@ -66,8 +66,46 @@ namespace ClientNode
 
 
         }
-        public void CallTeardown()
-        {}
+        public bool CallTeardown(int fromNode, int toNode)
+        {
+
+            TcpClient client = new TcpClient();
+            client.Connect(CConstrains.ipAddress, CConstrains.ControlPlanePortNumber);
+            NetworkStream stream = client.GetStream();
+
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                {"FromNode", fromNode},
+                {"ToNode",toNode},
+                {"CallTeardown",null}
+                };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            CSNMPmessage msg = new Data.CSNMPmessage(pduList, null, null);
+            msg.pdu.RequestIdentifier = "CallTeardown:" + fromNode;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, msg);
+            stream.Flush();
+            Console.WriteLine("--> Sending CallTeardown " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
+
+            StreamReader sr = new StreamReader(stream);
+            String responseFromCP = sr.ReadLine();
+            client.Close();
+
+
+            if (responseFromCP.Equals("OK"))
+            {
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
+                return false;
+            }
+
+
+        }
 
     }
 }

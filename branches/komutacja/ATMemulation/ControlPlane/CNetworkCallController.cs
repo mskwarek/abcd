@@ -79,6 +79,28 @@ namespace ControlPlane
                         }
                     }
                 }
+                else if (dane.pdu.RequestIdentifier.StartsWith("CallTeardown"))
+                {
+                    foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
+                    {
+                        if (d.ContainsKey("CallTeardown"))
+                        {
+                            int fromNode = Convert.ToInt16(d["FromNode"]);
+                            int toNode = Convert.ToInt16(d["ToNode"]);
+                            //Metoda zlecająca CC rozlaczenie połączenia.
+                            if (CallTeardownOut(fromNode, toNode))
+                            {
+                                downStream.WriteLine("OK");
+                                downStream.Flush();
+                            }
+                            else
+                            {
+                                downStream.WriteLine("ERROR");
+                                downStream.Flush();
+                            }
+                        }
+                    }
+                }
                 else if (dane.pdu.RequestIdentifier.StartsWith("PNNIList ML"))
                 {
 
@@ -217,8 +239,6 @@ namespace ControlPlane
                 }
                 else if (responseFromNCC.Equals("Rejected"))
                     continue;
-
-
             }
             
         
@@ -229,7 +249,7 @@ namespace ControlPlane
         public void DirectoryRequest(string localName)
         { }
 
-        public void CallTeardownOut(int source, int destination)
+        public bool CallTeardownOut(int source, int destination)
         {
             
             //potrzeba metody ktora zamienii source i destination na cala sciezke od source do destination
@@ -237,17 +257,40 @@ namespace ControlPlane
             //to co trzeba, moze dodac do klasy route pole source i destination i napisac jakas metode?
             RouteEngine.Route route = CConnectionController.Instance.getRouteByIdentifier(CConnectionController.Instance.setIdentifier(source, destination));
 
-            List<CLink> links = route.Connections;
-            int i = 0;
-            CLink link;
-            do
+            if (route.Connections != null)
             {
-                link = links[i];
-                CLink temp;
-                temp = CConnectionController.Instance.LinkConnectionDeallocation(link);
-                i++;
-            } while (i < links.Count);
-                        
+                List<CLink> links = route.Connections;
+                int i = 0;
+                CLink link;
+                do
+                {
+                    link = links[i];
+                    CLink temp;
+                    temp = CConnectionController.Instance.LinkConnectionDeallocation(link);
+                    i++;
+                } while (i < links.Count);
+
+            }
+            else
+                return false;
+            List<CConnectionController.commutationEntry> commutationTables = CConnectionController.Instance.CommutationTables;
+            if (commutationTables.Count > 0)
+            {
+                int i = commutationTables.Count - 1;
+                CConnectionController.commutationEntry commutationEntry;
+                do
+                {
+                    commutationEntry = commutationTables[i];
+                    CConnectionController.Instance.removeConnection(commutationEntry);
+                    commutationTables.Remove(commutationEntry);
+                    i--;
+                } while (i >= 0);
+
+                CConnectionController.Instance.removeRouteByIdentifier(CConnectionController.Instance.setIdentifier(source, destination));
+                return true;
+            }
+            else
+                return false;
         }
     }
 }
