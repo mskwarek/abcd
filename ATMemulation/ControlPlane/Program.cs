@@ -10,7 +10,11 @@ namespace ControlPlane
         static void Main(string[] args)
         {
             Console.Title = "Control Plane";
-            CNetworkCallController.Instance.CNetworkCallControllerStart();
-        }
+            if (CConfigReader.Instance.readConfig())
+            {
+                CNetworkCallController.Instance.CNetworkCallControllerStart();
+            }
+            Console.ReadKey();            
+       }
     }
 }
