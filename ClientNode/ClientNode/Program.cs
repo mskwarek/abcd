@@ -14,6 +14,8 @@ namespace ClientNode
             try
             {
                 CConstrains.nodeNumber = Convert.ToInt32(args[0]);
+                CConstrains.domainName = args[1];
+                CConstrains.configFileURL = CConstrains.defaultconfigFileURL + CConstrains.domainName + CConstrains.xmlEnding;
             }
             catch (Exception e)
             {

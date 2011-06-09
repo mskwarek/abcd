@@ -45,7 +45,7 @@ namespace NetworkNode
             else
             {
                 Console.WriteLine("ERROR : nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
-                textReader = new XmlTextReader(CConstrains.defaultConfigFileURL);
+                textReader = new XmlTextReader(CConstrains.configFileURL);
             }
 
             try
@@ -60,28 +60,8 @@ namespace NetworkNode
                     {
                         CConstrains.nccPort = Convert.ToInt32(textReader.ReadElementContentAsInt());
                     }
-                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "domainName")
-                    {
-                        CConstrains.domainName = textReader.ReadElementContentAsString();
-                    }
                     if (textReader.NodeType == XmlNodeType.Element && textReader.Name == ("node" + CConstrains.nodeNumber))
                     {
-                        while (textReader.Read())
-                        {
-                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
-                            { CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
-                            { CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputNetworkPort")
-                            { CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                            if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputNetworkPort")
-                            { CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                        
-                        }
-                    }
-                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "defaultNode")
-                    {
-                        Console.WriteLine("zaczytałem default");
                         while (textReader.Read())
                         {
                             if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
@@ -92,9 +72,25 @@ namespace NetworkNode
                             { CConstrains.inputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
                             if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputNetworkPort")
                             { CConstrains.outputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
-
+                        
                         }
                     }
+                    //else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "defaultNode")
+                    //{
+                    //    Console.WriteLine("zaczytałem default");
+                    //    while (textReader.Read())
+                    //    {
+                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
+                    //        { CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
+                    //        { CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputNetworkPort")
+                    //        { CConstrains.inputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
+                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputNetworkPort")
+                    //        { CConstrains.outputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
+
+                    //    }
+                    //}
                 }
                 textReader.Close();
                 Console.WriteLine("Config loaded. ");

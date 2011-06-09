@@ -14,10 +14,12 @@ namespace NetworkNode
             try
             {
                 CConstrains.nodeNumber = Convert.ToInt32(args[0]);
+                CConstrains.domainName = args[1];
+                CConstrains.configFileURL = CConstrains.defaultconfigFileURL + CConstrains.domainName + CConstrains.xmlEnding;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Argument musi być liczbą!!");
+                Console.WriteLine("ERROR : Niepoprawny argument!!!");
                 Console.WriteLine(e.StackTrace);
             }
             System.Console.WriteLine("Network Node!");

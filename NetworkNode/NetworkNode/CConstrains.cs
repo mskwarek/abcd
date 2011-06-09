@@ -15,8 +15,9 @@ namespace NetworkNode
         public const String nodeType = "NetworkNode";
         public static string ipAddress = "127.0.0.1";
         public static int managementLayerPort;// = 49999;
-        public static String configFileURL = "../../../../ATMemulation/starter/networkConfig.xml";
-        public static String defaultConfigFileURL = "../../defaultConfig.xml";
+        public static String defaultconfigFileURL = "../../../../ATMemulation/starter/networkConfig";
+        public static String configFileURL; // = "../../defaultConfig.xml";
+        public static String xmlEnding = ".xml";
         public static int nccPort;// = 50008;
         public static string domainName;
         public static Dictionary<string, string> PortType = new Dictionary<string, string>()

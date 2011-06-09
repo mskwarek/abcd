@@ -22,10 +22,10 @@ namespace ControlPlane
 
         public bool readConfig()
         {
-            if(File.Exists("../../../starter/networkConfig.xml") )
+            if(File.Exists(CConstrains.configFileURL) )
             {
 
-            XmlTextReader textReader = new XmlTextReader("../../../starter/networkConfig.xml");
+            XmlTextReader textReader = new XmlTextReader(CConstrains.configFileURL);
             try
             {
                 while (textReader.Read())

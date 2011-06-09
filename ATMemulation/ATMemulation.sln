@@ -25,7 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteEngine", "RouteEngine\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "starter", "starter", "{4FDFB164-EC74-431B-8694-31D75AEF48AF}"
 	ProjectSection(SolutionItems) = preProject
-		starter\networkConfig.xml = starter\networkConfig.xml
+		starter\networkConfig1.xml = starter\networkConfig1.xml
+		starter\networkConfig2.xml = starter\networkConfig2.xml
 		starter\start.bat = starter\start.bat
 	EndProjectSection
 EndProject
