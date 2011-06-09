@@ -187,7 +187,51 @@ namespace ManagementLayer
                         }
                         else { Console.WriteLine("ERROR : Nie podałeś numeru węzła"); continue; }
                     }
+                    else if (ConsoleInput.StartsWith("rc"))
+                    {
+                        String[] command = ConsoleInput.Split(' ');
+                        if (command.Count() != 3)
+                        {
+                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                        }
 
+                        try
+                        {
+                            // wywołanie metod związanych z zestawieniem połączenia 
+                            int arg1 = Convert.ToInt32(command[1]);
+                            int arg2 = Convert.ToInt32(command[2]);
+
+                            ConnectionsManager.Instance.CallRequest(arg1, arg2);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(" ERROR : argument nie jest liczbą");
+                            Console.WriteLine(e.StackTrace);
+                        }
+                    }
+                    else if (ConsoleInput.StartsWith("ec"))
+                    {
+                        String[] command = ConsoleInput.Split(' ');
+                        if (command.Count() != 3)
+                        {
+                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                        }
+
+                        try
+                        {
+                            // wywołanie metod związanych z rozłączaniem połączenia 
+                            int arg1 = Convert.ToInt32(command[1]);
+                            int arg2 = Convert.ToInt32(command[2]);
+
+                            ConnectionsManager.Instance.CallTeardown(arg1, arg2);
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(" ERROR : argument nie jest liczbą");
+                            Console.WriteLine(e.StackTrace);
+                        }
+                    }
                     else Console.WriteLine(ConsoleInput);
 
                 }
