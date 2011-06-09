@@ -108,6 +108,40 @@ namespace ClientNode
                             //int arg2 = Convert.ToInt16(command[2]);
 
                             CPCC.Instance.CallRequest(CConstrains.nodeNumber, arg1);
+                            sender = new Thread(CSender.Instance.sendData);
+                            sender.Name = " CSender";
+                            sender.Start();
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(" ERROR : argument nie jest liczbą");
+                            Console.WriteLine(e.StackTrace);
+                        }
+                    }
+                    else if (ConsoleInput.StartsWith("ec"))
+                    {
+                        String[] command = ConsoleInput.Split(' ');
+                        if (command.Count() != 2)
+                        {
+                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                        }
+
+                        try
+                        {
+                            if (sender != null)
+                            {
+                                sender.Abort();
+                                Console.WriteLine("Wstrzymywanie nadawania ");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Węzeł obecnie nie nadaje");
+                            }
+                            // wywołanie metod związanych z rozłączaniem połączenia 
+                            int arg1 = Convert.ToInt32(command[1]);
+
+                            CPCC.Instance.CallTeardown(CConstrains.nodeNumber, arg1);
 
                         }
                         catch (Exception e)

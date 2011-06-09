@@ -12,13 +12,43 @@ namespace ControlPlane
 {
     class CConnectionController
     {
+        private static CConnectionController connectionController = new CConnectionController();
+
         private CLinkResourceManager cLinkResourceManager = CLinkResourceManager.Instance;
         private CRoutingController cRoutingController = CRoutingController.Instance;
 
         private Dictionary<int, RouteEngine.Route> establishedRoutes = new Dictionary<int, RouteEngine.Route>();
-        
-        private static CConnectionController connectionController= new CConnectionController();
-    
+
+        // numer polaczenia // Dict numer wezla + tablica komutacji
+        public struct commutationEntry
+        {
+            public int identifier;
+            public int nodeNumber;
+            public PortInfo portIn, portOut;
+
+            public commutationEntry(int identifier, int nodeNumber, PortInfo portIn, PortInfo portOut)
+            {
+                this.identifier = identifier;
+                this.portIn = portIn;
+                this.portOut = portOut;
+                this.nodeNumber = nodeNumber;
+            }
+        }
+
+        private List<commutationEntry> commutationTables = new List<commutationEntry>();
+
+        public List<commutationEntry> CommutationTables
+        {
+            get
+            {
+                return commutationTables;
+            }
+            set
+            {
+                commutationTables = value;
+            }
+        }
+
         Queue<int> VCIPole = new Queue<int>();
         Queue<int> VPIPole = new Queue<int>();
 
@@ -130,7 +160,9 @@ namespace ControlPlane
                             VCIOut = 0;
                             VPIOut = 0;
                         }
-                        addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut); 
+
+                        addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier); 
+                                                
                     }
                     Console.WriteLine(" Connection " + identifier + " established ");
                     return true;
@@ -192,12 +224,21 @@ namespace ControlPlane
                 return null;
         }
 
-        public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B)
+        public void removeRouteByIdentifier(int identifier)
+        {
+            if (establishedRoutes.ContainsKey(identifier))
+                establishedRoutes.Remove(identifier);
+            
+        }
+
+        public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B, int identifier)
         {
             Console.WriteLine("\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A);
             Console.WriteLine(" portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B);
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
+
+            commutationTables.Add(new commutationEntry(identifier, nodeNumber, portIn, portOut));
 
             Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
             {"from", portIn},
@@ -213,6 +254,30 @@ namespace ControlPlane
 
             Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
         }
+
+        public void removeConnection(commutationEntry commutationEntry)
+        {
+            Data.PortInfo portIn = commutationEntry.portIn;
+            Data.PortInfo portOut = commutationEntry.portOut;
+            int nodeNumber = commutationEntry.nodeNumber;
+            int identifier = commutationEntry.identifier;
+
+                Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+                {"from", portIn},
+                {"to", portOut},
+                {"remove", null}
+                };
+                List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+                pduList.Add(pduDict);
+                Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
+                dataToSend.pdu.RequestIdentifier = "REMOVE" + nodeNumber.ToString();
+
+                send(nodeNumber, dataToSend);
+
+                Console.WriteLine("node : " + nodeNumber + " from : " + portIn.getPortID() + " to : " + portOut.getPortID());
+            
+        }
+
         private void send(int nodeNumber, Data.CSNMPmessage msg)
         {
             int portNumber = 50000 + 100 * nodeNumber;

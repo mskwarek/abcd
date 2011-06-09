@@ -55,7 +55,7 @@ namespace LinkResourceManager
 
         public CLink SNPLinkConnectionDeallocation(CLink SNPtoSNP)
         {
-            if (!establishedLinksList.Contains(SNPtoSNP))
+            if (establishedLinksList.Contains(SNPtoSNP))
             {
                 Console.WriteLine("RLM: Deallocating connection ");
                 releaseCLink(SNPtoSNP);
