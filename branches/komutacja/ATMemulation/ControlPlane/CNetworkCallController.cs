@@ -82,7 +82,6 @@ namespace ControlPlane
                 else if (dane.pdu.RequestIdentifier.StartsWith("PNNIList ML"))
                 {
 
-
                     foreach (Data.CPNNITable t in dane.pdu.PNNIList)
                     {
                         if (PNNIList.Contains(t))

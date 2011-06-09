@@ -47,8 +47,7 @@ namespace ClientNode
             bf.Serialize(stream, msg);
             stream.Flush();
             Console.WriteLine("--> Sending CallRequest " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
-            
-            //TU JEST COŚ NIE TAK!!
+
             StreamReader sr = new StreamReader(stream);
             String responseFromCP = sr.ReadLine();
             client.Close();

@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CConfigReader.cs" />
     <Compile Include="CConnectionController.cs" />
     <Compile Include="CConstrains.cs" />
     <Compile Include="CDirectory.cs" />

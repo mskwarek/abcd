@@ -32,14 +32,22 @@ namespace ManagementLayer
             set { LinkList = value; }
         }
 
-        public void readConfig()
+        public bool readConfig()
         {
-            XmlTextReader textReader = new XmlTextReader("../../networkConfig.xml");
+            XmlTextReader textReader = new XmlTextReader("../../../starter/networkConfig.xml");
             try
             {
                 while (textReader.Read())
                 {
-                    if (textReader.NodeType == XmlNodeType.Element && textReader.Name =="link")
+                    if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "managementLayerPort")
+                    {
+                        CConstrains.LMportNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "nccPort")
+                    {
+                        CConstrains.NCCportNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
+                    }
+                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name =="link")
                     {
                         //from
                         String[] fromArray = textReader.GetAttribute(0).Split(';');
@@ -85,11 +93,13 @@ namespace ManagementLayer
                         Console.WriteLine("node : " + l.from.nodeNumber + " seems to be off");
                     }
                     
-                }//**/ 
+                }//**/
+                return true;
             }
             catch (System.Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+                return false;
             }
         }
         // metoda doadjąca połączenie fizyczne, używana przy zgłaszaniu sie nowego noda. 
