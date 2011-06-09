@@ -18,9 +18,7 @@ namespace RoutingController
 
         private CRoutingController()
         {
-            Thread t = new Thread(routingInfoListener);
-            t.Name = "routingInfoListener";
-            t.Start();
+
         }
 
         public static CRoutingController Instance
@@ -48,22 +46,7 @@ namespace RoutingController
             CShortestPathCalculatorWrapper.Instance.linkList = newLinkList;
         }
 
-        // listener nasluchuje komunikatow o routingu
-        private void routingInfoListener()
-        {
-            bool status = true;
-            IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);
-            TcpListener portListener = new TcpListener(ip, CConstrains.CPportNumber);
-            portListener.Start();
-            Console.WriteLine(" Control Plane nasluchuje na porcie : " + CConstrains.CPportNumber);
-
-            while (status)
-            {
-                TcpClient client = portListener.AcceptTcpClient();
-                new ClientHandler(client);
-            }
-
-        }
+      
        // na zapytanie zrodlo-cel odpowiada zbiorem polaczen niezbednych do osiagniecia celu ze zrodla
         public RouteEngine.Route RouteTableQuery(int source, int destination)
         {

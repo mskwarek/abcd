@@ -37,9 +37,9 @@ namespace ControlPlane
 
         public void CNetworkCallControllerStart()
         {
-            Thread t = new Thread(NCCListener);
-            t.Name = " Network Call Controller listener";
-            t.Start();
+           Thread t = new Thread(NCCListener);
+           t.Name = " Network Call Controller listener";
+           t.Start();
         
         }
         public void NCCListener() 

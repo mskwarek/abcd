@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Data.CAdministrationData" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAgAACiAoAAIAAAjIggAAhCAggEAAAAAEAAgACA=</HashCode>
+      <FileName>CAdministrationData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.CRC8" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAABAAAAAQgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CAdministrationData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.CCharacteristicData" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAQAAAAAAAAAAAAAgAgAQAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>CCharacteristicData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.CCommutationTable" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CCommutationTable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.CLink" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAIAAAAAAAAAgEAAAAwAACAAAAAAAAAAIAEAAAA=</HashCode>
+      <FileName>CLink.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Data.CLinkInfo" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAACAQAAAAA=</HashCode>
+      <FileName>CLinkInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.CPNNITable" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gCQIAKAAAAAAAAgAgAIAAAAAQAIAAIAiAAAAAAgAAgA=</HashCode>
+      <FileName>CPNNITable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Data.CSNMPmessage" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAiAAAAJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>CSNMPmessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.SNMPpdu" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABgQAAAAAAAAAAAAAAAAAABAAgAAQAAAAAAAAA=</HashCode>
+      <FileName>CSNMPmessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.SNMPpduResponse" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAgAAAAIAA=</HashCode>
+      <FileName>CSNMPmessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.CSNPP" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CSNPP.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.CUserData" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAAAABABAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>CUserData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.PortInfo" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAgAAEgAABAAAAABAAAIAAAAAAEAAAACA=</HashCode>
+      <FileName>PortInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Data.Contact" Collapsed="true">
+    <Position X="4.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CAdministrationData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Data.PT" Collapsed="true">
+    <Position X="8.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAADAAAAAAAAABAAAAAAAAAAAMAAAAAA=</HashCode>
+      <FileName>CAdministrationData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Data.CLP" Collapsed="true">
+    <Position X="3" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAAAAAA=</HashCode>
+      <FileName>CAdministrationData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Data.CRC8_POLY" Collapsed="true">
+    <Position X="6.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAACABAA=</HashCode>
+      <FileName>CAdministrationData.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
