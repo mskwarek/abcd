@@ -143,25 +143,81 @@ namespace ControlPlane
                         VPIs[a] = VPIPole.Dequeue();
                         VCIs[a] = VCIPole.Dequeue();
                     }
-                    
+
+
+                    int nodeNumber;
+                    int portIn;
+                    int portOut;
+                    int VPIIn;
+                    int VCIIn;
+                    int VPIOut;
+                    int VCIOut;
+
                     for ( int a = 0; a < links.Count - 1; a++)
                     {
-                        int nodeNumber = links[a].B.nodeNumber;
-                        int portIn = links[a].B.portNumber;
-                        int portOut = links[a+1].A.portNumber;
-                        int VPIIn = VPIs[a];
-                        int VCIIn = VCIs[a];
-                        int VPIOut = VPIs[a+1];
-                        int VCIOut = VCIs[a+1];
-                        if (a == 0 )
+                        if (links[a].A.portType != "client" ) 
                         {
-                            VCIIn = 0;
-                            VPIIn = 0;
+                             nodeNumber = links[a].A.nodeNumber;
+                             portIn = links[a].A.portNumber;
+                             portOut = links[a+1].A.portNumber;
+                             VPIIn = VPIs[a];
+                             VCIIn = VCIs[a];
+                             VPIOut = VPIs[a + 1];
+                             VCIOut = VCIs[a + 1];
+                            if (a == 0)
+                            {
+                                VCIIn = 0;
+                                VPIIn = 0;
+                            }
+                            if (a == links.Count - 2)
+                            {
+                                VCIOut = 0;
+                                VPIOut = 0;
+                            }
+                        
                         }
-                        if ( a == links.Count -2 )
+                        else if (links[a].B.portType != "client")
                         {
-                            VCIOut = 0;
-                            VPIOut = 0;
+                             nodeNumber = links[a].B.nodeNumber;
+                             portIn = links[a].B.portNumber;
+                             portOut = links[a + 1].B.portNumber;
+                             VPIIn = VPIs[a];
+                             VCIIn = VCIs[a];
+                             VPIOut = VPIs[a + 1];
+                             VCIOut = VCIs[a + 1];
+                            if (a == 0)
+                            {
+                                VCIIn = 0;
+                                VPIIn = 0;
+                            }
+                            if (a == links.Count - 2)
+                            {
+                                VCIOut = 0;
+                                VPIOut = 0;
+                            }
+
+                        }
+                        
+                        
+                        else
+                        {
+                             nodeNumber = links[a].B.nodeNumber;
+                             portIn = links[a].B.portNumber;
+                             portOut = links[a + 1].A.portNumber;
+                             VPIIn = VPIs[a];
+                             VCIIn = VCIs[a];
+                             VPIOut = VPIs[a + 1];
+                             VCIOut = VCIs[a + 1];
+                            if (a == 0)
+                            {
+                                VCIIn = 0;
+                                VPIIn = 0;
+                            }
+                            if (a == links.Count - 2)
+                            {
+                                VCIOut = 0;
+                                VPIOut = 0;
+                            }
                         }
 
                         addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier); 

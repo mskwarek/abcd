@@ -68,7 +68,7 @@ namespace ControlPlane
 　　　　　　　　　　　　　　bool exists=false;
 　　　　　　　　　　　　　　foreach ( Data.CPNNITable t in PNNIList)
 　　　　　　　　　　　　　　{
-　　　　　　　　　　　　　　　　if (t.NodeNumber == toNode)
+　　　　　　　　　　　　　　　　if (t.NodeNumber == toNode || t.NeighbourNodeNumber ==toNode)
 　　　　　　　　　　　　　　　　　　exists = true;
 　　　　　　　　　　　　　　}
 　　　　　　　　　　　　　　if (exists)
@@ -164,13 +164,14 @@ namespace ControlPlane
                         if (d.ContainsKey("CallRequest"))
                         {
 
-                            nodeNumber = (int)d["ToNode"];
+                            nodeNumber = Convert.ToInt32(d["ToNode"]);
                             foreach (Data.CPNNITable t in PNNIList)
                             {
-                                if (t.NodeNumber == nodeNumber)
+                                if (t.NeighbourNodeNumber == nodeNumber || t.NodeNumber == nodeNumber)
                                 {
                                     exist = true;
                                     downStream.WriteLine("Confirmation");
+                                    downStream.Flush();
                                     break;
                                 }
 
@@ -179,16 +180,20 @@ namespace ControlPlane
 
                     }
                     if (!exist)
+                    {
                         downStream.WriteLine("Rejected");
+                        downStream.Flush();
+
+                    }
                     else
                     {
-                        int borderNodeNumber=0;
+                        int borderNodeNumber = 0;
                         foreach (Data.CPNNITable t in PNNIList)
                         {
                             if (t.NodeType.Equals("border"))
                             {
                                 borderNodeNumber = t.NodeNumber;
-                                
+
                                 break; //bo i tak jeden border
                             }
                         }
