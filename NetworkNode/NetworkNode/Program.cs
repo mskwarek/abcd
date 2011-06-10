@@ -32,11 +32,11 @@ namespace NetworkNode
             while (true)
             {
                 String input = Console.ReadLine();
-                if (input.StartsWith("startHelloMsg"))
+                if (input.StartsWith("sh"))
                 {
                     CNetManager.Instance.init();
                 }
-                else if (input.StartsWith("stopHelloMsg"))
+                else if (input.StartsWith("sth"))
                 {
                     CNetManager.Instance.stopSending();
                 }

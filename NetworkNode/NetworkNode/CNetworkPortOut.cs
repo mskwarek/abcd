@@ -84,17 +84,18 @@ namespace NetworkNode
                     Console.Write(b + " ");
                 }
                 Console.WriteLine(" *** ");
-
-            }
+                }
             catch (Exception e)
             {
                 Console.WriteLine(base.PORTNUMBER + " is unreachable ");
-                CNetManager.Instance.fillTable(base.ID, "0;x;0", false);
-
+                CNetManager.Instance.fillTable(base.ID, "0;x;0;0", false);
+                //return PORTNUMBER;
+                
             }
 
-
             return PORTNUMBER;
+            
+            
         }
 
     }

@@ -290,6 +290,24 @@ namespace ControlPlane
             
         }
 
+        public bool findRouteForNode(int nodeNumber)
+        {
+
+            foreach (RouteEngine.Route r in establishedRoutes.Values)
+            {
+                foreach (CLink l in r.Connections)
+                {
+                    if (l.A.nodeNumber == nodeNumber || l.B.nodeNumber == nodeNumber)
+                    {
+                        CNetworkCallController.Instance.CallTeardownOut(r.Connections[0].A.nodeNumber, r.Connections[r.Connections.Count - 1].B.nodeNumber);
+                        CNetworkCallController.Instance.ConnectionRequest(r.Connections[0].A.nodeNumber, r.Connections[r.Connections.Count - 1].B.nodeNumber);
+                    }
+                }
+            }
+            return true;
+        }
+
+
         public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B, int identifier)
         {
             Console.WriteLine("\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A);
