@@ -44,11 +44,12 @@ namespace NetworkNode
                 try
                 {
                     Exception ex = new Exception();
-                    throw ex;
                 }
-                catch (Exception e)
+
+
+                catch (Exception)
                 {
-                    Console.WriteLine("ERROR : Brak zadanego wpisu w tablicy komutacji " + e.StackTrace);
+                    Console.WriteLine("ERROR : Brak zadanego wpisu w tablicy komutacji !!!" );
                 }
             }
             return portOut;

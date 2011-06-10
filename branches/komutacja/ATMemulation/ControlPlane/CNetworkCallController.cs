@@ -68,7 +68,9 @@ namespace ControlPlane
 　　　　　　　　　　　　　　bool exists=false;
 　　　　　　　　　　　　　　foreach ( Data.CPNNITable t in PNNIList)
 　　　　　　　　　　　　　　{
-　　　　　　　　　　　　　　　　if (t.NodeNumber == toNode || t.NeighbourNodeNumber ==toNode)
+
+　　　　　　　　　　　　　　　　if (t.NodeNumber == toNode || t.NeighbourNodeNumber == toNode)
+
 　　　　　　　　　　　　　　　　　　exists = true;
 　　　　　　　　　　　　　　}
 　　　　　　　　　　　　　　if (exists)
@@ -140,6 +142,7 @@ namespace ControlPlane
                                 PNNIList.ElementAt(index).IsNeighbourActive = t.IsNeighbourActive;
                                 CRoutingController.Instance.updateRCTable(t);
                                 Console.WriteLine("*** PNNIList Updated  " + PNNIList.ElementAt(index).NodeNumber + " " + PNNIList.ElementAt(index).NodeType + " ACTIVITY :  " + PNNIList.ElementAt(index).IsNeighbourActive);
+                        
                             }
                         }
                         else
@@ -147,7 +150,6 @@ namespace ControlPlane
                             PNNIList.Add(t);
                             CRoutingController.Instance.updateRCTable(t);
                             Console.WriteLine("PNNIList  ADDED : " + t.NodeNumber + " " + t.NodeType + " " + t.NodePortNumberSender + " " + t.NeighbourNodeNumber + " " + t.NeighbourNodeType + " " + t.NeighbourPortNumberReciever + " " + t.IsNeighbourActive);
-
                         }
                         downStream.WriteLine("--> SENDING RESPONSE : " + dane.pdu.RequestIdentifier + " -OK- ");
                         downStream.Flush();
@@ -167,7 +169,11 @@ namespace ControlPlane
                             nodeNumber = Convert.ToInt32(d["ToNode"]);
                             foreach (Data.CPNNITable t in PNNIList)
                             {
-                                if (t.NeighbourNodeNumber == nodeNumber || t.NodeNumber == nodeNumber)
+
+                                if (t.NodeNumber == nodeNumber && t.NeighbourNodeNumber== nodeNumber)  // a w wersji z projektu tak
+
+                       //         if (t.NeighbourNodeNumber == nodeNumber || t.NodeNumber == nodeNumber) w wersji 171 bylo tak
+
                                 {
                                     exist = true;
                                     downStream.WriteLine("Confirmation");
