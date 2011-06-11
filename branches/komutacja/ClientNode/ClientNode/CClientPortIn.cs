@@ -21,7 +21,7 @@ namespace ClientNode
         private TcpClient client;
         private NetworkStream clientStream;
         private int portNumber;
-        
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         public CClientPortIn(int id, Boolean busy, int systemPortNumber): base(id, busy){
             this.portNumber = systemPortNumber;
         
@@ -36,7 +36,9 @@ namespace ClientNode
 
         public void init() //metoda uruchamiająca nasłuchiwanie na porcie. 
         {
-            Console.WriteLine("Port o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + portNumber);
+            String text = "Port : " + base.ID + " Listening on : " + portNumber;
+            
+            logger.print(null,text, (int)Logger.CLogger.Modes.background );
             status = true;
             portListener = new TcpListener(ip, portNumber);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();   

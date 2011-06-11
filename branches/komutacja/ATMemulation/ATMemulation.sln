@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "starter", "starter", "{4FDF
 		starter\start.bat = starter\start.bat
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -143,6 +145,18 @@ Global
 		{DC7D3B5F-9BF1-4702-BEE2-0487C96A5291}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DC7D3B5F-9BF1-4702-BEE2-0487C96A5291}.Release|Win32.ActiveCfg = Release|Any CPU
 		{DC7D3B5F-9BF1-4702-BEE2-0487C96A5291}.Release|x86.ActiveCfg = Release|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Release|Win32.ActiveCfg = Release|Any CPU
+		{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
