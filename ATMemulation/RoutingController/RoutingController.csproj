@@ -56,6 +56,10 @@
       <Project>{F9CF54D3-ED5F-4C87-8C0C-8067E306CC5E}</Project>
       <Name>Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RouteEngine\RouteEngine.csproj">
       <Project>{DC7D3B5F-9BF1-4702-BEE2-0487C96A5291}</Project>
       <Name>RouteEngine</Name>

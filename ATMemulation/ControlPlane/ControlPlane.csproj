@@ -60,6 +60,10 @@
       <Project>{CC710602-216A-4B3E-A1E4-025C1524B37F}</Project>
       <Name>LinkResourceManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{BA23B88C-3F2E-4A29-9032-8AF7CB667AFE}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RouteEngine\RouteEngine.csproj">
       <Project>{DC7D3B5F-9BF1-4702-BEE2-0487C96A5291}</Project>
       <Name>RouteEngine</Name>
