@@ -14,14 +14,14 @@ namespace LinkResourceManager
     {
 
         private static CLinkResourceManager cLinkResourceManager = new CLinkResourceManager();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         private List<Data.CLinkInfo> allocatedSNPs = new List<Data.CLinkInfo>();
 
 
         private CLinkResourceManager()
         {
 
-            Console.WriteLine("CLinkResourceManager");
+            logger.print("CLinkResourceManager",null,(int)Logger.CLogger.Modes.constructor);
             
         }
 
@@ -43,7 +43,7 @@ namespace LinkResourceManager
         {
             if ( !allocatedSNPs.Contains(SNP) )
             {
-                Console.WriteLine("RLM: Reserving connection ");
+                logger.print("LRM","Reserving connection ",(int)Logger.CLogger.Modes.normal);
                 reserveSNP( SNP );
                 //CShortestPathCalculatorWrapper.Instance.reserveCLink(SNP);
 
@@ -57,7 +57,7 @@ namespace LinkResourceManager
         {
             if (allocatedSNPs.Contains(SNP))
             {
-                Console.WriteLine("RLM: Deallocating connection ");
+                logger.print("LRM", "Deallocating connection", (int)Logger.CLogger.Modes.normal);
                 releaseSNP(SNP);
                 //TODO: Powiadom RC o alokacji
                 //CShortestPathCalculatorWrapper.Instance.releaseCLink(SNP);

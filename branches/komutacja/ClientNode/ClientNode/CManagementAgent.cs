@@ -25,7 +25,7 @@ namespace ClientNode
        private TcpListener portListener;
        private TcpClient client;
        private NetworkStream clientStream;
-
+       private Logger.CLogger logger = Logger.CLogger.Instance;
        private CManagementAgent()
        {
            portNum = 50000 + CConstrains.nodeNumber * 100;
@@ -49,7 +49,7 @@ namespace ClientNode
         {
             portListener = new TcpListener(ip, portNum);  //listener na porcie danego węzła
             portListener.Start();
-            Console.WriteLine("*** SNMPMessageListener in ON ***");
+            logger.print("SNMPMessageListener",null,(int)Logger.CLogger.Modes.constructor);
             
             status = true;
 
@@ -57,7 +57,7 @@ namespace ClientNode
             {
                 client = portListener.AcceptTcpClient();
                 clientStream = client.GetStream();
-                Console.WriteLine("*** ML CONNECTED ***");
+                //Console.WriteLine("*** ML CONNECTED ***");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CSNMPmessage dane = (CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
@@ -75,13 +75,10 @@ namespace ClientNode
                 if (queue.Count != 0)
                 {
                     //obiekty w słowniku: [from = CPortInfo1][to = CPortInfo2][add = null]
-
                     Data.SNMPpdu pdu = queue.Dequeue().pdu;
 
                     foreach (Dictionary<String, Object> d in pdu.variablebinding)
-                    
                     {
-                        
                         if (d.ContainsKey("setTopologyConnection"))
                         {
                             //obsługa ustawienia portów wyjściowych.
@@ -99,11 +96,9 @@ namespace ClientNode
         public void sendHelloMsgToML(int nodeNumber)
         {
             Data.CSNMPmessage msg;
-
             TcpClient client = new TcpClient();
             client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
             NetworkStream stream = client.GetStream();
-
             Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
                 {"NodeNumber", nodeNumber},
                 {"helloMsg",null}
@@ -111,22 +106,16 @@ namespace ClientNode
             List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
             pduList.Add(pduDict);
             msg = new Data.CSNMPmessage(pduList, null, null);
-
-
             msg.pdu.RequestIdentifier = "helloMsgtoML : " + CConstrains.nodeNumber.ToString();
-
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("--> Sending helloMsg  " + msg + " to ML " + nodeNumber);
-
+            logger.print(null,"--> Sending helloMsg  " + msg + " to ML " + nodeNumber,(int)Logger.CLogger.Modes.normal);
             StreamReader sr = new StreamReader(stream);
             String dane = sr.ReadLine();
-
             String[] array = dane.Split(';');
             //CConstrains.domainName = array[1];
-            Console.WriteLine("<-- " + array[0] + " domainName : " +array[1] );
-
+            logger.print(null, "<-- " + array[0] + " domainName : " + array[1], (int)Logger.CLogger.Modes.normal);
         }
 
        
@@ -136,14 +125,12 @@ namespace ClientNode
             TcpClient client = new TcpClient();
             client.Connect(CConstrains.ipAddress,portNumber);
             NetworkStream stream = client.GetStream();
-
             CSNMPmessage msg = new CSNMPmessage(null, null, null);
             msg.pdu.RequestIdentifier = responseId;
-
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("--> Sending Respnse " + msg + " to ML");
+            logger.print(null,"--> Sending Respnse " + msg + " to ML",(int)Logger.CLogger.Modes.normal);
             client.Close();
         
         }

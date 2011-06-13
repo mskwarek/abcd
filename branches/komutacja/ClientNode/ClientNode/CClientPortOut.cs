@@ -19,7 +19,7 @@ namespace ClientNode
         private int portNumber;
         //konstruktor
         public CClientPortOut(int id, bool busy): base(id,busy){}
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         public void startPort(int portNumber)
         {
             this.portNumber = portNumber;
@@ -33,20 +33,18 @@ namespace ClientNode
             client.Connect(CConstrains.ipAddress, portNumber);
             NetworkStream stream = client.GetStream();
             BinaryFormatter bf = new BinaryFormatter();
-            Console.WriteLine("--> SENDING : " + data);
+            logger.print(null,"--> SENDING : " + data,(int)Logger.CLogger.Modes.normal);
             bf.Serialize(stream, data);
             stream.Flush();
 
             List<byte> lista = new List<byte>();
             lista = data.getInformation();
 
-            Console.WriteLine(" *** ");
             foreach (byte b in lista)
             {
                 
                 Console.Write(b + " ");
             }
-            Console.WriteLine(" *** ");
             
         }
 

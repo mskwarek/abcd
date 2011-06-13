@@ -22,6 +22,8 @@ namespace ManagementLayer
         
         };
 
+        private Logger.CLogger logger = Logger.CLogger.Instance;
+
         private CMLConsole()
         {
         }
@@ -37,7 +39,7 @@ namespace ManagementLayer
         public void consoleInit()
         {
             //CPortManager cpm = CPortManager.Instance;
-            Console.WriteLine(helloMessage);
+            logger.print(null,helloMessage,(int)Logger.CLogger.Modes.normal);
             CNetworkConfiguration cnc = CNetworkConfiguration.Instance;
             ConnectionsManager cm = ConnectionsManager.Instance;
 
@@ -48,24 +50,24 @@ namespace ManagementLayer
                 while (true)
                 {
 
-                    Console.Write(commandPrompt + " ");
+                    logger.print(null, commandPrompt + " ", (int)Logger.CLogger.Modes.normal);
                     ConsoleInput = Console.ReadLine();
                     if (ConsoleInput.Equals("q"))
                     {
-                        Console.WriteLine(exitMessage);
+                        logger.print(null, exitMessage, (int)Logger.CLogger.Modes.normal);
                         //cpm.shutdownAllPorts();
                         Environment.Exit(1);
                     }
                     else if (ConsoleInput.Equals("?"))
                     {
                         // pokazuje listę dostępnych poleceń
-                        Console.WriteLine("***\t Dostępne polecenia: \t***");
+                        logger.print(null, "***\t Dostępne polecenia: \t***", (int)Logger.CLogger.Modes.normal);
                         foreach (KeyValuePair<String, String> pair in cmdList)
                         {
 
                             Console.WriteLine("{0} \t {1}",
                             pair.Key,
-                            pair.Value);
+                            pair.Value );
                         }
 
                     }
@@ -86,13 +88,13 @@ namespace ManagementLayer
                             }
                             else
                             {
-                                Console.WriteLine("ERROR : Błędny argument");
+                                logger.print(null, "Błędny argument",(int)Logger.CLogger.Modes.error);
                                 continue;
                             }
                         }
                         else
                         {
-                            Console.WriteLine("ERROR : Brak podanego argumentu...");
+                            logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
                             continue;
                         }
 
@@ -116,14 +118,14 @@ namespace ManagementLayer
                                     //CShortestPathCalculatorWrapper.Instance.getShortestPath(args[0], args[1]);
 
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
-                                    Console.WriteLine("ERROR : Błędny argument " + e.Message);
+                                    logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
                                 }
                             }
-                            else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
+                            else { logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error); }
                         }
-                        else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
+                        else { logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error); }
 
                     }
 
@@ -144,14 +146,14 @@ namespace ManagementLayer
                                     // node number, port in port out
                                     cm.removeConnection(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
                                 }
-                                catch (Exception e)
+                                catch (Exception)
                                 {
-                                    Console.WriteLine("ERROR : Błędny argument " + e.Message);
+                                    logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
                                 }
                             }
-                            else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
+                            else { logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error); }
                         }
-                        else { Console.WriteLine("ERROR : Błęda liczba argumentów"); }
+                        else { logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error); }
 
                     }
                     else if (ConsoleInput.StartsWith("getConnections"))
@@ -167,9 +169,9 @@ namespace ManagementLayer
                                     args.Add(Convert.ToInt16(alt[i]));
                                 }
                             }
-                            catch (Exception e)
+                            catch (Exception)
                             {
-                                Console.WriteLine("ERROR : Błędny argument " + e.Message);
+                                logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
                             }
                             // usuwam powtarzające sie argumenty
                             int[] var = args.Distinct().ToArray();
@@ -179,20 +181,20 @@ namespace ManagementLayer
                             {
                                 if (cnc.checkFormula(a))
                                 {
-                                    Console.WriteLine("<-- Pobierasz dane z noda: " + args[0]);
+                                    logger.print(null,"<-- Pobierasz dane z noda: " + args[0],(int)Logger.CLogger.Modes.background);
                                     cm.getNodeCommutationTable(args[0]);
                                 }
                             }
 
                         }
-                        else { Console.WriteLine("ERROR : Nie podałeś numeru węzła"); continue; }
+                        else {logger.print(null,"Nie podałeś numeru węzła",(int)Logger.CLogger.Modes.error); continue; }
                     }
                     else if (ConsoleInput.StartsWith("rc"))
                     {
                         String[] command = ConsoleInput.Split(' ');
                         if (command.Count() != 3)
                         {
-                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                            logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
                         }
 
                         try
@@ -203,10 +205,10 @@ namespace ManagementLayer
 
                             ConnectionsManager.Instance.CallRequest(arg1, arg2);
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
-                            Console.WriteLine(" ERROR : argument nie jest liczbą");
-                            Console.WriteLine(e.StackTrace);
+                            logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
+                            //Console.WriteLine(e.StackTrace);
                         }
                     }
                     else if (ConsoleInput.StartsWith("ec"))
@@ -214,7 +216,7 @@ namespace ManagementLayer
                         String[] command = ConsoleInput.Split(' ');
                         if (command.Count() != 3)
                         {
-                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                            logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
                         }
 
                         try
@@ -228,17 +230,17 @@ namespace ManagementLayer
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(" ERROR : argument nie jest liczbą");
-                            Console.WriteLine(e.StackTrace);
+                            logger.print(null, "Błędny argument", (int)Logger.CLogger.Modes.error);
+                            //Console.WriteLine(e.StackTrace);
                         }
                     }
-                    else Console.WriteLine(ConsoleInput);
+                    else Console.WriteLine();
 
                 }
             }
             else
             {
-                Console.WriteLine("ERROR : nie zaczytana konfiguracja!!!");
+                logger.print(null, "BRAK KONFIGURACJI", (int)Logger.CLogger.Modes.error);
             }
         }
   

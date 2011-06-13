@@ -9,7 +9,7 @@ namespace ControlPlane
     public sealed class CConfigReader
     {
         static readonly CConfigReader instance = new CConfigReader();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         CConfigReader() { }
 
         public static CConfigReader Instance
@@ -50,7 +50,7 @@ namespace ControlPlane
                 Console.WriteLine(e.StackTrace);
                 return false;
             }
-          }else {Console.WriteLine("Nie znalazłem pliku konfiguracyjnego!!!");
+          }else {logger.print("readConfig","Nie znalazłem pliku konfiguracyjnego!!!",(int)Logger.CLogger.Modes.error);
           return false;
           }
         }
