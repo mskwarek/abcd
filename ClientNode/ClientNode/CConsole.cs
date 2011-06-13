@@ -32,20 +32,19 @@ namespace ClientNode
         {
             CPortManager cpm = CPortManager.Instance;
             CManagementAgent cma = CManagementAgent.Instance;
-
+            Logger.CLogger logger = Logger.CLogger.Instance;
             foreach (Thread t in CConstrains.threadList)
             {
                 t.Start(); 
             }
 
                 Console.Title = "ClientNode ID = " + CConstrains.nodeNumber;
-                Console.WriteLine("Wszystkie porty wstały");
                 CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);
-                Console.WriteLine(helloMessage);
+                logger.print(null,helloMessage,(int)Logger.CLogger.Modes.normal);
                 while (true)
                 {
 
-                    Console.Write(commandPrompt + " ");
+                    logger.print(null, commandPrompt + " ", (int)Logger.CLogger.Modes.normal) ;
                     ConsoleInput = Console.ReadLine();
                     if (ConsoleInput.Equals("q"))
                     {
@@ -69,11 +68,12 @@ namespace ClientNode
                         if (sender != null)
                         {
                             sender.Abort();
-                            Console.WriteLine("Wstrzymywanie nadawania ");
+                            logger.print(null,"Wstrzymanie nadawania", (int)Logger.CLogger.Modes.normal);
+                
                         }
                         else
                         {
-                            Console.WriteLine("Węzeł obecnie nie nadaje");
+                            logger.print(null,"Aktualnie nie nadajesz", (int)Logger.CLogger.Modes.normal);
                         }
                             
                     }
@@ -87,7 +87,9 @@ namespace ClientNode
                         String[] command = ConsoleInput.Split(' ');
                         if (command.Count() != 2)
                         {
-                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                            logger.print(null,"Błędna liczba argumentów", (int)Logger.CLogger.Modes.error);
+                
+                            
                         }
                         
                         try
@@ -99,8 +101,7 @@ namespace ClientNode
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(" ERROR : argument nie jest liczbą");
-                            Console.WriteLine(e.StackTrace);
+                            logger.print(null,"Agrument nie jest liczbą", (int)Logger.CLogger.Modes.error);
                         }
                     }
                     else if (ConsoleInput.StartsWith("ec"))
@@ -108,7 +109,7 @@ namespace ClientNode
                         String[] command = ConsoleInput.Split(' ');
                         if (command.Count() != 2)
                         {
-                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                            logger.print(null, "Błędna liczba argumentów", (int)Logger.CLogger.Modes.error);
                         }
 
                         try
@@ -116,11 +117,11 @@ namespace ClientNode
                             if (sender != null)
                             {
                                 sender.Abort();
-                                Console.WriteLine("Wstrzymywanie nadawania ");
+                                logger.print(null, "Wstrzymanie nadawania", (int)Logger.CLogger.Modes.normal);
                             }
                             else
                             {
-                                Console.WriteLine("Węzeł obecnie nie nadaje");
+                                logger.print(null, "Aktualnie nie nadajesz", (int)Logger.CLogger.Modes.normal);
                             }
                             // wywołanie metod związanych z rozłączaniem połączenia 
                             int arg1 = Convert.ToInt32(command[1]);
@@ -130,8 +131,7 @@ namespace ClientNode
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(" ERROR : argument nie jest liczbą");
-                            Console.WriteLine(e.StackTrace);
+                            logger.print(null, "Agrument nie jest liczbą", (int)Logger.CLogger.Modes.error);
                         }
                     }
                     

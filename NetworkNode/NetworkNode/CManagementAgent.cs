@@ -17,7 +17,7 @@ namespace NetworkNode
        static readonly CManagementAgent instance = new CManagementAgent();
 
        public Queue<Data.CSNMPmessage> queue = new Queue<Data.CSNMPmessage>();
-       
+       private Logger.CLogger logger = Logger.CLogger.Instance;
        private bool status;
        private IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
        private int portNum;
@@ -88,7 +88,7 @@ namespace NetworkNode
             {
                 client = portListener.AcceptTcpClient();
                 clientStream = client.GetStream();
-                Console.WriteLine("*** ML CONNECTED ***");
+                //Console.WriteLine("*** ML CONNECTED ***");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
@@ -127,7 +127,7 @@ namespace NetworkNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("--> Sending Respnse " + msg + " to ML");
+            logger.print(null,"--> Sending Respnse " + msg + " to ML",(int)Logger.CLogger.Modes.normal);
         }
 
         // metoda kontaktująca sie z ML aby zestawić nowe fizyczne połączenie w sieci. 
@@ -187,14 +187,14 @@ namespace NetworkNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("--> Sending helloMsg  " + msg + " to ML " + nodeNumber );
+            logger.print(null,"--> Sending helloMsg  " + msg + " to ML " + nodeNumber,(int)Logger.CLogger.Modes.background );
 
             StreamReader sr = new StreamReader(stream);
             String dane = sr.ReadLine();
 
             String[] array = dane.Split(';');
             //CConstrains.domainName = array[1];
-            Console.WriteLine("<-- " + array[0] + " domainName : " + array[1]);
+            logger.print(null, "<-- " + array[0] + " domainName : " + array[1],(int)Logger.CLogger.Modes.background);
         }
 
         public void sendNodeActivityToML(List<Data.CPNNITable> lista)
@@ -217,20 +217,50 @@ namespace NetworkNode
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(stream, msg);
                 stream.Flush();
-                Console.WriteLine("--> Sending NodeActivityMsg  " + msg + " to ML ");
+                logger.print(null,"--> Sending NodeActivityMsg  " + msg + " to ML ",(int)Logger.CLogger.Modes.background);
 
                 StreamReader sr = new StreamReader(stream);
                 String dane = sr.ReadLine();
-                Console.WriteLine("<-- " + dane);
+                logger.print(null,"<-- " + dane, (int)Logger.CLogger.Modes.background);
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR : ML niesdostępny" );
+                logger.print("SendNodeActivityToML","ML niesdostępny",(int)Logger.CLogger.Modes.error );
             }
         }
 
-        
 
+        public void sendNodeActivityToCP(List<Data.CPNNITable> lista)
+        {
+            Data.CSNMPmessage msg;
+
+            TcpClient client = new TcpClient();
+            try
+            {
+                client.Connect(CConstrains.ipAddress, CConstrains.nccPort);
+                NetworkStream stream = client.GetStream();
+
+
+                msg = new Data.CSNMPmessage(null, null, null);
+                msg.pdu.PNNIList = lista;
+
+
+                msg.pdu.RequestIdentifier = "NodeActivity : " + CConstrains.nodeNumber.ToString();
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(stream, msg);
+                stream.Flush();
+                logger.print(null, "--> Sending NodeActivityMsg  " + msg + " to CP ", (int)Logger.CLogger.Modes.background);
+
+                StreamReader sr = new StreamReader(stream);
+                String dane = sr.ReadLine();
+                logger.print(null, "<-- " + dane, (int)Logger.CLogger.Modes.background);
+            }
+            catch (Exception e)
+            {
+                logger.print("SendNodeActivityToML", "CP niesdostępny", (int)Logger.CLogger.Modes.error);
+            }
+        }
 
 
 

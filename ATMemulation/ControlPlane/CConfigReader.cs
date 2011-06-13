@@ -50,7 +50,11 @@ namespace ControlPlane
                 Console.WriteLine(e.StackTrace);
                 return false;
             }
-          }else {Console.WriteLine("Nie znalazłem pliku konfiguracyjnego!!!");
+            }
+            else
+            {
+                Logger.CLogger.Instance.print(null, "Nie znalazłem pliku konfiguracyjnego!!!", (int)Logger.CLogger.Modes.error);
+              
           return false;
           }
         }
