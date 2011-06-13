@@ -4,7 +4,6 @@
 <network>
   <managementLayerPort>49999</managementLayerPort>
   <nccPort>50009</nccPort>
-  <CloudPort>50000</CloudPort>
   <neighbourNccPort>50010</neighbourNccPort>
   <link from="1;c;1" to="2;n;1"></link>
   <link from="2;n;6" to="3;n;6"></link>

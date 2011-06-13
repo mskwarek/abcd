@@ -43,10 +43,6 @@ namespace ManagementLayer
                     {
                         CConstrains.LMportNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
                     }
-                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "CloudPort")
-                    {
-                        CConstrains.CloudPortNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
-                    }
                     else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "nccPort")
                     {
                         CConstrains.NCCportNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());

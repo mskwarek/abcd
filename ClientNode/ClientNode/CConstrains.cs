@@ -18,7 +18,6 @@ namespace ClientNode
         public static string ipAddress = "127.0.0.1";
         public static int managementLayerPort; //= 49999;
         public static int ControlPlanePortNumber;// = 50009;
-        public static int CloudPortNumber;
         public static string domainName;
 
     }

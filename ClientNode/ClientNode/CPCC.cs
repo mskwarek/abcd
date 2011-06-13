@@ -13,7 +13,7 @@ namespace ClientNode
     {
 
         static CPCC instance = new CPCC();
-        private Logger.CLogger logger = Logger.CLogger.Instance;
+
         private CPCC()
         { }
 
@@ -46,9 +46,8 @@ namespace ClientNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            
-            logger.print("CallRequest", "--> Sending CallRequest " + msg + " to NCC [" + fromNode + "->" + toNode + "]", (int)Logger.CLogger.Modes.normal);
-           
+            Console.WriteLine("--> Sending CallRequest " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
+
             StreamReader sr = new StreamReader(stream);
             String responseFromCP = sr.ReadLine();
             client.Close();
@@ -56,14 +55,12 @@ namespace ClientNode
 
             if (responseFromCP.Equals("OK"))
             {
-                //Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
-
-                logger.print(null, "<-- " + responseFromCP + " <-- RESPONSE FROM NCC", (int)Logger.CLogger.Modes.normal);
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
                 return true;
             }
             else
             {
-                logger.print(null, "<-- " + responseFromCP + " <-- RESPONSE FROM NCC", (int)Logger.CLogger.Modes.error);
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
                 return false;
             }
 
@@ -89,7 +86,8 @@ namespace ClientNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            logger.print("CallTeardown", "--> Sending CallTeardown " + msg + " to NCC [" + fromNode + "->" + toNode + "]", (int)Logger.CLogger.Modes.normal);
+            Console.WriteLine("--> Sending CallTeardown " + msg + " to NCC [" + fromNode + "->" + toNode + "]");
+
             StreamReader sr = new StreamReader(stream);
             String responseFromCP = sr.ReadLine();
             client.Close();
@@ -97,12 +95,12 @@ namespace ClientNode
 
             if (responseFromCP.Equals("OK"))
             {
-                logger.print(null, "<-- " + responseFromCP + " <-- RESPONSE FROM NCC", (int)Logger.CLogger.Modes.normal);
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
                 return true;
             }
             else
             {
-                logger.print(null, "<-- " + responseFromCP + " <-- RESPONSE FROM NCC", (int)Logger.CLogger.Modes.error);
+                Console.WriteLine("<-- " + responseFromCP + " <-- RESPONSE FROM NCC");
                 return false;
             }
 

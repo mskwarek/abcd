@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using Data;
 
 namespace NetworkNode
 {
@@ -17,7 +18,7 @@ namespace NetworkNode
        static readonly CManagementAgent instance = new CManagementAgent();
 
        public Queue<Data.CSNMPmessage> queue = new Queue<Data.CSNMPmessage>();
-       private Logger.CLogger logger = Logger.CLogger.Instance;
+       
        private bool status;
        private IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
        private int portNum;
@@ -88,11 +89,12 @@ namespace NetworkNode
             {
                 client = portListener.AcceptTcpClient();
                 clientStream = client.GetStream();
-                //Console.WriteLine("*** ML CONNECTED ***");
+                Console.WriteLine("*** ML CONNECTED ***");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
                 Thread process = new Thread(new ThreadStart(processReceivedData));
+                process.Name = "Thread process data " + dane.pdu.RequestIdentifier;
                 process.Start();
                 
                 Thread.Sleep(1000);
@@ -127,7 +129,7 @@ namespace NetworkNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            logger.print(null,"--> Sending Respnse " + msg + " to ML",(int)Logger.CLogger.Modes.normal);
+            Console.WriteLine("--> Sending Response " + msg + " to ML");
         }
 
         // metoda kontaktująca sie z ML aby zestawić nowe fizyczne połączenie w sieci. 
@@ -187,14 +189,14 @@ namespace NetworkNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            logger.print(null,"--> Sending helloMsg  " + msg + " to ML " + nodeNumber,(int)Logger.CLogger.Modes.background );
+            Console.WriteLine("--> Sending helloMsg  " + msg + " to ML " + nodeNumber );
 
             StreamReader sr = new StreamReader(stream);
             String dane = sr.ReadLine();
 
             String[] array = dane.Split(';');
             //CConstrains.domainName = array[1];
-            logger.print(null, "<-- " + array[0] + " domainName : " + array[1],(int)Logger.CLogger.Modes.background);
+            Console.WriteLine("<-- " + array[0] + " domainName : " + array[1]);
         }
 
         public void sendNodeActivityToML(List<Data.CPNNITable> lista)
@@ -217,55 +219,43 @@ namespace NetworkNode
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(stream, msg);
                 stream.Flush();
-                logger.print(null,"--> Sending NodeActivityMsg  " + msg + " to ML ",(int)Logger.CLogger.Modes.background);
+                Console.WriteLine("--> Sending NodeActivityMsg  " + msg + " to ML ");
 
                 StreamReader sr = new StreamReader(stream);
                 String dane = sr.ReadLine();
-                logger.print(null,"<-- " + dane, (int)Logger.CLogger.Modes.background);
+                Console.WriteLine("<-- " + dane);
             }
             catch (Exception e)
             {
-                logger.print("SendNodeActivityToML","ML niesdostępny",(int)Logger.CLogger.Modes.error );
+                Console.WriteLine("ERROR : ML niesdostępny" );
             }
         }
 
-
-        public void sendNodeActivityToCP(List<Data.CPNNITable> lista)
+        
+        private void sendPCResponse(Data.CLinkInfo SNP, string requestIdentifier)
         {
-            Data.CSNMPmessage msg;
 
             TcpClient client = new TcpClient();
-            try
-            {
-                client.Connect(CConstrains.ipAddress, CConstrains.nccPort);
-                NetworkStream stream = client.GetStream();
+            client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
+            NetworkStream stream = client.GetStream();
 
-
-                msg = new Data.CSNMPmessage(null, null, null);
-                msg.pdu.PNNIList = lista;
-
-
-                msg.pdu.RequestIdentifier = "NodeActivity : " + CConstrains.nodeNumber.ToString();
-
-                BinaryFormatter bf = new BinaryFormatter();
-                bf.Serialize(stream, msg);
-                stream.Flush();
-                logger.print(null, "--> Sending NodeActivityMsg  " + msg + " to CP ", (int)Logger.CLogger.Modes.background);
-
-                StreamReader sr = new StreamReader(stream);
-                String dane = sr.ReadLine();
-                logger.print(null, "<-- " + dane, (int)Logger.CLogger.Modes.background);
-            }
-            catch (Exception e)
-            {
-                logger.print("SendNodeActivityToML", "CP niesdostępny", (int)Logger.CLogger.Modes.error);
-            }
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+            {"CCI", null},
+            {requestIdentifier, null},
+            {"SNP", SNP}
+            };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
+            dataToSend.pdu.RequestIdentifier = requestIdentifier + SNP.nodeNumber.ToString();
+            
+            Console.WriteLine("node : " + SNP.nodeNumber);
+            
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, dataToSend);
+            stream.Flush();
+            Console.WriteLine("--> Sending Response " + dataToSend.pdu.RequestIdentifier);
         }
-
-
-
-
-
 
         public void processReceivedData()
         {
@@ -279,7 +269,13 @@ namespace NetworkNode
 
                     foreach (Dictionary<String, Object> d in pdu.variablebinding)
                     {
-                        if (d.ContainsKey("add"))
+                        if (d.ContainsKey("CCI"))
+                        {
+                            CLinkInfo response;
+                            if ((response = PacketController.Instance.processReceivedData(d)) != null )
+                                sendPCResponse(response, pdu.RequestIdentifier);
+                        }
+                        else if (d.ContainsKey("add"))
                         {
                             //obsługa dodania połaczenia w polu kom.
                             addConnection(
