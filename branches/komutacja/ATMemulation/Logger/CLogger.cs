@@ -30,9 +30,6 @@ namespace Logger
         {
             if (modes == (int)Modes.normal) 
             {
-                Console.ResetColor();
-                if (methodName == null) { Console.WriteLine(text); } 
-                else 
                 Console.WriteLine("[" + methodName + "] " + text);
                 
             }
@@ -40,18 +37,20 @@ namespace Logger
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("[" + methodName + "] " + text);
-                
+                Console.ResetColor();
             }
             else if (modes == (int)Modes.error)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("ERROR : [" + methodName + "] " + text);
-                
+                Console.ResetColor();
             }
             else if (modes == (int)Modes.constructor)
             {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("INIT : [" + methodName + "]");
+                Console.ResetColor();
+            
             }
         }
 

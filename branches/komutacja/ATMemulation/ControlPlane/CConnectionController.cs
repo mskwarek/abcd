@@ -7,6 +7,7 @@ using RoutingController;
 using LinkResourceManager;
 using Data;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace ControlPlane
 {
@@ -14,10 +15,11 @@ namespace ControlPlane
     {
         private static CConnectionController connectionController = new CConnectionController();
 
-        private CLinkResourceManager cLinkResourceManager = CLinkResourceManager.Instance;
         private CRoutingController cRoutingController = CRoutingController.Instance;
-        private Logger.CLogger logger = Logger.CLogger.Instance;
+
         private Dictionary<int, RouteEngine.Route> establishedRoutes = new Dictionary<int, RouteEngine.Route>();
+
+        static readonly object _locker = new object();
 
         // numer polaczenia // Dict numer wezla + tablica komutacji
         public struct commutationEntry
@@ -64,8 +66,8 @@ namespace ControlPlane
             {
                 VPIPole.Enqueue(i);
             }
-            logger.print("ConnectionController", null, (int)Logger.CLogger.Modes.constructor);
-            
+
+            Console.WriteLine("ConnectionController");
         }
 
         public static  CConnectionController Instance
@@ -101,138 +103,140 @@ namespace ControlPlane
         //zwraca: polaczenie podsieciowe
         public bool ConnectionRequestOut(int SNP_s, int SNP_d)
         {
-            RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
-            if (route != null && route.Connections.Count != 0)
-            {
-                
-                logger.print("ConnectionRequestOut", " Route " + SNP_s + " to " + SNP_d + " set up ", (int)Logger.CLogger.Modes.normal);
-            
-                List<CLink> links = route.Connections;
 
-                int i = 0;
-                CLink link;
-                Boolean failed = false;
-                int identifier = setIdentifier(SNP_s, SNP_d);
-                logger.print("ConnectionRequestOut", "Identifier is " + identifier, (int)Logger.CLogger.Modes.normal);
-                
-                do
+            lock (_locker)
+            {
+                RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
+                if (route != null && route.Connections.Count != 0)
                 {
-                    link = links[i];
-                    CLink temp;
-                    if ((temp = LinkConnectionRequest(link)) == null)
-                        failed = true;
-                    i++;
-                } while (failed != true && i < links.Count);
-                if (failed)
-                {
-                    for (int j = 0; j < i; j++)
+                    Console.WriteLine(" Route " + SNP_s + " to " + SNP_d + " set up ");
+                    List<CLink> links = route.Connections;
+
+                    int i = 0;
+                    CLink link;
+                    Boolean failed = false;
+                    int identifier = setIdentifier(SNP_s, SNP_d);
+                    System.Console.WriteLine("Identifier is " + identifier);
+                    do
                     {
                         link = links[i];
-                        LinkConnectionDeallocation(link);
+                        //temp
+                        if (LinkConnectionRequest(link.A) == null || LinkConnectionRequest(link.B) == null)
+                            failed = true;
+                        i++;
+                    } while (failed != true && i < links.Count);
+                    if (failed)
+                    {
+                        for (int j = 0; j < i; j++)
+                        {
+                            link = links[i];
+                            LinkConnectionDeallocation(link.A);
+                            LinkConnectionDeallocation(link.B);
+                        }
+                        return false;
                     }
-                    return false;
+                    else
+                    {
+                        establishedRoutes.Add(identifier, route);
+
+                        //tworzenie tablic komutacji
+
+                        int[] VPIs = new int[links.Count];
+                        int[] VCIs = new int[links.Count];
+
+                        for (int a = 0; a < links.Count; a++)
+                        {
+                            VPIs[a] = VPIPole.Dequeue();
+                            VCIs[a] = VCIPole.Dequeue();
+                        }
+
+
+                        int nodeNumber;
+                        int portIn;
+                        int portOut;
+                        int VPIIn;
+                        int VCIIn;
+                        int VPIOut;
+                        int VCIOut;
+
+                        for (int a = 0; a < links.Count - 1; a++)
+                        {
+                            RouteEngine.CShortestPathCalculatorWrapper.Instance.reserveCLink(links[a]);
+                            //if (links[a].A.portType != "client")
+                            //{
+                            //    nodeNumber = links[a].A.nodeNumber;
+                            //    portIn = links[a].A.portNumber;
+                            //    portOut = links[a + 1].A.portNumber;
+                            //    VPIIn = VPIs[a];
+                            //    VCIIn = VCIs[a];
+                            //    VPIOut = VPIs[a + 1];
+                            //    VCIOut = VCIs[a + 1];
+                            //    if (a == 0)
+                            //    {
+                            //        VCIIn = 0;
+                            //        VPIIn = 0;
+                            //    }
+                            //    if (a == links.Count - 2)
+                            //    {
+                            //        VCIOut = 0;
+                            //        VPIOut = 0;
+                            //    }
+
+                            //}
+                            //else if (links[a].B.portType != "client")
+                            //{
+                            //    nodeNumber = links[a].B.nodeNumber;
+                            //    portIn = links[a].B.portNumber;
+                            //    portOut = links[a + 1].B.portNumber;
+                            //    VPIIn = VPIs[a];
+                            //    VCIIn = VCIs[a];
+                            //    VPIOut = VPIs[a + 1];
+                            //    VCIOut = VCIs[a + 1];
+                            //    if (a == 0)
+                            //    {
+                            //        VCIIn = 0;
+                            //        VPIIn = 0;
+                            //    }
+                            //    if (a == links.Count - 2)
+                            //    {
+                            //        VCIOut = 0;
+                            //        VPIOut = 0;
+                            //    }
+
+                            //}
+
+
+                            //else
+                            //{
+                                nodeNumber = links[a].B.nodeNumber;
+                                portIn = links[a].B.portNumber;
+                                portOut = links[a + 1].A.portNumber;
+                                VPIIn = VPIs[a];
+                                VCIIn = VCIs[a];
+                                VPIOut = VPIs[a + 1];
+                                VCIOut = VCIs[a + 1];
+                                if (a == 0)
+                                {
+                                    VCIIn = 0;
+                                    VPIIn = 0;
+                                }
+                            //    if (a == links.Count - 2)
+                            //    {
+                            //        VCIOut = 0;
+                            //        VPIOut = 0;
+                            //    }
+                            //}
+
+                            addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
+
+                        }
+                        Console.WriteLine(" Connection " + identifier + " established ");
+                        return true;
+                    }
                 }
                 else
-                {
-                    establishedRoutes.Add(identifier, route);
-
-                    //tworzenie tablic komutacji
-
-                    int[] VPIs =new int[links.Count];
-                    int[] VCIs =new int[links.Count];
-
-                    for( int a = 0 ; a < links.Count ; a++)
-                    {
-                        VPIs[a] = VPIPole.Dequeue();
-                        VCIs[a] = VCIPole.Dequeue();
-                    }
-
-
-                    int nodeNumber;
-                    int portIn;
-                    int portOut;
-                    int VPIIn;
-                    int VCIIn;
-                    int VPIOut;
-                    int VCIOut;
-
-                    for ( int a = 0; a < links.Count - 1; a++)
-                    {
-                        if (links[a].A.portType != "client" ) 
-                        {
-                             nodeNumber = links[a].A.nodeNumber;
-                             portIn = links[a].A.portNumber;
-                             portOut = links[a+1].A.portNumber;
-                             VPIIn = VPIs[a];
-                             VCIIn = VCIs[a];
-                             VPIOut = VPIs[a + 1];
-                             VCIOut = VCIs[a + 1];
-                            if (a == 0)
-                            {
-                                VCIIn = 0;
-                                VPIIn = 0;
-                            }
-                            if (a == links.Count - 2)
-                            {
-                                VCIOut = 0;
-                                VPIOut = 0;
-                            }
-                        
-                        }
-                        else if (links[a].B.portType != "client")
-                        {
-                             nodeNumber = links[a].B.nodeNumber;
-                             portIn = links[a].B.portNumber;
-                             portOut = links[a + 1].B.portNumber;
-                             VPIIn = VPIs[a];
-                             VCIIn = VCIs[a];
-                             VPIOut = VPIs[a + 1];
-                             VCIOut = VCIs[a + 1];
-                            if (a == 0)
-                            {
-                                VCIIn = 0;
-                                VPIIn = 0;
-                            }
-                            if (a == links.Count - 2)
-                            {
-                                VCIOut = 0;
-                                VPIOut = 0;
-                            }
-
-                        }
-                        
-                        
-                        else
-                        {
-                             nodeNumber = links[a].B.nodeNumber;
-                             portIn = links[a].B.portNumber;
-                             portOut = links[a + 1].A.portNumber;
-                             VPIIn = VPIs[a];
-                             VCIIn = VCIs[a];
-                             VPIOut = VPIs[a + 1];
-                             VCIOut = VCIs[a + 1];
-                            if (a == 0)
-                            {
-                                VCIIn = 0;
-                                VPIIn = 0;
-                            }
-                            if (a == links.Count - 2)
-                            {
-                                VCIOut = 0;
-                                VPIOut = 0;
-                            }
-                        }
-
-                        addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier); 
-                                                
-                    }
-                    logger.print("ConnectionRequestOut"," Connection " + identifier + " established ",(int)Logger.CLogger.Modes.normal);
-                    return true;
-                }
+                    return false;
             }
-            else
-                return false;
-            
         }
 
         //metoda zwraca identyfikator połączenia
@@ -252,32 +256,60 @@ namespace ControlPlane
         //metoda do zestawienia polaczenia? kierowana do LRM
         //parametry:brak
         //zwraca: link connection ( pare SNP)
-        public CLink LinkConnectionRequest( CLink SNPtoSNP )
+        public CLinkInfo LinkConnectionRequest(CLinkInfo SNP)
         {
-            return cLinkResourceManager.SNPLinkConnectionRequest(SNPtoSNP);
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+            {"CCI", null},
+            {"SNPLinkConnectionRequest", null},
+            {"SNP", SNP}
+            };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
+            dataToSend.pdu.RequestIdentifier = "SNPLinkConnectionRequest" + SNP.nodeNumber.ToString();
+
+            send(SNP.nodeNumber, dataToSend);
+
+            Console.WriteLine("node : " + SNP.nodeNumber );
+            return SNP;
         }
 
-        public CLink LinkConnectionDeallocation(CLink SNPtoSNP)
+        public CLinkInfo LinkConnectionDeallocation( CLinkInfo SNP )
         {
-            return cLinkResourceManager.SNPLinkConnectionDeallocation(SNPtoSNP);
+            Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
+            {"CCI", null},
+            {"SNPLinkConnectionDeallocation", null},
+            {"SNP", SNP}
+            };
+            List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+            pduList.Add(pduDict);
+            Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
+            dataToSend.pdu.RequestIdentifier = "SNPLinkConnectionDeallocation" + SNP.nodeNumber.ToString();
+
+            send(SNP.nodeNumber, dataToSend);
+
+            Console.WriteLine("node : " + SNP.nodeNumber );
+
+            return SNP;
+            
+            //TODO: Komunikacja
         }
 
         // listener żądań od NCC jedno, czy wielowatkowy?
-        //private void nccListener()
-        //{
-        //    bool status = true;
-        //    IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);
-        //    TcpListener portListener = new TcpListener(ip, CConstrains.NCCportNumber);
-        //    portListener.Start();
-        //    Console.WriteLine();
-        //    logger.print(null, "NCC listening on : " + CConstrains.NCCportNumber, (int)Logger.CLogger.Modes.background);
-                    
-        //    while (status)
-        //    {
-        //        TcpClient client = portListener.AcceptTcpClient();
-        //        new ClientHandler(client);
-        //    }
-        //}
+        private void nccListener()
+        {
+            bool status = true;
+            IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);
+            TcpListener portListener = new TcpListener(ip, CConstrains.NCCportNumber);
+            portListener.Start();
+            Console.WriteLine(" Control Plane nasluchuje na porcie : " + CConstrains.NCCportNumber);
+
+            while (status)
+            {
+                TcpClient client = portListener.AcceptTcpClient();
+                new ClientHandler(client);
+            }
+        }
 
         public RouteEngine.Route getRouteByIdentifier(int identifier)
         {
@@ -314,9 +346,8 @@ namespace ControlPlane
 
         public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B, int identifier)
         {
-            logger.print(null, "\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A, (int)Logger.CLogger.Modes.normal);
-            logger.print(null, " portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B, (int)Logger.CLogger.Modes.normal);
-         
+            Console.WriteLine("\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A);
+            Console.WriteLine(" portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B);
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
 
@@ -334,7 +365,7 @@ namespace ControlPlane
 
             send(nodeNumber, dataToSend);
 
-            logger.print(null, "node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B, (int)Logger.CLogger.Modes.normal);
+            Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
         }
 
         public void removeConnection(commutationEntry commutationEntry)
@@ -356,7 +387,7 @@ namespace ControlPlane
 
                 send(nodeNumber, dataToSend);
 
-                logger.print(null,"node : " + nodeNumber + " from : " + portIn.getPortID() + " to : " + portOut.getPortID(), (int)Logger.CLogger.Modes.normal);
+                Console.WriteLine("node : " + nodeNumber + " from : " + portIn.getPortID() + " to : " + portOut.getPortID());
             
         }
 
@@ -370,7 +401,7 @@ namespace ControlPlane
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             //stream.Flush();
-            logger.print(null,"--> SENDING " + msg + " TO NODE : " + nodeNumber,(int)Logger.CLogger.Modes.background);
+            Console.WriteLine("--> SENDING " + msg + " TO NODE : " + nodeNumber);
 
         }
 

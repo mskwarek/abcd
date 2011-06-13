@@ -19,7 +19,15 @@ namespace Data
             portType = pt;
 
         }
-   
+
+        public override bool Equals(object obj)
+        {
+            CLinkInfo comparable = (CLinkInfo)obj;
+            if (this.nodeNumber == comparable.nodeNumber && this.portNumber == comparable.portNumber && this.portType.Equals(comparable.portType))
+                return true;
+            else
+                return false; 
+        }
         
     }
 

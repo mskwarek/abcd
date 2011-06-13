@@ -14,14 +14,14 @@ namespace LinkResourceManager
     {
 
         private static CLinkResourceManager cLinkResourceManager = new CLinkResourceManager();
-        private Logger.CLogger logger = Logger.CLogger.Instance;
-        private List<Data.CLink> establishedLinksList = new List<Data.CLink>();
+
+        private List<Data.CLinkInfo> allocatedSNPs = new List<Data.CLinkInfo>();
 
 
         private CLinkResourceManager()
         {
-            logger.print("LinkResourceManager", null, (int)Logger.CLogger.Modes.constructor);
-            
+
+            Console.WriteLine("CLinkResourceManager");
             
         }
 
@@ -34,66 +34,59 @@ namespace LinkResourceManager
         }
 
         //
-        public List<CLink> LocalTopology()
+        public List<CLinkInfo> LocalTopology()
         {
-            return establishedLinksList;
+            return allocatedSNPs;
         }
 
-        public CLink SNPLinkConnectionRequest(CLink SNPtoSNP)
+        public CLinkInfo SNPLinkConnectionRequest(CLinkInfo SNP)
         {
-            if (!establishedLinksList.Contains(SNPtoSNP))
+            if ( !allocatedSNPs.Contains(SNP) )
             {
-                
-                logger.print("SNPLinkConnectionRequest", "RLM: Reserving connection ", (int)Logger.CLogger.Modes.normal);
-            
-                reserveCLink(SNPtoSNP);
-                CShortestPathCalculatorWrapper.Instance.reserveCLink(SNPtoSNP);
+                Console.WriteLine("RLM: Reserving connection ");
+                reserveSNP( SNP );
+                //CShortestPathCalculatorWrapper.Instance.reserveCLink(SNP);
 
-                return SNPtoSNP;
+                return SNP;
             }
 
             return null;
         }
 
-        public CLink SNPLinkConnectionDeallocation(CLink SNPtoSNP)
+        public CLinkInfo SNPLinkConnectionDeallocation(CLinkInfo SNP)
         {
-            if (establishedLinksList.Contains(SNPtoSNP))
+            if (allocatedSNPs.Contains(SNP))
             {
-                logger.print("SNPLinkConnectionDeallocation", "RLM: Deallocating connection ", (int)Logger.CLogger.Modes.normal);
-            
-                releaseCLink(SNPtoSNP);
-                CShortestPathCalculatorWrapper.Instance.releaseCLink(SNPtoSNP);
+                Console.WriteLine("RLM: Deallocating connection ");
+                releaseSNP(SNP);
+                //TODO: Powiadom RC o alokacji
+                //CShortestPathCalculatorWrapper.Instance.releaseCLink(SNP);
 
-                return SNPtoSNP;
+                return SNP;
             }
             
             return null;
         }
 
 
-        // zmienia stan danego CLink na busy
-        private void reserveCLink(CLink cLink)
+        // dodaje SNP do puli wykorzystywanych
+        private void reserveSNP(CLinkInfo cLinkInfo)
         {
-            establishedLinksList.Add(cLink);
+            allocatedSNPs.Add(cLinkInfo);
         }
 
-        // zmienia stan danego CLink na ready
-        private void releaseCLink(CLink cLink)
+        // usuwa SNP z puli wykorzystywanych
+        private void releaseSNP(CLinkInfo cLinkInfo)
         {
-            establishedLinksList.Remove(cLink);
+            allocatedSNPs.Remove(cLinkInfo);
         }
 
 
 
 
-
-
-
-
-
-        public List<CLink> Configuration()
+        public List<CLinkInfo> Configuration()
         {
-            return establishedLinksList;
+            return allocatedSNPs;
         }
 
         public void Translation()

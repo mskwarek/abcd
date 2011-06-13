@@ -13,7 +13,7 @@ namespace ClientNode
         private List<CClientPortIn> InputClientPortList = new List<CClientPortIn>();
         private List<CClientPortOut> OutputClientPortList = new List<CClientPortOut>();
         private static  CPortManager instance = null;
-        private Logger.CLogger logger = Logger.CLogger.Instance;
+
         public static CPortManager Instance
         {
             get
@@ -42,7 +42,7 @@ namespace ClientNode
             }
             else
             {
-                logger.print(null, "Brak pliku konfiguracyjnego : " + CConstrains.nodeNumber, (int)Logger.CLogger.Modes.error);
+                Console.WriteLine("ERROR : nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
                 textReader = new XmlTextReader(CConstrains.configFileURL);
             }
 
@@ -53,10 +53,6 @@ namespace ClientNode
                     if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "managementLayerPort")
                     {
                         CConstrains.managementLayerPort = Convert.ToInt32(textReader.ReadElementContentAsInt());
-                    }
-                    else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "CloudPort")
-                    {
-                        CConstrains.CloudPortNumber = Convert.ToInt32(textReader.ReadElementContentAsInt());
                     }
                     else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "nccPort")
                     {
@@ -87,16 +83,15 @@ namespace ClientNode
                     //}
                 }
                 textReader.Close();
-                logger.print(null, "Config loaded. " + showConfig(), (int)Logger.CLogger.Modes.background);
-                
+                Console.WriteLine("Config loaded. " + showConfig());
             }
             catch(System.Exception e) {
                 StreamWriter sw = new StreamWriter("error.txt", true);
                 sw.Write(e.StackTrace);
                 sw.Flush();
                 sw.Close();
-
-                logger.print(null, "Brak pliku konfiguracyjnego : " + CConstrains.nodeNumber, (int)Logger.CLogger.Modes.error);
+                
+                Console.WriteLine("ERROR!!! nie ma pliku konfiguracyjnego");
             }
         }
 
@@ -128,14 +123,10 @@ namespace ClientNode
 
         public void showPorts() {
             for (int i = 0; i < InputClientPortList.Count; i++) {
-                logger.print(null, "in " + InputClientPortList[i].ID + "  " + InputClientPortList[i].STATUS, (int)Logger.CLogger.Modes.normal);
-                
-//                Console.WriteLine("in " + InputClientPortList[i].ID + "  " + InputClientPortList[i].STATUS);
+                Console.WriteLine("in " + InputClientPortList[i].ID + "  " + InputClientPortList[i].STATUS);
             }
             for (int i = 0; i < OutputClientPortList.Count; i++) {
-//                Console.WriteLine("out " + OutputClientPortList[i].ID + "  " + OutputClientPortList[i].STATUS);
-                logger.print(null, "out " + OutputClientPortList[i].ID + "  " + OutputClientPortList[i].STATUS, (int)Logger.CLogger.Modes.normal);
-                
+                Console.WriteLine("out " + OutputClientPortList[i].ID + "  " + OutputClientPortList[i].STATUS);
             }
         }
 
@@ -147,12 +138,12 @@ namespace ClientNode
         
         // metoda odpowiedzialna za nadawanie wiadomości
         public void sendMsg(Data.CUserData data) {
-            //Console.WriteLine("*** wyszukuje port... ***");
+            Console.WriteLine("*** wyszukuje port... ***");
             CClientPortOut free = findFreePort();
-            if (free == null){ logger.print(null, "Wszystkie porty zajete", (int)Logger.CLogger.Modes.error); }
+            if (free == null) { Console.WriteLine("ERROR : Wszystkie porty zajete"); }
             else
             {
-                //Console.WriteLine("*** port o id= " + free.ID + " jest wolny ***");
+                Console.WriteLine("*** port o id= " + free.ID + " jest wolny ***");
                 int index = OutputClientPortList.IndexOf(free);
                 //testowa zmiana------------
                // OutputClientPortList[index].startPort(50201);
@@ -164,17 +155,13 @@ namespace ClientNode
 
         public void stopSending(int i)
         {
-            logger.print(null, "Wstrzymywanie nadawnia na porcie : " + i, (int)Logger.CLogger.Modes.normal);
-            //Console.WriteLine("Wstrzymywanie nadawnia na porcie : " + i);
+            Console.WriteLine("Wstrzymywanie nadawnia na porcie : " + i);
             if (OutputClientPortList[i].STATUS == true)
             {
                 //OutputClientPortList[i].stop();
                 OutputClientPortList[i].STATUS = false;
             }
-            else
-            {
-                logger.print(null, "błędny numer portu", (int)Logger.CLogger.Modes.error);
-            }
+            else { Console.WriteLine("błędny numer portu" ); }
         }
 
         public void shutdownAllPorts()
@@ -187,14 +174,14 @@ namespace ClientNode
 
         public void getNodePortConfiguration()
         {
-            logger.print(null, "\n\nNode ID = " + CConstrains.nodeNumber + " PORT CONFIGURATION\n\n",(int)Logger.CLogger.Modes.normal);
+            Console.WriteLine("\n\nNode ID = " + CConstrains.nodeNumber + " PORT CONFIGURATION\n\n");
             foreach (CClientPortIn p in InputClientPortList)
             {
-                logger.print(null, "ID = " + p.ID + " LISTENING ON PORT = " + p.getPortNumber(), (int)Logger.CLogger.Modes.normal);
+                Console.WriteLine("ID = " + p.ID + " LISTENING ON PORT = " + p.getPortNumber());
             }
             foreach (CClientPortOut p in OutputClientPortList)
             {
-                logger.print(null, "ID = " + p.ID + " SENDING ON PORT = " + p.getPortNumber(), (int)Logger.CLogger.Modes.normal);
+                Console.WriteLine("ID = " + p.ID +  " SENDING TO PORT = " + p.getPortNumber());
             }
         }
 
