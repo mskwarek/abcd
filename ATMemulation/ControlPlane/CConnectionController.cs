@@ -14,7 +14,7 @@ namespace ControlPlane
     class CConnectionController
     {
         private static CConnectionController connectionController = new CConnectionController();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         private CRoutingController cRoutingController = CRoutingController.Instance;
 
         private Dictionary<int, RouteEngine.Route> establishedRoutes = new Dictionary<int, RouteEngine.Route>();
@@ -67,7 +67,7 @@ namespace ControlPlane
                 VPIPole.Enqueue(i);
             }
 
-            Console.WriteLine("ConnectionController");
+            logger.print("ConnectionController",null,(int)Logger.CLogger.Modes.constructor);
         }
 
         public static  CConnectionController Instance
@@ -109,14 +109,14 @@ namespace ControlPlane
                 RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
                 if (route != null && route.Connections.Count != 0)
                 {
-                    Console.WriteLine(" Route " + SNP_s + " to " + SNP_d + " set up ");
+                    logger.print("ConnectionRequestOut"," Route " + SNP_s + " to " + SNP_d + " set up ", (int)Logger.CLogger.Modes.normal);
                     List<CLink> links = route.Connections;
 
                     int i = 0;
                     CLink link;
                     Boolean failed = false;
                     int identifier = setIdentifier(SNP_s, SNP_d);
-                    System.Console.WriteLine("Identifier is " + identifier);
+                    logger.print("ConnectionRequestOut","Identifier is " + identifier,(int)Logger.CLogger.Modes.normal);
                     do
                     {
                         link = links[i];
@@ -158,6 +158,7 @@ namespace ControlPlane
                         int VCIIn;
                         int VPIOut;
                         int VCIOut;
+
 
                         for (int a = 0; a < links.Count - 1; a++)
                         {
@@ -230,8 +231,9 @@ namespace ControlPlane
                             addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
 
                         }
-                        Console.WriteLine(" Connection " + identifier + " established ");
+                        logger.print("ConnectionRequestOut", " Connection " + identifier + " established ", (int)Logger.CLogger.Modes.normal);
                         return true;
+
                     }
                 }
                 else
@@ -270,7 +272,7 @@ namespace ControlPlane
 
             send(SNP.nodeNumber, dataToSend);
 
-            Console.WriteLine("node : " + SNP.nodeNumber );
+            //Console.WriteLine("node : " + SNP.nodeNumber );
             return SNP;
         }
 
@@ -288,28 +290,13 @@ namespace ControlPlane
 
             send(SNP.nodeNumber, dataToSend);
 
-            Console.WriteLine("node : " + SNP.nodeNumber );
+            //Console.WriteLine("node : " + SNP.nodeNumber );
 
             return SNP;
             
             //TODO: Komunikacja
         }
 
-        // listener żądań od NCC jedno, czy wielowatkowy?
-        private void nccListener()
-        {
-            bool status = true;
-            IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);
-            TcpListener portListener = new TcpListener(ip, CConstrains.NCCportNumber);
-            portListener.Start();
-            Console.WriteLine(" Control Plane nasluchuje na porcie : " + CConstrains.NCCportNumber);
-
-            while (status)
-            {
-                TcpClient client = portListener.AcceptTcpClient();
-                new ClientHandler(client);
-            }
-        }
 
         public RouteEngine.Route getRouteByIdentifier(int identifier)
         {
@@ -346,8 +333,8 @@ namespace ControlPlane
 
         public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B, int identifier)
         {
-            Console.WriteLine("\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A);
-            Console.WriteLine(" portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B);
+            logger.print(null,"\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A,(int)Logger.CLogger.Modes.normal);
+            logger.print(null, " portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B, (int)Logger.CLogger.Modes.normal);
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
 
@@ -365,7 +352,7 @@ namespace ControlPlane
 
             send(nodeNumber, dataToSend);
 
-            Console.WriteLine("node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B);
+            logger.print(null, "node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B, (int)Logger.CLogger.Modes.normal);
         }
 
         public void removeConnection(commutationEntry commutationEntry)
@@ -387,7 +374,7 @@ namespace ControlPlane
 
                 send(nodeNumber, dataToSend);
 
-                Console.WriteLine("node : " + nodeNumber + " from : " + portIn.getPortID() + " to : " + portOut.getPortID());
+                logger.print(null, "node : " + nodeNumber + " from : " + portIn.getPortID() + " to : " + portOut.getPortID(), (int)Logger.CLogger.Modes.normal);
             
         }
 
@@ -401,7 +388,7 @@ namespace ControlPlane
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             //stream.Flush();
-            Console.WriteLine("--> SENDING " + msg + " TO NODE : " + nodeNumber);
+            logger.print(null,"--> SENDING " + msg + " TO NODE : " + nodeNumber, (int)Logger.CLogger.Modes.normal);
 
         }
 

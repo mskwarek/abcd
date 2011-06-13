@@ -12,7 +12,7 @@ namespace ManagementLayer
 
         Dictionary<int, String> nodesType = new Dictionary<int, string>() {{1, "client" } };
         private List<Data.CLink> LinkList = new List<Data.CLink>();
-        
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         CNetworkConfiguration()
         {
         }
@@ -129,10 +129,12 @@ namespace ManagementLayer
 
         public void showNetworkConfiguration()
         {
-            Console.WriteLine("*** Konfiguracja sieci : *** ");
+            logger.print(null,"Konfiguracja sieci :",(int)Logger.CLogger.Modes.normal);
             foreach (Data.CLink cl in LinkList)
-                Console.WriteLine("node " + cl.from.nodeNumber + " port " + cl.from.portNumber + " type  " + cl.from.portType + " --> node " + cl.to.nodeNumber + " port " + cl.to.portNumber + " type " + cl.to.portType + " ");
-
+            {
+                String text = "node " + cl.from.nodeNumber + " port " + cl.from.portNumber + " type  " + cl.from.portType + " --> node " + cl.to.nodeNumber + " port " + cl.to.portNumber + " type " + cl.to.portType + " ";
+                logger.print(null, text, (int)Logger.CLogger.Modes.normal);
+            }
         }
 
         public List<Data.CLink> getLinkList()
@@ -146,12 +148,12 @@ namespace ManagementLayer
             try
             {
                 nodesType.Add(i, type);
-                Console.WriteLine("*** DODAŁEM NODE : " + i + " type :  " + type + " TO DICTIONARY ***" );
+                logger.print(null, "DODAŁEM NODE : " + i + " type :  " + type + " TO DICTIONARY",(int)Logger.CLogger.Modes.normal);
                 return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR : Błąd przy dodawaniu węzła do słownika, węzeł o id = " + i + " juz isnieje " + e.Message);
+                logger.print(null, "Błąd przy dodawaniu węzła do słownika, węzeł o id = " + i + " juz isnieje ", (int)Logger.CLogger.Modes.error);
                 return false;
             }
         }
@@ -168,7 +170,7 @@ namespace ManagementLayer
 
         public void showNodes()
         {   
-            Console.WriteLine("\t Wezly w sieci");
+            logger.print(null,"\t Wezly w sieci",(int)Logger.CLogger.Modes.normal);
             foreach(KeyValuePair<int, String> pair in nodesType)
             {
                 Console.WriteLine("{0}, {1}",

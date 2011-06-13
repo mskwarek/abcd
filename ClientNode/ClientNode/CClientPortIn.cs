@@ -49,7 +49,7 @@ namespace ClientNode
                 
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
-                Console.WriteLine("receiving");
+                //Console.WriteLine("receiving");
 
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);

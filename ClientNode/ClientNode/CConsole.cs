@@ -15,7 +15,7 @@ namespace ClientNode
         private String exitMessage = "Exiting...";
         private String commandPrompt = "ClientNode$";
         private readonly static  CConsole instance = new CConsole();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         private CConsole()
         {
         }
@@ -39,17 +39,17 @@ namespace ClientNode
             }
 
                 Console.Title = "ClientNode ID = " + CConstrains.nodeNumber;
-                Console.WriteLine("Wszystkie porty wstały");
+                //Console.WriteLine("Wszystkie porty wstały");
                 CManagementAgent.Instance.sendHelloMsgToML(CConstrains.nodeNumber);
-                Console.WriteLine(helloMessage);
+                //Console.WriteLine(helloMessage);
                 while (true)
                 {
 
-                    Console.Write(commandPrompt + " ");
+                    logger.print(null,commandPrompt + " ",(int)Logger.CLogger.Modes.normal);
                     ConsoleInput = Console.ReadLine();
                     if (ConsoleInput.Equals("q"))
                     {
-                        Console.WriteLine(exitMessage);
+                        logger.print(null, exitMessage, (int)Logger.CLogger.Modes.normal);
 
                         Environment.Exit(1);
                     }
@@ -69,11 +69,11 @@ namespace ClientNode
                         if (sender != null)
                         {
                             sender.Abort();
-                            Console.WriteLine("Wstrzymywanie nadawania ");
+                            logger.print(null, "Wstrzymywanie nadawania ", (int)Logger.CLogger.Modes.normal);
                         }
                         else
                         {
-                            Console.WriteLine("Węzeł obecnie nie nadaje");
+                            logger.print(null, "Węzeł obecnie nie nadaje", (int)Logger.CLogger.Modes.normal);
                         }
                             
                     }
@@ -87,7 +87,7 @@ namespace ClientNode
                         String[] command = ConsoleInput.Split(' ');
                         if (command.Count() != 2)
                         {
-                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                            logger.print(null, "Błędna liczba argumentów.", (int)Logger.CLogger.Modes.error);
                         }
                         
                         try
@@ -99,7 +99,7 @@ namespace ClientNode
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(" ERROR : argument nie jest liczbą");
+                            logger.print(null, "Argument nie jest liczbą", (int)Logger.CLogger.Modes.error);
                             Console.WriteLine(e.StackTrace);
                         }
                     }
@@ -108,7 +108,7 @@ namespace ClientNode
                         String[] command = ConsoleInput.Split(' ');
                         if (command.Count() != 2)
                         {
-                            Console.WriteLine(" ERROR : Błędna liczba argumentów.");
+                            logger.print(null, "Błędna liczba argumentów.", (int)Logger.CLogger.Modes.error);
                         }
 
                         try
@@ -116,11 +116,11 @@ namespace ClientNode
                             if (sender != null)
                             {
                                 sender.Abort();
-                                Console.WriteLine("Wstrzymywanie nadawania ");
+                                logger.print(null,"Wstrzymywanie nadawania ",(int)Logger.CLogger.Modes.normal);
                             }
                             else
                             {
-                                Console.WriteLine("Węzeł obecnie nie nadaje");
+                                logger.print(null, "Węzeł obecnie nie nadaje", (int)Logger.CLogger.Modes.normal);
                             }
                             // wywołanie metod związanych z rozłączaniem połączenia 
                             int arg1 = Convert.ToInt32(command[1]);
@@ -130,13 +130,13 @@ namespace ClientNode
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(" ERROR : argument nie jest liczbą");
-                            Console.WriteLine(e.StackTrace);
+                            logger.print(null, "Argument nie jest liczbą", (int)Logger.CLogger.Modes.error);
+                            //Console.WriteLine(e.StackTrace);
                         }
                     }
                     
-                    else 
-                        Console.WriteLine(ConsoleInput);
+                    else
+                        logger.print(null, ConsoleInput, (int)Logger.CLogger.Modes.normal);
 
                 }
             
