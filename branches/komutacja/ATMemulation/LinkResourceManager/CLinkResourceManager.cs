@@ -14,14 +14,14 @@ namespace LinkResourceManager
     {
 
         private static CLinkResourceManager cLinkResourceManager = new CLinkResourceManager();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         private List<Data.CLink> establishedLinksList = new List<Data.CLink>();
 
 
         private CLinkResourceManager()
         {
-
-            Console.WriteLine("CLinkResourceManager");
+            logger.print("LinkResourceManager", null, (int)Logger.CLogger.Modes.constructor);
+            
             
         }
 
@@ -43,7 +43,9 @@ namespace LinkResourceManager
         {
             if (!establishedLinksList.Contains(SNPtoSNP))
             {
-                Console.WriteLine("RLM: Reserving connection ");
+                
+                logger.print("SNPLinkConnectionRequest", "RLM: Reserving connection ", (int)Logger.CLogger.Modes.normal);
+            
                 reserveCLink(SNPtoSNP);
                 CShortestPathCalculatorWrapper.Instance.reserveCLink(SNPtoSNP);
 
@@ -57,7 +59,8 @@ namespace LinkResourceManager
         {
             if (establishedLinksList.Contains(SNPtoSNP))
             {
-                Console.WriteLine("RLM: Deallocating connection ");
+                logger.print("SNPLinkConnectionDeallocation", "RLM: Deallocating connection ", (int)Logger.CLogger.Modes.normal);
+            
                 releaseCLink(SNPtoSNP);
                 CShortestPathCalculatorWrapper.Instance.releaseCLink(SNPtoSNP);
 
