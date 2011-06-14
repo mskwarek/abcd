@@ -23,7 +23,7 @@ namespace NetworkNode
         private TcpListener portListener;
         private TcpClient client;
         private NetworkStream clientStream;
-       
+        private Logger.CLogger logger = Logger.CLogger.Instance;
 
         public CClientPortIn(int id, Boolean busy, int systemPortNumber) : base(id, busy)
         {
@@ -43,20 +43,20 @@ namespace NetworkNode
             status = true;
             portListener = new TcpListener(ip, base.PORTNUMBER);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
-            Console.WriteLine(base.PORTCLASS + " o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
-            
+            String text = "Port : " + base.ID + " Listening on : " + portNumber;
+            logger.print(null, text, (int)Logger.CLogger.Modes.background);
             while (status) //uruchamiamy nasłuchiwanie
             {
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
-                Console.WriteLine("connection accepted ");
+                //Console.WriteLine("connection accepted ");
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CUserData dane = (CUserData)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
-                Console.WriteLine(dane);
+                //Console.WriteLine(dane);
                 Thread  recieve = new Thread(receiveData);
                 recieve.Name = "receiveData " + base.PORTNUMBER;
-                 recieve.Start();
+                recieve.Start();
                 Thread.Sleep(1000);
             }
 
@@ -92,7 +92,7 @@ namespace NetworkNode
                 {
                     CCharacteristicData cCharacteristicData = prepareCharacteristicData(queue.Dequeue());
                     CCommutationField.Instance.passOnData(cCharacteristicData, this);
-                    System.Console.WriteLine("--> Data sent on port :" + PORTNUMBER + " with VPI :" + cCharacteristicData.getCAdministrationData().getVPI() + " and VCI :" + cCharacteristicData.getCAdministrationData().getVCI()); 
+                    logger.print(null,"--> Data sent on port :" + PORTNUMBER + " with VPI :" + cCharacteristicData.getCAdministrationData().getVPI() + " and VCI :" + cCharacteristicData.getCAdministrationData().getVCI(),(int)Logger.CLogger.Modes.normal); 
                     Thread.Sleep(1000);
                 }
                 Thread.Sleep(1000);

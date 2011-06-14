@@ -7,10 +7,11 @@ namespace NetworkNode
 {
     class Program
     {
+        
         static int Main(string[] args)
         {
             String exitMessage = "Exiting...";
-            
+            Logger.CLogger logger = Logger.CLogger.Instance;
             try
             {
                 CConstrains.nodeNumber = Convert.ToInt32(args[0]);
@@ -19,8 +20,8 @@ namespace NetworkNode
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR : Niepoprawny argument!!!");
-                Console.WriteLine(e.StackTrace);
+                logger.print(null, "Błędna liczba argumentów.", (int)Logger.CLogger.Modes.error);
+                //Console.WriteLine(e.StackTrace);
             }
             System.Console.WriteLine("Network Node!");
             Console.Title = "NetworkNode ID = " + CConstrains.nodeNumber;

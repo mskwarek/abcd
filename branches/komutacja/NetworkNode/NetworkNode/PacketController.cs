@@ -10,13 +10,13 @@ namespace NetworkNode
     public sealed class PacketController
     {
         private static PacketController cPacketController = new PacketController();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         static readonly object _locker = new object();
 
         private PacketController()
         {
 
-            Console.WriteLine("PacketController");
+            logger.print("PacketController",null,(int)Logger.CLogger.Modes.constructor);
             
         }
 

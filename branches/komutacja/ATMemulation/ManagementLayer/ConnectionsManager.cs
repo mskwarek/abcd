@@ -14,7 +14,7 @@ namespace ManagementLayer
     {
         static readonly ConnectionsManager instance = new ConnectionsManager();
         public List<Data.CPNNITable> PNNIList = new List<Data.CPNNITable>();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
 
         public static ConnectionsManager Instance
         {
@@ -41,7 +41,7 @@ namespace ManagementLayer
            IPAddress ip = IPAddress.Parse(CConstrains.ipAddress);     //adres serwera
            TcpListener portListener = new TcpListener(ip, CConstrains.LMportNumber);
            portListener.Start();
-           Console.WriteLine("*** ML nasłuchuje na porcie : " +CConstrains.LMportNumber + " *** ");
+           logger.print(null,"ML port : " +CConstrains.LMportNumber,(int)Logger.CLogger.Modes.background);
            
            while (status)
            {
@@ -49,7 +49,7 @@ namespace ManagementLayer
                NetworkStream clientStream = client.GetStream();
                StreamWriter downStream = new StreamWriter(clientStream);
                
-               Console.WriteLine("*** CONNECTION FROM NODE ACCEPTED ***");
+               //Console.WriteLine("*** CONNECTION FROM NODE ACCEPTED ***");
                BinaryFormatter binaryFormater = new BinaryFormatter();
                Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
 
@@ -96,20 +96,15 @@ namespace ManagementLayer
                                        index = i;
                                        setNetworkConnections((Convert.ToInt16(d["NodeNumber"])),CNetworkConfiguration.Instance.linkList.ElementAt(i) );
                                    }
-
                                    if (index != -1)
                                    {
                                        Data.CLink link = CNetworkConfiguration.Instance.linkList.ElementAt(index);
                                        //Wysylanie informacji o wezle klienckim
                                        PNNIList.Add(new Data.CPNNITable(link.A.nodeNumber, link.A.portType, link.A.portNumber, link.B.nodeNumber, link.B.portType, link.B.portNumber, CConstrains.domainName, true));
-                                       Console.WriteLine("PNNIList  ADDED Client NODE");
+                                       logger.print(null,"PNNIList  ADDED Client NODE",(int)Logger.CLogger.Modes.background);
                                        sendPNNIListToCP(PNNIList);
                                    }
-
                                }
-
-
-
                                downStream.WriteLine(dane.pdu.RequestIdentifier + " -OK-;"+CConstrains.domainName);
                                downStream.Flush();
                            }
@@ -123,8 +118,6 @@ namespace ManagementLayer
                }
                else if (dane.pdu.RequestIdentifier.StartsWith("NodeActivity"))
                {
-
-
                    foreach(Data.CPNNITable t in dane.pdu.PNNIList)
                    {
                        if (PNNIList.Contains(t))
@@ -135,22 +128,19 @@ namespace ManagementLayer
                            {
                                PNNIList.ElementAt(index).IsNeighbourActive = t.IsNeighbourActive;
                                Console.WriteLine("*** PNNIList Updated  " + PNNIList.ElementAt(index).NodeNumber + " " + PNNIList.ElementAt(index).NodeType + " ACTIVITY :  " + PNNIList.ElementAt(index).IsNeighbourActive);
-                               sendPNNIListToCP(PNNIList); 
+                               //sendPNNIListToCP(PNNIList); 
                            }
                        }
                        else
                        {
                            PNNIList.Add(t);
                            Console.WriteLine("PNNIList  ADDED : " + t.NodeNumber + " " + t.NodeType + " " + t.NodePortNumberSender + " " + t.NeighbourNodeNumber + " " + t.NeighbourNodeType + " " + t.NeighbourPortNumberReciever + " " + t.IsNeighbourActive);
-                           sendPNNIListToCP(PNNIList); 
+                           //sendPNNIListToCP(PNNIList); 
                        }
                        downStream.WriteLine("--> SENDING RESPONSE : " + dane.pdu.RequestIdentifier + " -OK- ");
                        downStream.Flush();
                    }
                }
-
-
-               
                Console.WriteLine(dane.pdu.RequestIdentifier);
                Thread.Sleep(1000);
            }

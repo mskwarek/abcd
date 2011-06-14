@@ -8,7 +8,7 @@ namespace NetworkNode
 {
     class CNetManager
     {
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         private static readonly CNetManager instance = new CNetManager();
         private bool state = true;
         private List<Data.CPNNITable> PNNIList = new List<Data.CPNNITable>();
@@ -51,7 +51,7 @@ namespace NetworkNode
         {
             String[] array = nodeResponse.Split(';');
             Data.CPNNITable table = new Data.CPNNITable(CConstrains.nodeNumber, CConstrains.nodeType, portNumber, Convert.ToInt16(array[0]), array[1], Convert.ToInt16(array[2]),array[3], isActive);
-            Console.WriteLine("<-- RESPONSE FOR HELLO MSG RECIEVED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " "  + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive + " " + table.DomainName );
+            logger.print(null,"<-- RESPONSE FOR HELLO MSG RECIEVED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " "  + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive + " " + table.DomainName,(int)Logger.CLogger.Modes.background );
 
             if (PNNIList.Contains(table))
             {
@@ -60,14 +60,18 @@ namespace NetworkNode
                 if (PNNIList.ElementAt(index).IsNeighbourActive != isActive)
                 {
                     PNNIList.ElementAt(index).IsNeighbourActive = isActive;
-                    Console.WriteLine("*** Zmieniłem flagę na " + isActive);
+                    logger.print(null,PNNIList.ElementAt(index).NeighbourNodeNumber + " activity : " + isActive, (int)Logger.CLogger.Modes.normal);
+                    CManagementAgent.Instance.sendNodeActivityToCP(PNNIList);
+                    Thread.Sleep(100);
                     CManagementAgent.Instance.sendNodeActivityToML(PNNIList);
                 }
             }
             else
             {
                 PNNIList.Add(table);
-                Console.WriteLine("PNNIList ADDED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " " + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive + " " + table.DomainName);
+                logger.print(null,"PNNIList ADDED : " + table.NodeNumber + " " + table.NodeType + " " + table.NodePortNumberSender + " " + table.NeighbourNodeNumber + " " + table.NeighbourNodeType + " " + table.NeighbourPortNumberReciever + " " + table.IsNeighbourActive + " " + table.DomainName,(int)Logger.CLogger.Modes.background);
+                CManagementAgent.Instance.sendNodeActivityToCP(PNNIList);
+                Thread.Sleep(100);
                 CManagementAgent.Instance.sendNodeActivityToML(PNNIList);
                 
             }

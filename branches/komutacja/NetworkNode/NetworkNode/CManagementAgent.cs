@@ -25,7 +25,7 @@ namespace NetworkNode
        private TcpListener portListener;
        private TcpClient client;
        private NetworkStream clientStream;
-
+       private Logger.CLogger logger = Logger.CLogger.Instance;
        private CManagementAgent()
        {
            portNum = 50000 + CConstrains.nodeNumber * 100;
@@ -89,7 +89,7 @@ namespace NetworkNode
             {
                 client = portListener.AcceptTcpClient();
                 clientStream = client.GetStream();
-                Console.WriteLine("*** ML CONNECTED ***");
+                logger.print(null,"ML CONNECTED",(int)Logger.CLogger.Modes.background);
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 queue.Enqueue(dane);
@@ -104,11 +104,9 @@ namespace NetworkNode
         private void sendResponse(String responseId, Data.CCommutationTable table) 
         {
             Data.CSNMPmessage msg;
-            
             TcpClient client = new TcpClient();
             client.Connect(CConstrains.ipAddress,CConstrains.managementLayerPort);
             NetworkStream stream = client.GetStream();
-
             // przypadek wysyłania tablicy komutacji do ML
             if (table != null)
             {
@@ -125,11 +123,10 @@ namespace NetworkNode
             }
 
             msg.pdu.RequestIdentifier = responseId;
-
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("--> Sending Response " + msg + " to ML");
+            logger.print(null,"--> Sending Response " + msg + " to ML",(int)Logger.CLogger.Modes.background);
         }
 
         // metoda kontaktująca sie z ML aby zestawić nowe fizyczne połączenie w sieci. 
@@ -170,11 +167,9 @@ namespace NetworkNode
         public void sendHelloMsgToML(int nodeNumber)
         {
             Data.CSNMPmessage msg;
-
             TcpClient client = new TcpClient();
             client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
             NetworkStream stream = client.GetStream();
-
             Dictionary<String, Object> pduDict = new Dictionary<String, Object>() {
                 {"NodeNumber", nodeNumber},
                 {"helloMsg",null}
@@ -182,55 +177,68 @@ namespace NetworkNode
             List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
             pduList.Add(pduDict);
             msg = new Data.CSNMPmessage(pduList, null, null);
-
-
             msg.pdu.RequestIdentifier = "helloMsgtoML : " + CConstrains.nodeNumber.ToString();
-
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            Console.WriteLine("--> Sending helloMsg  " + msg + " to ML " + nodeNumber );
-
+            logger.print(null,"--> Sending helloMsg  " + msg + " to ML " + nodeNumber,(int)Logger.CLogger.Modes.background );
             StreamReader sr = new StreamReader(stream);
             String dane = sr.ReadLine();
 
             String[] array = dane.Split(';');
             //CConstrains.domainName = array[1];
-            Console.WriteLine("<-- " + array[0] + " domainName : " + array[1]);
+            logger.print(null,"<-- " + array[0] + " domainName : " + array[1],(int)Logger.CLogger.Modes.background);
         }
 
         public void sendNodeActivityToML(List<Data.CPNNITable> lista)
         {
             Data.CSNMPmessage msg;
-
             TcpClient client = new TcpClient();
             try
             {
                 client.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
                 NetworkStream stream = client.GetStream();
-                
-                
                 msg = new Data.CSNMPmessage(null, null, null);
                 msg.pdu.PNNIList = lista;
-
-
                 msg.pdu.RequestIdentifier = "NodeActivity : " + CConstrains.nodeNumber.ToString();
-
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(stream, msg);
                 stream.Flush();
-                Console.WriteLine("--> Sending NodeActivityMsg  " + msg + " to ML ");
-
+                logger.print(null,"--> Sending NodeActivityMsg  " + msg + " to ML ",(int)Logger.CLogger.Modes.background );
                 StreamReader sr = new StreamReader(stream);
                 String dane = sr.ReadLine();
-                Console.WriteLine("<-- " + dane);
+                logger.print(null, "<-- " + dane, (int)Logger.CLogger.Modes.background);
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR : ML niesdostępny" );
+                logger.print("sendNodeActivityToML", "ML niesdostępny",(int)Logger.CLogger.Modes.error);
             }
         }
+        public void sendNodeActivityToCP(List<Data.CPNNITable> lista)
+        {
+            Data.CSNMPmessage msg;
+            TcpClient client = new TcpClient();
+            try
+            {
+                client.Connect(CConstrains.ipAddress, CConstrains.nccPort);
+                NetworkStream stream = client.GetStream();
+                msg = new Data.CSNMPmessage(null, null, null);
+                msg.pdu.PNNIList = lista;
+                msg.pdu.RequestIdentifier = "NodeActivity";
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(stream, msg);
+                stream.Flush();
+                logger.print(null, "--> Sending NodeActivityMsg  " + msg + " to CP ", (int)Logger.CLogger.Modes.background);
 
+                StreamReader sr = new StreamReader(stream);
+                String dane = sr.ReadLine();
+                logger.print(null, "<-- " + dane, (int)Logger.CLogger.Modes.background);
+            }
+            catch (Exception e)
+            {
+                logger.print("sendNodeActivityToML", "CP niesdostępny", (int)Logger.CLogger.Modes.error);
+            }
+        }
         
         private void sendPCResponse(Data.CLinkInfo SNP, string requestIdentifier)
         {
@@ -249,12 +257,12 @@ namespace NetworkNode
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = requestIdentifier + SNP.nodeNumber.ToString();
             
-            Console.WriteLine("node : " + SNP.nodeNumber);
+            logger.print(null,"node : " + SNP.nodeNumber,(int)Logger.CLogger.Modes.background);
             
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, dataToSend);
             stream.Flush();
-            Console.WriteLine("--> Sending Response " + dataToSend.pdu.RequestIdentifier);
+            logger.print(null,"--> Sending Response " + dataToSend.pdu.RequestIdentifier,(int)Logger.CLogger.Modes.background);
         }
 
         public void processReceivedData()
@@ -316,17 +324,5 @@ namespace NetworkNode
             CPort outPort = (CPort)CPortManager.Instance.getOutputPort(from.portNumber);
             outPort.startPort(50000 + to.nodeNumber * 100 + to.portNumber);
         }
-
-        //public void sendToML()      //wysyłanie do ML - co konkretnie to zaraz..
-        //{
-        //    TcpClient agentClient = new TcpClient();
-        //    agentClient.Connect(CConstrains.ipAddress, CConstrains.managementLayerPort);
-        //    NetworkStream upStream = agentClient.GetStream();
-        //    StreamWriter upStreamWriter = new StreamWriter(upStream);
-
-        //    //wysyłanie:
-        //    upStreamWriter.WriteLine();
-        //    upStreamWriter.Flush();
-        //}
    }
 }

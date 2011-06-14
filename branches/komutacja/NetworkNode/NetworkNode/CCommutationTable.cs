@@ -12,7 +12,7 @@ namespace NetworkNode
 
        // IN/OUT
        private Data.CCommutationTable commutationTable;
-
+       private Logger.CLogger logger = Logger.CLogger.Instance;
 
        private CCommutationTable()
        {
@@ -30,12 +30,11 @@ namespace NetworkNode
 
         public PortInfo getOutputPortInfo(PortInfo portIn)
         {
-            Console.WriteLine("*** Getting output port Info ***");
+            //Console.WriteLine("*** Getting output port Info ***");
             PortInfo portOut;
             if (commutationTable.ContainsKey(portIn))
             {
                 portOut = commutationTable[portIn];
-
             }
             else
             {
@@ -49,7 +48,7 @@ namespace NetworkNode
 
                 catch (Exception)
                 {
-                    Console.WriteLine("ERROR : Brak zadanego wpisu w tablicy komutacji !!!" );
+                    logger.print(null,"Brak zadanego wpisu w tablicy komutacji !!!",(int)Logger.CLogger.Modes.error );
                 }
             }
             return portOut;
@@ -57,25 +56,25 @@ namespace NetworkNode
 
         public void setCommutationTable(Data.CCommutationTable commutationTable)
         {
-            Console.WriteLine("Setting connection");
+            logger.print(null, "Setting connection", (int)Logger.CLogger.Modes.normal);
             this.commutationTable = commutationTable;
         }
 
         public void resetCommutationTable()
         {
-            Console.WriteLine("Reseting connection");
+            logger.print(null, "Reseting connection", (int)Logger.CLogger.Modes.normal);
             commutationTable.Clear();
         }
 
         public void addEntry(PortInfo portIn, PortInfo portOut)
         {
-            Console.WriteLine("Adding entry");
+            logger.print(null, "Adding entry", (int)Logger.CLogger.Modes.normal);
             commutationTable.Add(portIn, portOut);
         }
 
         public void removeConnection(PortInfo portIn, PortInfo portOut)
         {
-            Console.WriteLine("Removing connection");
+            logger.print(null, "Removing connection", (int)Logger.CLogger.Modes.normal);
             if (commutationTable[portIn].Equals(portOut))
             {
                 commutationTable.Remove(portIn);
@@ -96,7 +95,8 @@ namespace NetworkNode
                 if (commutationTable.ContainsKey(key))
                 {
                     portOut = commutationTable[key];
-                    Console.WriteLine("Port In :" + key.getPortID() + " VPI :" + key.getVPI() + " VCI :" + key.getVCI() + " || Port Out :" + portOut.getPortID() + " VPI :" + portOut.getVPI() + " VCI :" + portOut.getVCI());
+                    String text = "Port In :" + key.getPortID() + " VPI :" + key.getVPI() + " VCI :" + key.getVCI() + " || Port Out :" + portOut.getPortID() + " VPI :" + portOut.getVPI() + " VCI :" + portOut.getVCI();
+                    logger.print(null, text, (int)Logger.CLogger.Modes.background);
                 }
                 
             }
