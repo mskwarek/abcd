@@ -110,12 +110,12 @@ namespace ClientNode
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             stream.Flush();
-            logger.print(null,"--> Sending helloMsg  " + msg + " to ML " + nodeNumber,(int)Logger.CLogger.Modes.normal);
+            logger.print(null,"--> Sending helloMsg  " + msg + " to ML " + nodeNumber,(int)Logger.CLogger.Modes.background);
             StreamReader sr = new StreamReader(stream);
             String dane = sr.ReadLine();
             String[] array = dane.Split(';');
             //CConstrains.domainName = array[1];
-            logger.print(null, "<-- " + array[0] + " domainName : " + array[1], (int)Logger.CLogger.Modes.normal);
+            logger.print(null, "<-- " + array[0] + " domainName : " + array[1], (int)Logger.CLogger.Modes.background);
         }
 
        

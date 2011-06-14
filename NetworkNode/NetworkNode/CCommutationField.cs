@@ -50,7 +50,7 @@ namespace NetworkNode
                     }
                 else
                 {
-                    System.Console.WriteLine("ERROR : Blad doboru portu wyjsciowego");
+                   Logger.CLogger.Instance.print("passOnData","Blad doboru portu wyjsciowego",(int)Logger.CLogger.Modes.error);
                 }
             return portnumber;
         }

@@ -10,7 +10,7 @@ namespace NetworkNode
 {
     public class CNetworkPortOut:CNetworkPort
     {
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
 
 
 
@@ -65,29 +65,28 @@ namespace NetworkNode
                 stream.Flush();
                 if (helloMsg == true)
                 {
-                    Console.WriteLine("--> CNetworkPortOut :  SENDING HELLO  ON PORT " + base.PORTNUMBER);
+                    logger.print(null,"-->SENDING HELLO TO : " + base.PORTNUMBER,(int)Logger.CLogger.Modes.background);
                     StreamReader sr = new StreamReader(stream);
                     String dane = sr.ReadLine();
                     CNetManager.Instance.fillTable(base.ID, dane, true);
 
                 }
                 else
-                    Console.WriteLine("--> CNetworkPortOut :  SENDING " + data + " ON PORT " + base.PORTNUMBER);
+                    logger.print(null,"--> SENDING " + data + " TO : " + base.PORTNUMBER,(int)Logger.CLogger.Modes.normal);
 
 
                 List<byte> lista = new List<byte>();
                 lista = data.getCUserData().getInformation();
 
-                Console.WriteLine(" *** ");
+
                 foreach (byte b in lista)
                 {
-                    Console.Write(b + " ");
+                    Console.Write("["+b+"]");
                 }
-                Console.WriteLine(" *** ");
                 }
             catch (Exception e)
             {
-                Console.WriteLine(base.PORTNUMBER + " is unreachable ");
+                logger.print(null,base.PORTNUMBER + " is unreachable ",(int)Logger.CLogger.Modes.normal);
                 CNetManager.Instance.fillTable(base.ID, "0;x;0;0", false);
                 //return PORTNUMBER;
                 

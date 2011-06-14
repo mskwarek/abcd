@@ -13,7 +13,7 @@ namespace  NetworkNode
 
     class CClientPortOut : CClientPort
     {
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
 
 
         //konstruktor
@@ -39,26 +39,17 @@ namespace  NetworkNode
             TcpClient client = new TcpClient();
             client.Connect(CConstrains.ipAddress, base.PORTNUMBER);
             NetworkStream stream = client.GetStream();
-
             Data.CUserData cUserData = data.getCUserData();
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, cUserData);
-            
-            Console.WriteLine("--> SENDING : " + cUserData);
+            logger.print(null,"--> SENDING : " + cUserData,(int)Logger.CLogger.Modes.normal);
             List<byte> lista = new List<byte>();
             lista = cUserData.getInformation();
-
-            
-
             stream.Flush();
-            Console.WriteLine("***");
-            foreach (byte b in lista)
-            {
-
-                Console.Write(b + "  ");
-
+            
+            foreach (byte b in lista){
+                Console.Write("["+b+"]");
             }
-            Console.WriteLine("***");
             return PORTNUMBER;
         }
     }

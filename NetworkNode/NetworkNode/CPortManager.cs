@@ -13,7 +13,7 @@ namespace NetworkNode
 
         private List<CPort> InputPortList = new List<CPort>();
         private List<CPort> OutputPortList = new List<CPort>();
-        
+        private Logger.CLogger logger = Logger.CLogger.Instance;
         private static readonly CPortManager instance = new CPortManager();
 
         private CPortManager()
@@ -44,7 +44,7 @@ namespace NetworkNode
             }
             else
             {
-                Console.WriteLine("ERROR : nie znaleziono pliku konfiguracyjnego dla węzła " + CConstrains.nodeNumber + "\n Wczytuje domysliny");
+                logger.print(null, "Brak pliku konfiguracyjnego " + CConstrains.nodeNumber + "\n Wczytuje domysliny", (int)Logger.CLogger.Modes.error); 
                 textReader = new XmlTextReader(CConstrains.configFileURL);
             }
 
@@ -75,25 +75,10 @@ namespace NetworkNode
                         
                         }
                     }
-                    //else if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "defaultNode")
-                    //{
-                    //    Console.WriteLine("zaczytałem default");
-                    //    while (textReader.Read())
-                    //    {
-                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputClientPort")
-                    //        { CConstrains.inputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputClientPort")
-                    //        { CConstrains.outputClientPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "InputNetworkPort")
-                    //        { CConstrains.inputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
-                    //        if (textReader.NodeType == XmlNodeType.Element && textReader.Name == "OutputNetworkPort")
-                    //        { CConstrains.outputNetworkPortNumber = Convert.ToInt16(textReader.ReadString()); }
-
-                    //    }
-                    //}
+                    
                 }
                 textReader.Close();
-                Console.WriteLine("Config loaded. ");
+                logger.print("readConfig", null, (int)Logger.CLogger.Modes.constructor);
                 return true;
             }
             catch (System.Exception e)
@@ -103,7 +88,7 @@ namespace NetworkNode
                 sw.Flush();
                 sw.Close();
 
-                Console.WriteLine("ERROR!!! nie ma pliku konfiguracyjnego");
+                logger.print(null, "Brak pliku konfiguracyjnego " + CConstrains.nodeNumber, (int)Logger.CLogger.Modes.error);
                 return false;
             }
         }
@@ -186,14 +171,14 @@ namespace NetworkNode
 
         public void getNodePortConfiguration()
         {
-            Console.WriteLine("\n\nNode ID = " + CConstrains.nodeNumber + " PORT CONFIGURATION\n\n");
+            logger.print(null, "\n\nNode ID = " + CConstrains.nodeNumber + " PORT CONFIGURATION\n\n", (int)Logger.CLogger.Modes.background);
             foreach (CPort p in InputPortList)
             {
-                Console.WriteLine("ID = " + p.ID + " CLASS = " + p.PORTCLASS + " TYPE = " + p.PORTTYPE + " LISTENING ON PORT = " + p.PORTNUMBER);
+                logger.print(null, "ID = " + p.ID + " CLASS = " + p.PORTCLASS + " TYPE = " + p.PORTTYPE + " LISTENING ON PORT = " + p.PORTNUMBER, (int)Logger.CLogger.Modes.background);
             }
             foreach (CPort p in OutputPortList)
             {
-                Console.WriteLine("ID = " + p.ID + " CLASS = " + p.PORTCLASS + " TYPE = " + p.PORTTYPE + " SENDING TO PORT = " + p.PORTNUMBER);
+                logger.print(null, "ID = " + p.ID + " CLASS = " + p.PORTCLASS + " TYPE = " + p.PORTTYPE + " SENDING TO PORT = " + p.PORTNUMBER, (int)Logger.CLogger.Modes.background);
             }
         }
 

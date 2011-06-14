@@ -20,7 +20,7 @@ namespace NetworkNode
         private TcpClient client;
         private NetworkStream clientStream;
         private StreamWriter serwerStream;
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
 
         public CNetworkPortIn(int id, Boolean busy, int systemPortNumber)
             : base(id, busy)
@@ -40,13 +40,13 @@ namespace NetworkNode
             status = true;
             portListener = new TcpListener(ip, base.PORTNUMBER);  //tworzymy obiekt  nasłuchujący na podanym porcie
             portListener.Start();                      //uruchamiamy serwer
-            Console.WriteLine(base.PORTCLASS + " o id = " + base.ID + " będzie nasłuchiwał na porcie systemowym = " + base.PORTNUMBER);
-
+            String text = "Port : " + base.ID + " Listening on : " + portNumber;
+            logger.print(null, text, (int)Logger.CLogger.Modes.background);
             while (status) //uruchamiamy nasłuchiwanie
             {
                 client = portListener.AcceptTcpClient(); //akceptujemy żądanie połączenia
                 clientStream = client.GetStream();  //pobieramy strumień do wymiany danych
-                Console.WriteLine("*** CONNECTION ACCEPTED ***");
+                //Console.WriteLine("*** CONNECTION ACCEPTED ***");
                 serwerStream = new StreamWriter(clientStream);
                 BinaryFormatter binaryFormater = new BinaryFormatter();
                 CCharacteristicData dane = (CCharacteristicData)binaryFormater.Deserialize(clientStream);
@@ -54,25 +54,21 @@ namespace NetworkNode
                 //jeżeli przychodzi do nas coś na vpi = 0 i vci =5 
                 if ((dane.getCAdministrationData().getVCI() == 5) && (dane.getCAdministrationData().getVPI() == 0))
                 {
-                    Console.WriteLine("<-- CNetworkPortIn : RECIEVED HELLO MSG");
+                    logger.print(null,"<-- CNetworkPortIn : RECIEVED HELLO MSG",(int)Logger.CLogger.Modes.background);
                     serwerStream.WriteLine(CConstrains.nodeNumber+";"+CConstrains.nodeType+";"+base.ID+";"+CConstrains.domainName);
                     serwerStream.Flush();
                 }
                 else
                 {
-                    Console.WriteLine("<-- CNetworkPortIn :  RECIEVED DATA");
+                    logger.print(null,"<-- CNetworkPortIn :  RECIEVED DATA",(int)Logger.CLogger.Modes.normal);
                     List<byte> lista = new List<byte>();
                     lista = dane.getCUserData().getInformation();
-                    Console.WriteLine(" *** ");
                     foreach (byte b in lista)
                     {
-                        Console.Write(b + " ");
+                        Console.Write("["+b + "]");
                     }
-                    Console.WriteLine(" *** ");
-
-
                     queue.Enqueue(dane);
-                    Console.WriteLine(dane);
+                    //Console.WriteLine(dane);
                     Thread t2 = new Thread(new ThreadStart(receiveData));
                     t2.Name = "receiveData " + base.PORTNUMBER;
                     t2.Start();
@@ -101,8 +97,5 @@ namespace NetworkNode
                 Thread.Sleep(1000);
             }
         }
-
-
-        
     } 
 }

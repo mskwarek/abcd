@@ -156,6 +156,31 @@ namespace ControlPlane
                         downStream.Flush();
                     }
                 }
+                else if (dane.pdu.RequestIdentifier.StartsWith("NodeActivity"))
+                {
+                    foreach (Data.CPNNITable t in dane.pdu.PNNIList)
+                    {
+                        if (PNNIList.Contains(t))
+                        {
+                            int index = PNNIList.IndexOf(t);
+
+                            if (PNNIList.ElementAt(index).IsNeighbourActive != t.IsNeighbourActive)
+                            {
+                                PNNIList.ElementAt(index).IsNeighbourActive = t.IsNeighbourActive;
+                                Console.WriteLine("*** PNNIList Updated  " + PNNIList.ElementAt(index).NodeNumber + " " + PNNIList.ElementAt(index).NodeType + " ACTIVITY :  " + PNNIList.ElementAt(index).IsNeighbourActive);
+                                //sendPNNIListToCP(PNNIList); 
+                            }
+                        }
+                        else
+                        {
+                            PNNIList.Add(t);
+                            Console.WriteLine("PNNIList  ADDED : " + t.NodeNumber + " " + t.NodeType + " " + t.NodePortNumberSender + " " + t.NeighbourNodeNumber + " " + t.NeighbourNodeType + " " + t.NeighbourPortNumberReciever + " " + t.IsNeighbourActive);
+                            //sendPNNIListToCP(PNNIList); 
+                        }
+                        downStream.WriteLine("--> SENDING RESPONSE : " + dane.pdu.RequestIdentifier + " -OK- ");
+                        downStream.Flush();
+                    }
+                }
                 else if (dane.pdu.RequestIdentifier.StartsWith("NetworkCallCoordination"))
                 {
 
