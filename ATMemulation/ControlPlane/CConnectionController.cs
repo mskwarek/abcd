@@ -58,13 +58,14 @@ namespace ControlPlane
         {
             for (int i = 1; i <= Data.CAdministrationData.VCI_MAX; i++)
             {
-                if ( i != 5)
+                if ( i != 5 && i!=22)
                     VCIPole.Enqueue(i);
             }
 
             for (int i = 1; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
             {
-                VPIPole.Enqueue(i);
+                if (i != 66)
+                    VPIPole.Enqueue(i);
             }
 
             logger.print("ConnectionController",null,(int)Logger.CLogger.Modes.constructor);
@@ -151,85 +152,85 @@ namespace ControlPlane
                         }
 
 
-                        int nodeNumber;
-                        int portIn;
-                        int portOut;
-                        int VPIIn;
-                        int VCIIn;
-                        int VPIOut;
-                        int VCIOut;
+                        int nodeNumber=0;
+                        int portIn = 0;
+                        int portOut = 0;
+                        int VPIIn = 0;
+                        int VCIIn = 0;
+                        int VPIOut = 0;
+                        int VCIOut = 0;
 
 
                         for (int a = 0; a < links.Count - 1; a++)
                         {
                             RouteEngine.CShortestPathCalculatorWrapper.Instance.reserveCLink(links[a]);
-                            //if (links[a].A.portType != "client")
-                            //{
-                            //    nodeNumber = links[a].A.nodeNumber;
-                            //    portIn = links[a].A.portNumber;
-                            //    portOut = links[a + 1].A.portNumber;
-                            //    VPIIn = VPIs[a];
-                            //    VCIIn = VCIs[a];
-                            //    VPIOut = VPIs[a + 1];
-                            //    VCIOut = VCIs[a + 1];
-                            //    if (a == 0)
-                            //    {
-                            //        VCIIn = 0;
-                            //        VPIIn = 0;
-                            //    }
-                            //    if (a == links.Count - 2)
-                            //    {
-                            //        VCIOut = 0;
-                            //        VPIOut = 0;
-                            //    }
-
-                            //}
-                            //else if (links[a].B.portType != "client")
-                            //{
-                            //    nodeNumber = links[a].B.nodeNumber;
-                            //    portIn = links[a].B.portNumber;
-                            //    portOut = links[a + 1].B.portNumber;
-                            //    VPIIn = VPIs[a];
-                            //    VCIIn = VCIs[a];
-                            //    VPIOut = VPIs[a + 1];
-                            //    VCIOut = VCIs[a + 1];
-                            //    if (a == 0)
-                            //    {
-                            //        VCIIn = 0;
-                            //        VPIIn = 0;
-                            //    }
-                            //    if (a == links.Count - 2)
-                            //    {
-                            //        VCIOut = 0;
-                            //        VPIOut = 0;
-                            //    }
-
-                            //}
-
-
-                            //else
-                            //{
+                            Console.WriteLine("liczba laczy: " + links.Count);
+                                bool intraDomain = false;
                                 nodeNumber = links[a].B.nodeNumber;
                                 portIn = links[a].B.portNumber;
                                 portOut = links[a + 1].A.portNumber;
-                                VPIIn = VPIs[a];
-                                VCIIn = VCIs[a];
-                                VPIOut = VPIs[a + 1];
-                                VCIOut = VCIs[a + 1];
-                                if (a == 0)
+                                int borderNode=555;
+                                int borderNodeInPort=777;
+                                int borderNodeOutPort=999;
+
+                                if (!intraDomain)
                                 {
-                                    VCIIn = 0;
-                                    VPIIn = 0;
+                                    if (a == 0)
+                                    {
+                                        
+                                        VCIIn = 0;
+                                        VPIIn = 0;
+                                        VPIOut = VPIs[a];
+                                        VCIOut = VCIs[a];
+                                        Console.WriteLine("a == 0 " + VPIOut + "   " + VCIOut);
+                                    }
+
+                                    else
+                                    {
+                                        VPIIn = VPIs[a - 1];
+                                        VCIIn = VCIs[a - 1];
+                                        VPIOut = VPIs[a];
+                                        VCIOut = VCIs[a];
+                                        Console.WriteLine("a != 0 " + VPIOut + "   " + VCIOut);
+                                    }
+                                    addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
+                                    if (links[a + 1].A.portType != "client" && a == (links.Count - 2))
+                                    {
+
+                                        Console.WriteLine("a: "+a+"typ portu " +links[a + 1].A.portType);
+                                        intraDomain = true;
+                                        borderNode = links[a + 1].B.nodeNumber;
+                                        borderNodeInPort = links[a + 1].B.portNumber;
+                                        Console.WriteLine("intra domain");
+                                        
+                                        
+                                            VPIIn = VPIOut;
+                                            VCIIn = VCIOut;
+                                        
+                                        VPIOut = 66;
+                                        VCIOut = 22;
+                                        foreach(CPNNITable t in CNetworkCallController.Instance.PNNIList)
+                                        {
+                                            if (t.NodeNumber == borderNode)
+                                            {
+                                                borderNodeOutPort = t.NodePortNumberSender;
+                                                Console.WriteLine("node number :" + t.NodeNumber+" border port out :" + borderNodeOutPort);
+                                                break;
+                                            }
+                                        }
+
+                                        
+                                    }
+                                    
+                                    
                                 }
-                            //    if (a == links.Count - 2)
-                            //    {
-                            //        VCIOut = 0;
-                            //        VPIOut = 0;
-                            //    }
-                            //}
+                                else if(intraDomain)
+                                {
+                                    addConnection(borderNode, borderNodeInPort, VPIIn, VCIIn, borderNodeOutPort, VPIOut, VCIOut, identifier);
+                                    
 
-                            addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
-
+                                }
+                                
                         }
                         logger.print("ConnectionRequestOut", " Connection " + identifier + " established ", (int)Logger.CLogger.Modes.normal);
                         return true;

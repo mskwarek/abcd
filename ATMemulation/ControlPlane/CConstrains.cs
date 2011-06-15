@@ -15,5 +15,12 @@ namespace ControlPlane
         public static String defaultconfigFileURL = "../../../starter/networkConfig";
         public static String configFileURL; // = "../../defaultConfig.xml";
         public static String xmlEnding = ".xml";
+        public static Dictionary<string, string> PortType = new Dictionary<string, string>()
+        {
+                {"PortTypeIN" , "IN" },
+                {"PortTypeOUT" ,"OUT"},
+                {"ClientPortClass", "CLIENTPORT"},
+                {"NetworkPortClass" , "NETWORKPORT"}
+        };       
     }
 }
