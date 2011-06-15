@@ -89,7 +89,7 @@ namespace ControlPlane
 　　　　　　　　　　　　　　}
 　　　　　　　　　　　　　　else
 　　　　　　　　　　　　　　{
-
+                    
 　　　　　　　　　　　　　　　　if (NetworkCallCoordinationOut(fromNode, toNode))
 　　　　　　　　　　　　　　　　{
 　　　　　　　　　　　　　　　　　　downStream.WriteLine("OK");
@@ -183,7 +183,7 @@ namespace ControlPlane
                 }
                 else if (dane.pdu.RequestIdentifier.StartsWith("NetworkCallCoordination"))
                 {
-
+                    Console.WriteLine("NetworkCallCoordiation");
                     bool exist = false;
                     int nodeNumber=0;
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
@@ -196,12 +196,14 @@ namespace ControlPlane
                             foreach (Data.CPNNITable t in PNNIList)
                             {
 
-                                if (t.NodeNumber == nodeNumber && t.NeighbourNodeNumber== nodeNumber)  // a w wersji z projektu tak
+                                Console.WriteLine("do ktorego : " + nodeNumber + "  jaki jest " + t.NodeNumber);
+                                if (t.NodeNumber == nodeNumber) //&& t.NeighbourNodeNumber== nodeNumber)  // a w wersji z projektu tak
 
                        //         if (t.NeighbourNodeNumber == nodeNumber || t.NodeNumber == nodeNumber) w wersji 171 bylo tak
 
                                 {
                                     exist = true;
+
                                     downStream.WriteLine("Confirmation");
                                     downStream.Flush();
                                     break;
@@ -231,7 +233,7 @@ namespace ControlPlane
                         }
 
 
-                        ConnectionRequest(borderNodeNumber, nodeNumber);
+                        ConnectionRequest(nodeNumber,borderNodeNumber);
                     }
                 }
 
@@ -268,6 +270,7 @@ namespace ControlPlane
             List<int> adjacentNCCs = CConstrains.NCCList;
             foreach (int NCC in adjacentNCCs)
             {
+                
                 TcpClient client = new TcpClient();
                 client.Connect(CConstrains.ipAddress, NCC);
                 NetworkStream stream = client.GetStream();

@@ -6,7 +6,7 @@
   <nccPort>50010</nccPort>
   <neighbourNccPort>50009</neighbourNccPort>
   <link from="5;b;6" to="6;n;6"></link>
-  <link from="6;n;2" to="7;c;1"></link>
+  <link from="6;c;2" to="7;c;1"></link>
 <defaultNode>
     <InputClientPort>5</InputClientPort>
     <OutputClientPort>5</OutputClientPort>
