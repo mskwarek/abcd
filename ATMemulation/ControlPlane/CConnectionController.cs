@@ -220,7 +220,7 @@ namespace ControlPlane
                                         VPIIn = 0;
                                         VPIOut = VPIs[a];
                                         VCIOut = VCIs[a];
-                                        Console.WriteLine("a == 0 " + VPIOut + "   " + VCIOut);
+                                        
                                     }
 
                                     else
@@ -229,7 +229,7 @@ namespace ControlPlane
                                         VCIIn = VCIs[a - 1];
                                         VPIOut = VPIs[a];
                                         VCIOut = VCIs[a];
-                                        Console.WriteLine("a != 0 " + VPIOut + "   " + VCIOut);
+                                        
                                     }
                                     addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
                                     logger.print(null, "nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn, (int)Logger.CLogger.Modes.background); 
@@ -237,11 +237,11 @@ namespace ControlPlane
                                     if (links[a + 1].A.portType != "client" && a == (links.Count - 2))
                                     {
 
-                                        Console.WriteLine("a: " + a + "typ portu " + links[a + 1].A.portType);
+                                       
                                         intraDomain = true;
                                         borderNode = links[a + 1].B.nodeNumber;
                                         borderNodeInPort = links[a + 1].B.portNumber;
-                                        Console.WriteLine("intra domain");
+                                       
 
 
                                         VPIIn = VPIOut;
@@ -267,7 +267,7 @@ namespace ControlPlane
                                 }
                                 if (intraDomain)
                                 {
-                                    Console.WriteLine(" intra domain adding entry");
+                                    
                                     addConnection(borderNode, borderNodeInPort, VPIIn, VCIIn, borderNodeOutPort, VPIOut, VCIOut, identifier);
 
 

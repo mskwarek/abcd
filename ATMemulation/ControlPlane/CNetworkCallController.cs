@@ -401,7 +401,7 @@ namespace ControlPlane
                             break ; //bo i tak jeden border
                         }
                     }
-                    logger.print(null, "ConnectionRequest from :" + fromNode + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
+                    logger.print(null, "NCC -> CC : ConnectionRequest from :" + fromNode + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
                     ConnectionRequest(fromNode, borderNodeNumber);
                     return true;
                 }
@@ -459,7 +459,7 @@ namespace ControlPlane
                             break; //bo i tak jeden border
                         }
                     }
-                    logger.print(null, "ConnectionTeardownOut from :" + source + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
+                    logger.print(null, " NCC -> CC : ConnectionTeardownOut from :" + source + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
                     CallTeardownOut(source, borderNodeNumber);
                     return true;
                 }
