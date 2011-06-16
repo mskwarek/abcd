@@ -108,10 +108,10 @@ namespace ControlPlane
             lock (_locker)
             {
                 RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
-                logger.print(null, "Routing", (int)Logger.CLogger.Modes.background); 
+                logger.print("RC", "Routing", (int)Logger.CLogger.Modes.background); 
                 if (route != null && route.Connections.Count != 0)
                 {
-                    logger.print("ConnectionRequestOut", " Route " + SNP_s + " to " + SNP_d + " set up ", (int)Logger.CLogger.Modes.normal);
+                    logger.print("RC", " Route " + SNP_s + " to " + SNP_d + " set up ", (int)Logger.CLogger.Modes.normal);
                     List<CLink> links = route.Connections;
 
                     int i = 0;
@@ -165,7 +165,7 @@ namespace ControlPlane
                         for (int a = 0; a < links.Count - 1; a++)
                         {
                             RouteEngine.CShortestPathCalculatorWrapper.Instance.reserveCLink(links[a]);
-                            logger.print(null, "liczba laczy: " + links.Count, (int)Logger.CLogger.Modes.background); 
+                            //logger.print(null, "liczba laczy: " + links.Count, (int)Logger.CLogger.Modes.background); 
 
                             nodeNumber = links[a].B.nodeNumber;
                             portIn = links[a].B.portNumber;
@@ -204,7 +204,7 @@ namespace ControlPlane
                                 VPIOut = VPIs[a+1];
                                 VCIOut = VCIs[a + 1];
                                 addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
-                                logger.print(null, "nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn, (int)Logger.CLogger.Modes.background); 
+                                logger.print(null, "nodeNumber: " + nodeNumber + " port in " + portIn + " vpi in " + VPIIn + " vci in " + VCIIn + " port out " + portIn + " vpi out " + VPIIn + " vci out " + VCIIn, (int)Logger.CLogger.Modes.background); 
 
                             }
                             else{
@@ -255,7 +255,7 @@ namespace ControlPlane
                                             {
 
                                                 borderNodeOutPort = t.NodePortNumberSender;
-                                                logger.print(null, "node number :" + t.NodeNumber + " border port out :" + borderNodeOutPort, (int)Logger.CLogger.Modes.background); 
+                                                //logger.print(null, "node number :" + t.NodeNumber + " border port out :" + borderNodeOutPort, (int)Logger.CLogger.Modes.background); 
                                                 break;
                                             }
                                         }
@@ -265,6 +265,7 @@ namespace ControlPlane
 
 
                                 }
+
                                 if (intraDomain)
                                 {
                                     
@@ -336,7 +337,7 @@ namespace ControlPlane
             List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
             pduList.Add(pduDict);
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
-            dataToSend.pdu.RequestIdentifier = "SNPLinkConnectionDeallocation" + SNP.nodeNumber.ToString();
+            dataToSend.pdu.RequestIdentifier = "SNPLinkConnectionDeallocation " + SNP.nodeNumber.ToString();
 
             logger.print("SNPLinkConnectionDeallocation", "SNPLinkConnectionDeallocation" + SNP.nodeNumber.ToString(), (int)Logger.CLogger.Modes.normal);
             send(SNP.nodeNumber, dataToSend);
@@ -439,7 +440,7 @@ namespace ControlPlane
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, msg);
             //stream.Flush();
-            logger.print(null,"--> SENDING " + msg + " TO NODE : " + nodeNumber, (int)Logger.CLogger.Modes.normal);
+            //logger.print(null,"--> SENDING " + msg + " TO NODE : " + nodeNumber, (int)Logger.CLogger.Modes.normal);
 
         }
 

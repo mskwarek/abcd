@@ -58,7 +58,7 @@ namespace ControlPlane
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 if (dane.pdu.RequestIdentifier.StartsWith("CallRequest"))
                 {
-                    logger.print(null,"CallRequest", (int)Logger.CLogger.Modes.normal);
+                    logger.print("NCC","CallRequest", (int)Logger.CLogger.Modes.normal);
 
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
                     {
@@ -253,7 +253,7 @@ namespace ControlPlane
                     }
                     if (!exist)
                     {
-                        logger.print(null, " Rejected", (int)Logger.CLogger.Modes.background);
+                        logger.print(null, " Rejected ", (int)Logger.CLogger.Modes.background);
 
                         downStream.WriteLine("Rejected");
                         downStream.Flush();
@@ -384,7 +384,7 @@ namespace ControlPlane
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(stream, msg);
                 stream.Flush();
-                logger.print("NCC"," --> Sending NetworkCallCordination" + msg + " to other NCC [" + CConstrains.NCCportNumber + "->" + NCC + "]",(int)Logger.CLogger.Modes.normal);
+                logger.print("NCC -> NCC"," --> Sending NetworkCallCordination" + msg + " to other NCC [" + CConstrains.NCCportNumber + "->" + NCC + "]",(int)Logger.CLogger.Modes.normal);
                 StreamReader sr = new StreamReader(stream);
                 String responseFromNCC = sr.ReadLine();
                 logger.print(null,responseFromNCC,(int)Logger.CLogger.Modes.normal);
@@ -401,7 +401,7 @@ namespace ControlPlane
                             break ; //bo i tak jeden border
                         }
                     }
-                    logger.print(null, "NCC -> CC : ConnectionRequest from :" + fromNode + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
+                    logger.print("NCC -> CC", "ConnectionRequest from :" + fromNode + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
                     ConnectionRequest(fromNode, borderNodeNumber);
                     return true;
                 }
@@ -442,7 +442,7 @@ namespace ControlPlane
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(stream, msg);
                 stream.Flush();
-                logger.print("NCC", " --> Sending CallTeardownIn" + msg + " to other NCC [" + CConstrains.NCCportNumber + "->" + NCC + "]", (int)Logger.CLogger.Modes.normal);
+                logger.print("NCC -> NCC", " --> Sending CallTeardownIn" + msg + " to other NCC [" + CConstrains.NCCportNumber + "->" + NCC + "]", (int)Logger.CLogger.Modes.normal);
                 StreamReader sr = new StreamReader(stream);
                 String responseFromNCC = sr.ReadLine();
                 logger.print(null, responseFromNCC, (int)Logger.CLogger.Modes.normal);
@@ -459,7 +459,7 @@ namespace ControlPlane
                             break; //bo i tak jeden border
                         }
                     }
-                    logger.print(null, " NCC -> CC : ConnectionTeardownOut from :" + source + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
+                    logger.print("NCC -> CC", "ConnectionTeardownOut from :" + source + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
                     CallTeardownOut(source, borderNodeNumber);
                     return true;
                 }
