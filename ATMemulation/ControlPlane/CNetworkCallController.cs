@@ -58,8 +58,13 @@ namespace ControlPlane
                 Data.CSNMPmessage dane = (Data.CSNMPmessage)binaryFormater.Deserialize(clientStream);
                 if (dane.pdu.RequestIdentifier.StartsWith("CallRequest"))
                 {
+                    logger.print(null,"CallRequest", (int)Logger.CLogger.Modes.normal);
+
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
                     {
+
+                    
+
                       if (d.ContainsKey("CallRequest"))
 　　　　　　　　　　　　{
 　　　　　　　　　　　　　　int fromNode = Convert.ToInt16(d["FromNode"]);
@@ -107,6 +112,7 @@ namespace ControlPlane
                 }
                 else if (dane.pdu.RequestIdentifier.StartsWith("CallTeardown"))
                 {
+                    logger.print(null, "CallTeardown", (int)Logger.CLogger.Modes.normal);
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
                     {
                         if (d.ContainsKey("CallTeardown"))
@@ -125,7 +131,7 @@ namespace ControlPlane
                             }
                             if (exists)
                             {
-                                Console.WriteLine("dont exits rozlaczanie w tej domenie");
+                                
                                 if (CallTeardownOut(fromNode, toNode))
                                 {
                                     downStream.WriteLine("OK");
@@ -139,7 +145,7 @@ namespace ControlPlane
                             }
                             else
                             {
-                                Console.WriteLine("exists: rozlacznie w innej domenie");   
+                               
                                 if (CallTeardownIn(fromNode, toNode))
                                 {
                                     downStream.WriteLine("OK");
@@ -216,7 +222,7 @@ namespace ControlPlane
                 }
                 else if (dane.pdu.RequestIdentifier.StartsWith("NetworkCallCoordination"))
                 {
-                    Console.WriteLine("NetworkCallCoordiation");
+                    logger.print(null, "NetworkCallCoordination", (int)Logger.CLogger.Modes.normal);
                     bool exist = false;
                     int nodeNumber=0;
                     foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
@@ -232,7 +238,8 @@ namespace ControlPlane
                                
                                 if (t.NodeNumber == nodeNumber || t.NeighbourNodeNumber== nodeNumber)  // a w wersji z projektu ta
                                 {
-                                    Console.WriteLine("confirmation");
+                                    logger.print(null,  "Confirmation", (int)Logger.CLogger.Modes.background);
+
                                     exist = true;
 
                                     downStream.WriteLine("Confirmation");
@@ -246,58 +253,8 @@ namespace ControlPlane
                     }
                     if (!exist)
                     {
-                        downStream.WriteLine("Rejected");
-                        downStream.Flush();
+                        logger.print(null, " Rejected", (int)Logger.CLogger.Modes.background);
 
-                    }
-                    else
-                    {
-                        int borderNodeNumber = 0;
-                        foreach (Data.CPNNITable t in PNNIList)
-                        {
-                            if (t.NodeType.Equals("border"))
-                            {
-                                borderNodeNumber = t.NodeNumber;
-
-                                break; //bo i tak jeden border
-                            }
-                        }
-
-                        Console.WriteLine("ConnectionRequest domena 2 node number :" + nodeNumber + " borderNodeNumber " + borderNodeNumber);
-                        ConnectionRequest(borderNodeNumber,nodeNumber);
-                    }
-                }
-                else if (dane.pdu.RequestIdentifier.StartsWith("InCallTeardown"))
-                {
-                    Console.WriteLine("CallTeardownIn");
-                    bool exist = false;
-                    int nodeNumber = 0;
-                    foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
-                    {
-                        if (d.ContainsKey("CallTeardownIn"))
-                        {
-
-                            nodeNumber = Convert.ToInt32(d["ToNode"]);
-                            foreach (Data.CPNNITable t in PNNIList)
-                            {
-
-                                
-                                if (t.NodeNumber == nodeNumber || t.NeighbourNodeNumber == nodeNumber)  // a w wersji z projektu ta
-                                {
-                                    
-                                    exist = true;
-
-                                    downStream.WriteLine("Toredown");
-                                    downStream.Flush();
-                                    break;
-                                }
-
-                            }
-                        }
-
-                    }
-                    if (!exist)
-                    {
                         downStream.WriteLine("Rejected");
                         downStream.Flush();
 
@@ -316,6 +273,64 @@ namespace ControlPlane
                         }
 
                         
+                        logger.print(null, "ConnectionRequest from :" + borderNodeNumber + "to : " + nodeNumber, (int)Logger.CLogger.Modes.background);
+
+                        ConnectionRequest(borderNodeNumber,nodeNumber);
+                    }
+                }
+                else if (dane.pdu.RequestIdentifier.StartsWith("InCallTeardown"))
+                {
+                    
+                    logger.print(null, " CallTeardownIn", (int)Logger.CLogger.Modes.background);
+
+                    bool exist = false;
+                    int nodeNumber = 0;
+                    foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
+                    {
+                        if (d.ContainsKey("CallTeardownIn"))
+                        {
+
+                            nodeNumber = Convert.ToInt32(d["ToNode"]);
+                            foreach (Data.CPNNITable t in PNNIList)
+                            {
+
+                                
+                                if (t.NodeNumber == nodeNumber || t.NeighbourNodeNumber == nodeNumber)  // a w wersji z projektu ta
+                                {
+                                    
+                                    exist = true;
+                                    logger.print(null,"Toredown", (int)Logger.CLogger.Modes.normal);
+
+                                    downStream.WriteLine("Toredown");
+                                    downStream.Flush();
+                                    break;
+                                }
+
+                            }
+                        }
+
+                    }
+                    if (!exist)
+                    {
+                        logger.print(null, " Rejected", (int)Logger.CLogger.Modes.background);
+                        downStream.WriteLine("Rejected");
+                        downStream.Flush();
+
+                    }
+                    else
+                    {
+                        int borderNodeNumber = 0;
+                        foreach (Data.CPNNITable t in PNNIList)
+                        {
+                            if (t.NodeType.Equals("border"))
+                            {
+                                borderNodeNumber = t.NodeNumber;
+
+                                break; //bo i tak jeden border
+                            }
+                        }
+
+                        logger.print(null, "ConnectionTeardown from :" + borderNodeNumber + " to : " + nodeNumber, (int)Logger.CLogger.Modes.background);
                         CallTeardownOut(borderNodeNumber, nodeNumber);
                     }
                 }
@@ -386,6 +401,7 @@ namespace ControlPlane
                             break ; //bo i tak jeden border
                         }
                     }
+                    logger.print(null, "ConnectionRequest from :" + fromNode + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
                     ConnectionRequest(fromNode, borderNodeNumber);
                     return true;
                 }
@@ -443,6 +459,7 @@ namespace ControlPlane
                             break; //bo i tak jeden border
                         }
                     }
+                    logger.print(null, "ConnectionTeardownOut from :" + source + "to : " + borderNodeNumber, (int)Logger.CLogger.Modes.background);
                     CallTeardownOut(source, borderNodeNumber);
                     return true;
                 }
