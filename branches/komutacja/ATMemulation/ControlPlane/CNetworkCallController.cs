@@ -114,16 +114,48 @@ namespace ControlPlane
                             int fromNode = Convert.ToInt16(d["FromNode"]);
                             int toNode = Convert.ToInt16(d["ToNode"]);
                             //Metoda zlecająca CC rozlaczenie połączenia.
-                            if (CallTeardownOut(fromNode, toNode))
+
+                            bool exists = false;
+                            foreach (Data.CPNNITable t in PNNIList)
                             {
-                                downStream.WriteLine("OK");
-                                downStream.Flush();
+
+                                if (t.NodeNumber == toNode || t.NeighbourNodeNumber == toNode)
+
+                                    exists = true;
+                            }
+                            if (exists)
+                            {
+
+                                if (CallTeardownOut(fromNode, toNode))
+                                {
+                                    downStream.WriteLine("OK");
+                                    downStream.Flush();
+                                }
+                                else
+                                {
+                                    downStream.WriteLine("ERROR");
+                                    downStream.Flush();
+                                }
                             }
                             else
                             {
-                                downStream.WriteLine("ERROR");
-                                downStream.Flush();
+                                if (CallTeardownIn(fromNode, toNode))
+                                {
+                                    downStream.WriteLine("OK");
+                                    downStream.Flush();
+                                }
+                                else
+                                {
+                                    downStream.WriteLine("ERROR");
+                                    downStream.Flush();
+                                }
+
+
+
                             }
+
+
+
                         }
                     }
                 }
@@ -196,7 +228,7 @@ namespace ControlPlane
                             foreach (Data.CPNNITable t in PNNIList)
                             {
 
-                                Console.WriteLine("do ktorego : " + nodeNumber + "  jaki jest " + t.NodeNumber);
+                               
                                 if (t.NodeNumber == nodeNumber || t.NeighbourNodeNumber== nodeNumber)  // a w wersji z projektu ta
                                 {
                                     Console.WriteLine("confirmation");
@@ -232,6 +264,58 @@ namespace ControlPlane
 
                         Console.WriteLine("ConnectionRequest domena 2 node number :" + nodeNumber + " borderNodeNumber " + borderNodeNumber);
                         ConnectionRequest(borderNodeNumber,nodeNumber);
+                    }
+                }
+                else if (dane.pdu.RequestIdentifier.StartsWith("CallTeardownIn"))
+                {
+                    Console.WriteLine("CallTeardownIn");
+                    bool exist = false;
+                    int nodeNumber = 0;
+                    foreach (Dictionary<String, Object> d in dane.pdu.variablebinding)
+                    {
+                        if (d.ContainsKey("CallTeardownIn"))
+                        {
+
+                            nodeNumber = Convert.ToInt32(d["ToNode"]);
+                            foreach (Data.CPNNITable t in PNNIList)
+                            {
+
+                                
+                                if (t.NodeNumber == nodeNumber || t.NeighbourNodeNumber == nodeNumber)  // a w wersji z projektu ta
+                                {
+                                    
+                                    exist = true;
+
+                                    downStream.WriteLine("Toredown");
+                                    downStream.Flush();
+                                    break;
+                                }
+
+                            }
+                        }
+
+                    }
+                    if (!exist)
+                    {
+                        downStream.WriteLine("Rejected");
+                        downStream.Flush();
+
+                    }
+                    else
+                    {
+                        int borderNodeNumber = 0;
+                        foreach (Data.CPNNITable t in PNNIList)
+                        {
+                            if (t.NodeType.Equals("border"))
+                            {
+                                borderNodeNumber = t.NodeNumber;
+
+                                break; //bo i tak jeden border
+                            }
+                        }
+
+                        
+                        CallTeardownOut(borderNodeNumber, nodeNumber);
                     }
                 }
 
@@ -317,8 +401,65 @@ namespace ControlPlane
         public void DirectoryRequest(string localName)
         { }
 
-        public bool CallTeardownOut(int source, int destination)
+
+
+        public bool CallTeardownIn(int source, int destination)
         {
+
+            List<int> adjacentNCCs = CConstrains.NCCList;
+            foreach (int NCC in adjacentNCCs)
+            {
+
+                TcpClient client = new TcpClient();
+                client.Connect(CConstrains.ipAddress, NCC);
+                NetworkStream stream = client.GetStream();
+                Dictionary<String, Object> pduDict = new Dictionary<String, Object>(){
+                    {"FromNode",source},
+                    {"ToNode", destination},
+                    {"CallTeardownIn", null}
+                };
+                List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
+                pduList.Add(pduDict);
+                CSNMPmessage msg = new Data.CSNMPmessage(pduList, null, null);
+                msg.pdu.RequestIdentifier = "CallTeardownIn:" + CConstrains.NCCportNumber;
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(stream, msg);
+                stream.Flush();
+                logger.print("NCC", " --> Sending CallTeardownIn" + msg + " to other NCC [" + CConstrains.NCCportNumber + "->" + NCC + "]", (int)Logger.CLogger.Modes.normal);
+                StreamReader sr = new StreamReader(stream);
+                String responseFromNCC = sr.ReadLine();
+                logger.print(null, responseFromNCC, (int)Logger.CLogger.Modes.normal);
+                //client.Close();
+                if (responseFromNCC.Equals("Toredown"))
+                {
+                    int borderNodeNumber = 0;
+                    foreach (Data.CPNNITable t in PNNIList)
+                    {
+                        if (t.NodeType.Equals("border"))
+                        {
+                            borderNodeNumber = t.NodeNumber;
+
+                            break; //bo i tak jeden border
+                        }
+                    }
+                    CallTeardownOut(source, borderNodeNumber);
+                    return true;
+                }
+                else if (responseFromNCC.Equals("Rejected"))
+
+                    continue;
+            }
+            return false;
+
+
+
+        }
+        
+        
+        
+        public bool CallTeardownOut(int source, int destination)
+        {            
+            
             RouteEngine.Route route = CConnectionController.Instance.getRouteByIdentifier(CConnectionController.Instance.setIdentifier(source, destination));
             if (route != null && route.Connections != null)
             {
