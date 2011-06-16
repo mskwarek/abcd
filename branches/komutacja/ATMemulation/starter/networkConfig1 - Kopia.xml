@@ -5,7 +5,7 @@
   <managementLayerPort>49999</managementLayerPort>
   <nccPort>50009</nccPort>
   <neighbourNccPort>50010</neighbourNccPort>
-  <link from="1;c;1" to="2;c;1"></link>
+  <link from="1;c;1" to="2;n;1"></link>
   <link from="2;n;6" to="3;n;6"></link>
   <link from="3;c;1" to="4;c;1"></link>
   <link from="3;b;7" to="5;b;6"></link>

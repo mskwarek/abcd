@@ -197,11 +197,9 @@ namespace ControlPlane
                             {
 
                                 Console.WriteLine("do ktorego : " + nodeNumber + "  jaki jest " + t.NodeNumber);
-                                if (t.NodeNumber == nodeNumber) //&& t.NeighbourNodeNumber== nodeNumber)  // a w wersji z projektu tak
-
-                       //         if (t.NeighbourNodeNumber == nodeNumber || t.NodeNumber == nodeNumber) w wersji 171 bylo tak
-
+                                if (t.NodeNumber == nodeNumber || t.NeighbourNodeNumber== nodeNumber)  // a w wersji z projektu ta
                                 {
+                                    Console.WriteLine("confirmation");
                                     exist = true;
 
                                     downStream.WriteLine("Confirmation");
@@ -232,8 +230,8 @@ namespace ControlPlane
                             }
                         }
 
-
-                        ConnectionRequest(nodeNumber,borderNodeNumber);
+                        Console.WriteLine("ConnectionRequest domena 2 node number :" + nodeNumber + " borderNodeNumber " + borderNodeNumber);
+                        ConnectionRequest(borderNodeNumber,nodeNumber);
                     }
                 }
 

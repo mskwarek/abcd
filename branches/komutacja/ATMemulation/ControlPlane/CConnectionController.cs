@@ -108,16 +108,17 @@ namespace ControlPlane
             lock (_locker)
             {
                 RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
+                Console.WriteLine("Obliczam Route");
                 if (route != null && route.Connections.Count != 0)
                 {
-                    logger.print("ConnectionRequestOut"," Route " + SNP_s + " to " + SNP_d + " set up ", (int)Logger.CLogger.Modes.normal);
+                    logger.print("ConnectionRequestOut", " Route " + SNP_s + " to " + SNP_d + " set up ", (int)Logger.CLogger.Modes.normal);
                     List<CLink> links = route.Connections;
 
                     int i = 0;
                     CLink link;
                     Boolean failed = false;
                     int identifier = setIdentifier(SNP_s, SNP_d);
-                    logger.print("ConnectionRequestOut","Identifier is " + identifier,(int)Logger.CLogger.Modes.normal);
+                    logger.print("ConnectionRequestOut", "Identifier is " + identifier, (int)Logger.CLogger.Modes.normal);
                     do
                     {
                         link = links[i];
@@ -152,32 +153,68 @@ namespace ControlPlane
                         }
 
 
-                        int nodeNumber=0;
+                        int nodeNumber = 0;
                         int portIn = 0;
                         int portOut = 0;
                         int VPIIn = 0;
                         int VCIIn = 0;
                         int VPIOut = 0;
                         int VCIOut = 0;
-
-
+                        bool intra = false;
+                        bool intraDomain = false;
                         for (int a = 0; a < links.Count - 1; a++)
                         {
                             RouteEngine.CShortestPathCalculatorWrapper.Instance.reserveCLink(links[a]);
                             Console.WriteLine("liczba laczy: " + links.Count);
-                                bool intraDomain = false;
-                                nodeNumber = links[a].B.nodeNumber;
-                                portIn = links[a].B.portNumber;
-                                portOut = links[a + 1].A.portNumber;
-                                int borderNode=555;
-                                int borderNodeInPort=777;
-                                int borderNodeOutPort=999;
+
+                            nodeNumber = links[a].B.nodeNumber;
+                            portIn = links[a].B.portNumber;
+                            portOut = links[a + 1].A.portNumber;
+                            int borderNode = 555;
+                            int borderNodeInPort = 777;
+                            int borderNodeOutPort = 999;
+                           
+
+                            if (a == 0 && links[a].B.portType == "network" && !intra)
+                            {
+                                borderNode = links[a].A.nodeNumber;
+                                foreach (CPNNITable t in CNetworkCallController.Instance.PNNIList)
+                                {
+                                    if (t.NodeNumber == borderNode && t.NeighbourNodeType == "border")
+                                    {
+                                        borderNodeInPort = t.NeighbourPortNumberReciever;
+                                        break;
+                                    }
+                                }
+                                portOut = links[a].A.portNumber;
+                                VPIIn = 66;
+                                VCIIn = 22;
+                                VPIOut = VPIs[a];
+                                VCIOut = VCIs[a];
+                                Console.WriteLine(" domena 2: nodeNumber: " + borderNode + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn);
+                                addConnection(borderNode, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
+                                intra = true;
+                                a--;
+                                continue;
+                            }
+                            if (intra)
+                            {
+                                VPIIn = VPIOut;
+                                VCIIn = VCIOut;
+                                VPIOut = VPIs[a+1];
+                                VCIOut = VCIs[a + 1];
+                                addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
+                                Console.WriteLine("nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn);
+                            }
+                            else{
+                         
+
 
                                 if (!intraDomain)
                                 {
-                                    if (a == 0)
+                                    if (a == 0 )
                                     {
-                                        
+
                                         VCIIn = 0;
                                         VPIIn = 0;
                                         VPIOut = VPIs[a];
@@ -194,43 +231,48 @@ namespace ControlPlane
                                         Console.WriteLine("a != 0 " + VPIOut + "   " + VCIOut);
                                     }
                                     addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
+                                    Console.WriteLine("nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn);
+
                                     if (links[a + 1].A.portType != "client" && a == (links.Count - 2))
                                     {
 
-                                        Console.WriteLine("a: "+a+"typ portu " +links[a + 1].A.portType);
+                                        Console.WriteLine("a: " + a + "typ portu " + links[a + 1].A.portType);
                                         intraDomain = true;
                                         borderNode = links[a + 1].B.nodeNumber;
                                         borderNodeInPort = links[a + 1].B.portNumber;
                                         Console.WriteLine("intra domain");
-                                        
-                                        
-                                            VPIIn = VPIOut;
-                                            VCIIn = VCIOut;
-                                        
+
+
+                                        VPIIn = VPIOut;
+                                        VCIIn = VCIOut;
+
                                         VPIOut = 66;
                                         VCIOut = 22;
-                                        foreach(CPNNITable t in CNetworkCallController.Instance.PNNIList)
+                                        foreach (CPNNITable t in CNetworkCallController.Instance.PNNIList)
                                         {
-                                            if (t.NodeNumber == borderNode)
+                                            if (t.NodeNumber == borderNode && t.NeighbourNodeType == "border")
                                             {
+
                                                 borderNodeOutPort = t.NodePortNumberSender;
-                                                Console.WriteLine("node number :" + t.NodeNumber+" border port out :" + borderNodeOutPort);
+                                                Console.WriteLine("node number :" + t.NodeNumber + " border port out :" + borderNodeOutPort);
                                                 break;
                                             }
                                         }
 
-                                        
+
                                     }
-                                    
-                                    
-                                }
-                                else if(intraDomain)
-                                {
-                                    addConnection(borderNode, borderNodeInPort, VPIIn, VCIIn, borderNodeOutPort, VPIOut, VCIOut, identifier);
-                                    
+
 
                                 }
-                                
+                                if (intraDomain)
+                                {
+                                    Console.WriteLine(" intra domain adding entry");
+                                    addConnection(borderNode, borderNodeInPort, VPIIn, VCIIn, borderNodeOutPort, VPIOut, VCIOut, identifier);
+
+
+                                }
+                            }
+
                         }
                         logger.print("ConnectionRequestOut", " Connection " + identifier + " established ", (int)Logger.CLogger.Modes.normal);
                         return true;
@@ -238,7 +280,11 @@ namespace ControlPlane
                     }
                 }
                 else
+                {
+                    Console.WriteLine("nie ma route'a");
                     return false;
+
+                }
             }
         }
 
