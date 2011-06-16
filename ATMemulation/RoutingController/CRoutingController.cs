@@ -33,7 +33,7 @@ namespace RoutingController
         public void initRC( List<CPNNITable> PNNITable )
         {
             List<CLink> newLinkList = new List<CLink>();
-
+            
             foreach (CPNNITable i in PNNITable)
             {
                 if (i.IsNeighbourActive)
