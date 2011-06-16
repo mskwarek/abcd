@@ -257,7 +257,7 @@ namespace NetworkNode
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = requestIdentifier + SNP.nodeNumber.ToString();
             
-            logger.print(null,"node : " + SNP.nodeNumber,(int)Logger.CLogger.Modes.background);
+            logger.print(requestIdentifier,"node : " + SNP.nodeNumber,(int)Logger.CLogger.Modes.normal);
             
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, dataToSend);

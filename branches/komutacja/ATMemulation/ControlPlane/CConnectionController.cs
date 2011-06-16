@@ -108,7 +108,7 @@ namespace ControlPlane
             lock (_locker)
             {
                 RouteEngine.Route route = RouteTableQuery(SNP_s, SNP_d);
-                Console.WriteLine("Obliczam Route");
+                logger.print(null, "Routing", (int)Logger.CLogger.Modes.background); 
                 if (route != null && route.Connections.Count != 0)
                 {
                     logger.print("ConnectionRequestOut", " Route " + SNP_s + " to " + SNP_d + " set up ", (int)Logger.CLogger.Modes.normal);
@@ -165,7 +165,7 @@ namespace ControlPlane
                         for (int a = 0; a < links.Count - 1; a++)
                         {
                             RouteEngine.CShortestPathCalculatorWrapper.Instance.reserveCLink(links[a]);
-                            Console.WriteLine("liczba laczy: " + links.Count);
+                            logger.print(null, "liczba laczy: " + links.Count, (int)Logger.CLogger.Modes.background); 
 
                             nodeNumber = links[a].B.nodeNumber;
                             portIn = links[a].B.portNumber;
@@ -191,7 +191,7 @@ namespace ControlPlane
                                 VCIIn = 22;
                                 VPIOut = VPIs[a];
                                 VCIOut = VCIs[a];
-                                Console.WriteLine(" domena 2: nodeNumber: " + borderNode + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn);
+                                logger.print(null, " domena 2: nodeNumber: " + borderNode + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn, (int)Logger.CLogger.Modes.background); 
                                 addConnection(borderNode, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
                                 intra = true;
                                 a--;
@@ -204,7 +204,8 @@ namespace ControlPlane
                                 VPIOut = VPIs[a+1];
                                 VCIOut = VCIs[a + 1];
                                 addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
-                                Console.WriteLine("nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn);
+                                logger.print(null, "nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn, (int)Logger.CLogger.Modes.background); 
+
                             }
                             else{
                          
@@ -231,7 +232,7 @@ namespace ControlPlane
                                         Console.WriteLine("a != 0 " + VPIOut + "   " + VCIOut);
                                     }
                                     addConnection(nodeNumber, portIn, VPIIn, VCIIn, portOut, VPIOut, VCIOut, identifier);
-                                    Console.WriteLine("nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn);
+                                    logger.print(null, "nodeNumber: " + nodeNumber + " port in " + portIn + "vpi in" + VPIIn + "vci in " + VCIIn + " port out " + portIn + "vpi out" + VPIIn + "vci out " + VCIIn, (int)Logger.CLogger.Modes.background); 
 
                                     if (links[a + 1].A.portType != "client" && a == (links.Count - 2))
                                     {
@@ -254,7 +255,7 @@ namespace ControlPlane
                                             {
 
                                                 borderNodeOutPort = t.NodePortNumberSender;
-                                                Console.WriteLine("node number :" + t.NodeNumber + " border port out :" + borderNodeOutPort);
+                                                logger.print(null, "node number :" + t.NodeNumber + " border port out :" + borderNodeOutPort, (int)Logger.CLogger.Modes.background); 
                                                 break;
                                             }
                                         }
@@ -281,7 +282,7 @@ namespace ControlPlane
                 }
                 else
                 {
-                    Console.WriteLine("nie ma route'a");
+                    logger.print(null, "No such route!!", (int)Logger.CLogger.Modes.error); 
                     return false;
 
                 }
@@ -317,6 +318,8 @@ namespace ControlPlane
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = "SNPLinkConnectionRequest" + SNP.nodeNumber.ToString();
 
+            logger.print("SNPLinkConnectionRequest", "request " + SNP.nodeNumber.ToString(), (int)Logger.CLogger.Modes.normal);
+
             send(SNP.nodeNumber, dataToSend);
 
             //Console.WriteLine("node : " + SNP.nodeNumber );
@@ -335,6 +338,7 @@ namespace ControlPlane
             Data.CSNMPmessage dataToSend = new Data.CSNMPmessage(pduList, null, null);
             dataToSend.pdu.RequestIdentifier = "SNPLinkConnectionDeallocation" + SNP.nodeNumber.ToString();
 
+            logger.print("SNPLinkConnectionDeallocation", "SNPLinkConnectionDeallocation" + SNP.nodeNumber.ToString(), (int)Logger.CLogger.Modes.normal);
             send(SNP.nodeNumber, dataToSend);
 
             //Console.WriteLine("node : " + SNP.nodeNumber );
