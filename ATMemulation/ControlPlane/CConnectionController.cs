@@ -26,7 +26,8 @@ namespace ControlPlane
         {
             for (int i = 0; i <= Data.CAdministrationData.VCI_MAX; i++)
             {
-                VCIPole.Enqueue(i);
+                if( i != 5)
+                    VCIPole.Enqueue(i);
             }
 
             for (int i = 0; i <= Data.CAdministrationData.VPI_NNI_MAX; i++)
@@ -180,7 +181,7 @@ namespace ControlPlane
         //metoda zwraca identyfikator połączenia
         public int setIdentifier(int SNP_s, int SNP_d)
         {
-            return SNP_s * SNP_d;
+            return (SNP_s + SNP_d + SNP_s * SNP_d);
         }
 
         //metoda kierowana do RC by uzyskac sciezke pomiedzy dwoma punktami 
