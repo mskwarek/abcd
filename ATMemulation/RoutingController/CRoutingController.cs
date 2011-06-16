@@ -14,7 +14,7 @@ namespace RoutingController
     public sealed class CRoutingController
     {
         private static CRoutingController cRoutingController = new CRoutingController();
-
+        private Logger.CLogger logger = Logger.CLogger.Instance;
 
         private CRoutingController()
         {
@@ -73,7 +73,8 @@ namespace RoutingController
             CLinkInfo to = new CLinkInfo(PNNITable.NeighbourNodeNumber, PNNITable.NeighbourNodeType, PNNITable.NeighbourPortNumberReciever);
 
             CShortestPathCalculatorWrapper.Instance.updateLink(new CLink(from, to, 1), PNNITable.IsNeighbourActive);
-            Console.WriteLine("Routing Table UPDATED : " + PNNITable.NodeNumber + " " + PNNITable.NodeType + " " + PNNITable.NodePortNumberSender + " " + PNNITable.NeighbourNodeNumber + " " + PNNITable.NeighbourNodeType + " " + PNNITable.NeighbourPortNumberReciever + " " + PNNITable.IsNeighbourActive);
+            logger.print(null, "Routing Table UPDATED : " + PNNITable.NodeNumber + " " + PNNITable.NodeType + " " + PNNITable.NodePortNumberSender + " " + PNNITable.NeighbourNodeNumber + " " + PNNITable.NeighbourNodeType + " " + PNNITable.NeighbourPortNumberReciever + " " + PNNITable.IsNeighbourActive, (int)Logger.CLogger.Modes.normal);
+            
         }
 
 
