@@ -125,7 +125,7 @@ namespace ControlPlane
                             }
                             if (exists)
                             {
-
+                                Console.WriteLine("dont exits rozlaczanie w tej domenie");
                                 if (CallTeardownOut(fromNode, toNode))
                                 {
                                     downStream.WriteLine("OK");
@@ -139,6 +139,7 @@ namespace ControlPlane
                             }
                             else
                             {
+                                Console.WriteLine("exists: rozlacznie w innej domenie");   
                                 if (CallTeardownIn(fromNode, toNode))
                                 {
                                     downStream.WriteLine("OK");
@@ -266,7 +267,7 @@ namespace ControlPlane
                         ConnectionRequest(borderNodeNumber,nodeNumber);
                     }
                 }
-                else if (dane.pdu.RequestIdentifier.StartsWith("CallTeardownIn"))
+                else if (dane.pdu.RequestIdentifier.StartsWith("InCallTeardown"))
                 {
                     Console.WriteLine("CallTeardownIn");
                     bool exist = false;
@@ -421,7 +422,7 @@ namespace ControlPlane
                 List<Dictionary<String, Object>> pduList = new List<Dictionary<String, Object>>();
                 pduList.Add(pduDict);
                 CSNMPmessage msg = new Data.CSNMPmessage(pduList, null, null);
-                msg.pdu.RequestIdentifier = "CallTeardownIn:" + CConstrains.NCCportNumber;
+                msg.pdu.RequestIdentifier = "InCallTeardown:" + CConstrains.NCCportNumber;
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(stream, msg);
                 stream.Flush();
