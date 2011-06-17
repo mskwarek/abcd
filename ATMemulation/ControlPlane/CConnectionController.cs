@@ -385,8 +385,8 @@ namespace ControlPlane
 
         public void addConnection(int nodeNumber, int portNumber_A, int VPI_A, int VCI_A, int portNumber_B, int VPI_B, int VCI_B, int identifier)
         {
-            logger.print(null,"\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A,(int)Logger.CLogger.Modes.normal);
-            logger.print(null, " portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B, (int)Logger.CLogger.Modes.normal);
+            logger.print(null, "\n portIn " + portNumber_A + " VPI_A/VCI_A " + VPI_A + "/" + VCI_A, (int)Logger.CLogger.Modes.background);
+            logger.print(null, " portOut " + portNumber_B + " VPI_B/VCI_B " + VPI_B + "/" + VCI_B, (int)Logger.CLogger.Modes.background);
             Data.PortInfo portIn = new Data.PortInfo(portNumber_A, VPI_A, VCI_A);
             Data.PortInfo portOut = new Data.PortInfo(portNumber_B, VPI_B, VCI_B);
 
@@ -404,7 +404,7 @@ namespace ControlPlane
 
             send(nodeNumber, dataToSend);
 
-            logger.print(null, "node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B, (int)Logger.CLogger.Modes.normal);
+            logger.print(null, "node : " + nodeNumber + " from : " + portNumber_A + " to : " + portNumber_B, (int)Logger.CLogger.Modes.background);
         }
 
         public void removeConnection(commutationEntry commutationEntry)
@@ -426,7 +426,7 @@ namespace ControlPlane
 
                 send(nodeNumber, dataToSend);
 
-                logger.print(null, "node : " + nodeNumber + " from : " + portIn.getPortID() + " to : " + portOut.getPortID(), (int)Logger.CLogger.Modes.normal);
+                logger.print(null, "node : " + nodeNumber + " from : " + portIn.getPortID() + " to : " + portOut.getPortID(), (int)Logger.CLogger.Modes.background);
             
         }
 
